@@ -1,0 +1,77 @@
+series:
+  GDPC1:
+    name: Real Gross Domestic Product
+    frequency: Q
+    role: target
+    transform: annualised_qoq_log
+    source: FRED
+    start_date: "1985-01-01"
+
+  INDPRO:
+    name: Industrial Production Index
+    frequency: M
+    role: feature
+    transform: mom_log_pct
+    source: FRED
+    start_date: "1985-01-01"
+
+  PAYEMS:
+    name: All Employees, Total Nonfarm
+    frequency: M
+    role: feature
+    transform: mom_log_pct
+    source: FRED
+    start_date: "1985-01-01"
+
+  RSAFS:
+    name: Advance Retail Sales
+    frequency: M
+    role: feature
+    transform: mom_log_pct
+    source: FRED
+    start_date: "1992-01-01"
+
+  HOUST:
+    name: Housing Starts
+    frequency: M
+    role: feature
+    transform: mom_log_pct
+    source: FRED
+    start_date: "1985-01-01"
+
+  AWHMAN:
+    name: Average Weekly Hours, Manufacturing
+    frequency: M
+    role: feature
+    transform: mom_log_pct
+    source: FRED
+    start_date: "1985-01-01"
+
+  UNRATE:
+    name: Unemployment Rate
+    frequency: M
+    role: feature
+    transform: diff
+    source: FRED
+    start_date: "1985-01-01"
+
+  CPIAUCSL:
+    name: Consumer Price Index
+    frequency: M
+    role: feature
+    transform: mom_log_pct
+    source: FRED
+    start_date: "1985-01-01"
+
+  FEDFUNDS:
+    name: Effective Federal Funds Rate
+    frequency: M
+    role: feature
+    transform: diff
+    source: FRED
+    start_date: "1985-01-01"
+
+model:
+  target_series: GDPC1
+  ridge_alpha: 10.0
+  prediction_interval: 0.80

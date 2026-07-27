@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.pytest_cache/
+.streamlit/secrets.toml
+data/*.duckdb
+data/*.wal
+data/raw/*
+data/processed/*
+data/model_outputs/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/model_outputs/.gitkeep

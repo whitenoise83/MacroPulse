@@ -787,6 +787,47 @@ CREATE TABLE IF NOT EXISTS labour_vintage_backtest_results (
 CREATE INDEX IF NOT EXISTS idx_labour_vintage_results
 ON labour_vintage_backtest_results(backtest_id, target_series, forecast_stage, target_period);
 
+CREATE TABLE IF NOT EXISTS labour_interval_calibration_runs (
+    calibration_id VARCHAR PRIMARY KEY,
+    backtest_id VARCHAR NOT NULL,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    method VARCHAR NOT NULL,
+    target_coverage DOUBLE NOT NULL,
+    minimum_prior_errors INTEGER NOT NULL,
+    rolling_window INTEGER NOT NULL,
+    decay DOUBLE NOT NULL,
+    status VARCHAR NOT NULL,
+    metrics_json VARCHAR,
+    notes VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS labour_interval_calibrated_results (
+    calibration_id VARCHAR NOT NULL,
+    backtest_id VARCHAR NOT NULL,
+    target_series VARCHAR NOT NULL,
+    forecast_stage VARCHAR NOT NULL,
+    target_period VARCHAR NOT NULL,
+    model_name VARCHAR NOT NULL,
+    interval_method VARCHAR NOT NULL,
+    lower_80 DOUBLE,
+    upper_80 DOUBLE,
+    interval_covered BOOLEAN,
+    interval_half_width DOUBLE,
+    interval_score DOUBLE,
+    prior_error_count INTEGER NOT NULL,
+    calibration_window_count INTEGER NOT NULL,
+    calibration_cutoff_period VARCHAR,
+    calibration_status VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_interval_calibration
+ON labour_interval_calibrated_results(
+    calibration_id, target_series, forecast_stage, target_period, model_name
+);
+
 CREATE TABLE IF NOT EXISTS labour_validation_runs (
     validation_id VARCHAR PRIMARY KEY,
     backtest_id VARCHAR NOT NULL,
@@ -1100,6 +1141,26 @@ class MacroRepository:
                     "INSERT INTO labour_vintage_backtest_results SELECT * FROM _labour_vintage_results"
                 )
                 connection.unregister("_labour_vintage_results")
+
+    def save_labour_interval_calibration_outputs(
+        self,
+        run_record: pd.DataFrame,
+        results: pd.DataFrame,
+    ) -> None:
+        with self.connect() as connection:
+            connection.register("_labour_interval_calibration_run", run_record)
+            connection.execute(
+                "INSERT INTO labour_interval_calibration_runs "
+                "SELECT * FROM _labour_interval_calibration_run"
+            )
+            connection.unregister("_labour_interval_calibration_run")
+            if not results.empty:
+                connection.register("_labour_interval_calibrated_results", results)
+                connection.execute(
+                    "INSERT INTO labour_interval_calibrated_results "
+                    "SELECT * FROM _labour_interval_calibrated_results"
+                )
+                connection.unregister("_labour_interval_calibrated_results")
 
     def save_labour_validation_outputs(
         self,

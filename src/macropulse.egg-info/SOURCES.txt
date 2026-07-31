@@ -46,9 +46,14 @@ src/macropulse/labour/__init__.py
 src/macropulse/labour/backtest.py
 src/macropulse/labour/config.py
 src/macropulse/labour/dataset.py
+src/macropulse/labour/interval_calibration.py
 src/macropulse/labour/models.py
 src/macropulse/labour/service.py
+src/macropulse/labour/stages.py
+src/macropulse/labour/validation.py
 src/macropulse/labour/versioning.py
+src/macropulse/labour/vintage.py
+src/macropulse/labour/vintage_backtest.py
 src/macropulse/models/__init__.py
 src/macropulse/models/baseline.py
 src/macropulse/models/dynamic_factor.py
@@ -83,7 +88,9 @@ tests/test_intervals.py
 tests/test_labour_config.py
 tests/test_labour_dataset.py
 tests/test_labour_integration.py
+tests/test_labour_interval_calibration.py
 tests/test_labour_models.py
+tests/test_labour_vintage.py
 tests/test_model1a_identity_frozen.py
 tests/test_news_no_change.py
 tests/test_production_promotion.py

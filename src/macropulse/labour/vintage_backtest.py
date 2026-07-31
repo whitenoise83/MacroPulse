@@ -26,6 +26,7 @@ from macropulse.labour.versioning import current_labour_model_identity
 from macropulse.labour.vintage import (
     ensure_labour_snapshot,
     is_recent_unreleased_month,
+    structural_missing_reason,
     target_actual_from_release_snapshot,
 )
 
@@ -131,12 +132,21 @@ def run_vintage_labour_backtest(
         for number, target_period in enumerate(periods, start=1):
             release_date = repository.initial_release_date(target_id, target_period)
             if release_date is None:
-                kind = "pending" if is_recent_unreleased_month(target_period) else "missing_release"
+                structural_reason = structural_missing_reason(target_id, target_period)
+                if structural_reason is not None:
+                    kind = "structural_missing"
+                    message = structural_reason
+                elif is_recent_unreleased_month(target_period):
+                    kind = "pending"
+                    message = f"No initial-release date is stored yet for {target_id} {target_period}."
+                else:
+                    kind = "missing_release"
+                    message = f"No initial-release date is stored for {target_id} {target_period}."
                 notices.append({
                     "target_series": target_id,
                     "target_period": str(target_period),
                     "kind": kind,
-                    "message": f"No initial-release date is stored for {target_id} {target_period}.",
+                    "message": message,
                 })
                 continue
 
@@ -257,7 +267,11 @@ def run_vintage_labour_backtest(
 
     results = pd.DataFrame(rows)
     metrics = _metrics(results)
-    hard_issues = [item for item in notices if item.get("kind") not in {"pending", "training_warmup"}]
+    hard_issues = [
+        item
+        for item in notices
+        if item.get("kind") not in {"pending", "training_warmup", "structural_missing"}
+    ]
     status = "success" if not hard_issues else "partial"
     run_record = pd.DataFrame([{
         "backtest_id": backtest_id,

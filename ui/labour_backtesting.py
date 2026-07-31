@@ -75,6 +75,50 @@ with vintage_tab:
             metrics = pd.DataFrame(metric_rows).sort_values(["rmse", "mae"])
             st.subheader("Pseudo-real-time model metrics")
             st.dataframe(metrics, use_container_width=True, hide_index=True)
+
+            calibration_run = repository.query_df(
+                """
+                SELECT * FROM labour_interval_calibration_runs
+                WHERE backtest_id = ? AND status = 'success'
+                ORDER BY created_at DESC
+                LIMIT 1
+                """,
+                [run["backtest_id"]],
+            )
+            if not calibration_run.empty:
+                calibration_id = str(calibration_run.iloc[0]["calibration_id"])
+                calibrated = repository.query_df(
+                    """
+                    SELECT * FROM labour_interval_calibrated_results
+                    WHERE calibration_id = ?
+                      AND target_series = ?
+                      AND forecast_stage = ?
+                      AND calibration_status = 'calibrated'
+                    ORDER BY model_name, target_period
+                    """,
+                    [calibration_id, target, stage],
+                )
+                if not calibrated.empty:
+                    calibrated_summary = (
+                        calibrated.groupby("model_name")
+                        .agg(
+                            observations=("interval_covered", "count"),
+                            coverage=("interval_covered", "mean"),
+                            average_half_width=("interval_half_width", "mean"),
+                            mean_interval_score=("interval_score", "mean"),
+                        )
+                        .reset_index()
+                        .sort_values("mean_interval_score")
+                    )
+                    st.subheader("Prior-only interval calibration")
+                    st.caption(
+                        f"Method: {calibration_run.iloc[0]['method']} | "
+                        f"Calibration ID: {calibration_id}"
+                    )
+                    st.dataframe(
+                        calibrated_summary, use_container_width=True, hide_index=True
+                    )
+
             selected_model = st.selectbox(
                 "Vintage model",
                 metrics["model_name"].tolist(),

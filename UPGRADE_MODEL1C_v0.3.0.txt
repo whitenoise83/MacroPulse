@@ -1,0 +1,13 @@
+MacroPulse Model 1C v0.3.0 upgrade
+
+1. Extract directly into the MacroPulse project and replace matching files.
+2. Do not delete data/macropulse.duckdb, reports, .env, or .git.
+3. Run:
+
+   pip install -e .
+   python scripts\initialise_database.py
+   python scripts\repair_labour_structural_missing.py --backtest-id 834e0655-ba81-4b96-b42c-e1cdda73b847
+   python scripts\calibrate_labour_intervals.py --backtest-id 834e0655-ba81-4b96-b42c-e1cdda73b847
+   python scripts\run_labour_validation.py --backtest-id 834e0655-ba81-4b96-b42c-e1cdda73b847
+
+No FRED download or vintage-backtest rerun is required.

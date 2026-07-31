@@ -96,6 +96,10 @@ model:
   rolling_mean_window: 12
   minimum_training_observations: 120
   interval_coverage: 0.80
+  interval_calibration_method: exp_weighted_q80
+  interval_calibration_minimum_errors: 24
+  interval_calibration_window: 48
+  interval_calibration_decay: 0.94
   max_feature_carry_months: 4
   ensemble_members:
     - Labour Bridge Ridge

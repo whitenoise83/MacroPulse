@@ -1,0 +1,8 @@
+MacroPulse Model 1C v0.3.0 package validation
+
+- Python compilation: passed
+- Automated tests: 81 passed, 1 skipped
+- Strict prior-only interval calibration test: passed
+- Structural UNRATE 2025-10 exclusion test: passed
+- Existing Model 1A and Model 1B identity tests: passed
+- Forecast point estimates: unchanged by this package

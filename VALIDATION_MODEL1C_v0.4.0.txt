@@ -1,0 +1,12 @@
+MacroPulse Model 1C v0.4.0 package validation
+
+- Python compilation: passed
+- Automated tests: 88 passed, 1 skipped
+- Skipped test: pre-existing Model 1B DuckDB build-environment integration test
+- Stable policy count: 15 target-stage decisions
+- Prior-only selector tests: passed
+- Common-sample comparison tests: passed
+- Switching and regime diagnostics tests: passed
+- Calibrated interval attachment tests: passed
+- Model 1A and Model 1B production configurations: unchanged
+- Credential, database, cache, and user-report files: excluded from package

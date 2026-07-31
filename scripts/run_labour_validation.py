@@ -17,6 +17,8 @@ def main() -> None:
     print("Model 1C vintage validation complete")
     print(f"Validation ID: {result['validation_id']}")
     print(f"Backtest ID: {result['backtest_id']}")
+    if result.get("calibration_id"):
+        print(f"Calibration ID: {result['calibration_id']}")
     print(f"Status: {result['status']}")
     print(f"Passed: {result['passed']}")
     print(f"Failed: {result['failed']}")

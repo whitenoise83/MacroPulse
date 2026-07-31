@@ -2,28 +2,50 @@
 
 ## Purpose
 
-Provide monthly forecasts for nonfarm payroll change, unemployment, and wage growth as a third pillar of the MacroPulse unified macro state.
+Provide monthly forecasts for nonfarm payroll change, unemployment, and wage
+growth as the third pillar of the MacroPulse unified macro state.
 
 ## Current version
 
-v0.1.0 development foundation.
+v0.4.0 development policy candidate.
 
-## Inputs
+## Targets
 
-FRED-hosted BLS, Department of Labor, and Federal Reserve economic series covering claims, labour utilisation, JOLTS, temporary help, hours, manufacturing employment, and industrial production.
+- `PAYEMS`: monthly nonfarm payroll change, thousands of jobs.
+- `UNRATE`: unemployment rate, percent.
+- `CES0500000003`: monthly average-hourly-earnings growth annualised by 1,200.
 
-## Outputs
+## Evidence completed
 
-Five development model forecasts for each target, with preliminary 80% residual-based intervals.
+- Initial-release target outcomes and ALFRED information sets.
+- Five predeclared forecast stages.
+- No-look-ahead and target-leakage controls.
+- Prior-only `exp_weighted_q80` interval calibration.
+- Twenty vintage-validation gates passed with no failures or warnings.
+- Stable 15-decision point-policy candidate and adaptive shadow tournament.
+
+## Stable candidate policy
+
+- Payrolls: 12-month mean at month open; equal-weight ensemble after week 1;
+  Bridge Ridge thereafter.
+- Unemployment: equal-weight ensemble at all stages.
+- Earnings: Bridge Ridge at month open and after week 1; equal-weight ensemble
+  thereafter.
+
+## Governance status
+
+The stable map is a development candidate. The adaptive selector uses only
+previous forecast errors and remains shadow-only. Common-sample evidence must
+be reviewed before candidate validation.
 
 ## Known limitations
 
-- Uses latest-revised data rather than historical information sets.
-- Current-period weekly data are aggregated to a monthly mean without release-stage modelling.
-- JOLTS and other delayed series may be carried forward within the configured freshness limit.
-- No production model policy has been selected.
-- No prior-only interval calibration or news decomposition exists yet.
+- Pandemic observations materially influence payroll and unemployment RMSE.
+- October 2025 unemployment is structurally unavailable and explicitly excluded.
+- No governed live registry or labour news decomposition exists yet.
+- No production freeze or owner approval has been completed.
 
 ## Next validation stage
 
-v0.2.0 will introduce historical vintages, initial-release outcomes, employment-report cutoffs, release-stage backtesting, and no-look-ahead controls.
+v0.5.0 will formalise candidate-validation gates after the fixed-versus-shadow
+common-sample results are reviewed.

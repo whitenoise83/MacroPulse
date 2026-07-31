@@ -81,9 +81,9 @@ def _write_report(
         "",
         "## Interpretation",
         "",
-        "This development-stage validation confirms the release timing, vintage information "
-        "sets, model completeness, and robust reporting architecture. It does not select a "
-        "production champion or approve the raw residual-based intervals.",
+        "This development-stage validation confirms release timing, vintage information "
+        "sets, model completeness, documented structural exclusions, and prior-only interval "
+        "calibration. It does not yet select or approve a production point-forecast policy.",
     ])
     path.write_text("\n".join(lines), encoding="utf-8")
     return path
@@ -117,7 +117,38 @@ def run_labour_vintage_validation(
     if results.empty:
         raise RuntimeError(f"Labour vintage backtest {backtest_id} contains no results.")
 
+    run_metadata = repository.query_df(
+        "SELECT * FROM labour_vintage_backtest_runs WHERE backtest_id = ?",
+        [backtest_id],
+    )
+    notices = []
+    if not run_metadata.empty:
+        notices = json.loads(run_metadata.iloc[0].get("notices_json") or "[]")
+
     checks: list[dict] = []
+    ignored_notice_kinds = {"pending", "training_warmup", "structural_missing"}
+    unexpected_notices = [
+        item for item in notices if item.get("kind") not in ignored_notice_kinds
+    ]
+    checks.append(_check(
+        "Operational reliability",
+        "Vintage backtest contains no unresolved hard issues",
+        "pass" if not unexpected_notices else "fail",
+        len(unexpected_notices),
+        "0 unresolved hard issues",
+        unexpected_notices[:25],
+    ))
+    structural_notices = [
+        item for item in notices if item.get("kind") == "structural_missing"
+    ]
+    checks.append(_check(
+        "Data availability",
+        "Structurally unavailable target months are explicitly documented",
+        "pass",
+        len(structural_notices),
+        "documented exclusions allowed",
+        structural_notices,
+    ))
     duplicate_count = int(results.duplicated([
         "target_series", "forecast_stage", "target_period", "model_name"
     ]).sum())
@@ -210,17 +241,106 @@ def run_labour_vintage_validation(
         incomplete_regimes, "0 incomplete targets", regime_sets.to_dict()
     ))
 
-    coverage = results.groupby([
-        "target_series", "forecast_stage", "model_name"
-    ])["interval_covered"].mean()
-    outside = coverage[(coverage < 0.50) | (coverage > 0.95)]
-    checks.append(_check(
-        "Uncertainty calibration", "Development 80% intervals are not grossly miscalibrated",
-        "pass" if outside.empty else "warning",
-        f"{len(outside)} groups outside range",
-        "each group between 50% and 95%",
-        outside.to_dict(),
-    ))
+    calibration_run = repository.query_df(
+        """
+        SELECT *
+        FROM labour_interval_calibration_runs
+        WHERE backtest_id = ? AND status = 'success'
+        ORDER BY created_at DESC
+        LIMIT 1
+        """,
+        [backtest_id],
+    )
+    calibration_id: str | None = None
+    if calibration_run.empty:
+        checks.append(_check(
+            "Uncertainty calibration",
+            "Prior-only interval calibration is available",
+            "warning",
+            "not available",
+            "successful calibration required",
+        ))
+    else:
+        calibration = calibration_run.iloc[0]
+        calibration_id = str(calibration["calibration_id"])
+        calibrated = repository.query_df(
+            """
+            SELECT *
+            FROM labour_interval_calibrated_results
+            WHERE calibration_id = ?
+            ORDER BY target_series, forecast_stage, model_name, target_period
+            """,
+            [calibration_id],
+        )
+        usable = calibrated.loc[
+            calibrated["calibration_status"] == "calibrated"
+        ].copy()
+        checks.append(_check(
+            "Uncertainty calibration",
+            "Prior-only interval calibration is available",
+            "pass" if not usable.empty else "fail",
+            f"{len(usable)} calibrated rows",
+            "> 0 calibrated rows",
+            {"calibration_id": calibration_id, "method": calibration["method"]},
+        ))
+
+        target_periods = pd.PeriodIndex(usable["target_period"], freq="M")
+        cutoff_periods = pd.PeriodIndex(usable["calibration_cutoff_period"], freq="M")
+        lookahead = int((cutoff_periods >= target_periods).sum())
+        checks.append(_check(
+            "Econometric validity",
+            "Interval calibration uses strictly prior target-month errors",
+            "pass" if lookahead == 0 else "fail",
+            lookahead,
+            "0 look-ahead violations",
+        ))
+
+        required_prior = int(calibration["minimum_prior_errors"])
+        minimum_prior = int(usable["prior_error_count"].min()) if not usable.empty else 0
+        checks.append(_check(
+            "Uncertainty calibration",
+            "Every calibrated interval satisfies the prior-error minimum",
+            "pass" if minimum_prior >= required_prior else "fail",
+            minimum_prior,
+            f">= {required_prior} prior errors",
+        ))
+
+        calibrated_counts = (
+            usable.groupby(["target_series", "forecast_stage", "model_name"])[
+                "target_period"
+            ].nunique().sort_values()
+        )
+        minimum_calibrated = int(calibrated_counts.min()) if not calibrated_counts.empty else 0
+        checks.append(_check(
+            "Uncertainty calibration",
+            "Minimum evaluated calibrated intervals for every target, stage, and model",
+            "pass" if minimum_calibrated >= minimum_months_per_stage else "fail",
+            minimum_calibrated,
+            f">= {minimum_months_per_stage}",
+            calibrated_counts.to_dict(),
+        ))
+
+        coverage = usable.groupby([
+            "target_series", "forecast_stage", "model_name"
+        ])["interval_covered"].mean()
+        outside = coverage[(coverage < 0.60) | (coverage > 0.95)]
+        checks.append(_check(
+            "Uncertainty calibration",
+            "Prior-only 80% interval coverage is not grossly miscalibrated",
+            "pass" if outside.empty else "warning",
+            f"{len(outside)} groups outside range",
+            "each group between 60% and 95%",
+            outside.to_dict(),
+        ))
+
+        invalid_scores = int(pd.to_numeric(usable["interval_score"], errors="coerce").isna().sum())
+        checks.append(_check(
+            "Uncertainty calibration",
+            "Calibrated interval scores are finite and reportable",
+            "pass" if invalid_scores == 0 else "fail",
+            invalid_scores,
+            "0 invalid interval scores",
+        ))
 
     checks_frame = pd.DataFrame(checks)
     failures = int((checks_frame["status"] == "fail").sum())
@@ -250,7 +370,7 @@ def run_labour_vintage_validation(
         "summary_json": json.dumps({
             "passed": passed, "failed": failures, "warnings": warnings,
         }),
-        "notes": "Model 1C development vintage validation; no production approval implied.",
+        "notes": "Model 1C v0.3 development vintage validation with prior-only interval calibration; no production approval implied.",
     }])
     repository.save_labour_validation_outputs(run_record, checks_frame)
     return {
@@ -262,4 +382,5 @@ def run_labour_vintage_validation(
         "warnings": warnings,
         "checks": checks_frame,
         "report_path": report_path,
+        "calibration_id": calibration_id,
     }

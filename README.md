@@ -4,7 +4,7 @@
 
 - **Model 1A — US GDP Nowcast:** production v1.0.0, frozen and validated.
 - **Model 1B — US Inflation Nowcast:** production v1.0.0, frozen and validated.
-- **Model 1C — US Labour Nowcast:** development v0.2.0 vintage-validation architecture.
+- **Model 1C — US Labour Nowcast:** development v0.4.0 stable-policy tournament.
 
 Model 1B provides governed monthly forecasts for headline/core CPI and
 headline/core PCE. Forecasts are monthly log changes annualised by multiplying
@@ -57,14 +57,13 @@ The production promotion script verifies the complete approved evidence chain:
 ## Model 1C vintage-aware development
 
 Model 1C forecasts monthly nonfarm payroll change, the unemployment rate, and
-average-hourly-earnings growth using AR, rolling-mean, Bridge Ridge, Factor
-Ridge, and equal-weight ensemble models. Its v0.1.0 backtest uses latest-revised
-data and is not pseudo-real-time evidence.
+average-hourly-earnings growth. Version 0.4.0 contains a completed vintage
+backtest, prior-only `exp_weighted_q80` intervals, a stable 15-decision policy
+candidate, and a prior-only adaptive shadow challenger. It is not production
+approved.
 
 ```cmd
-python scripts\download_labour_data.py
-python scripts\run_labour_nowcast.py
-python scripts\run_labour_backtest.py --start 2016-01
+python scripts\evaluate_labour_policy.py --backtest-id 834e0655-ba81-4b96-b42c-e1cdda73b847
 ```
 
 ## Governance

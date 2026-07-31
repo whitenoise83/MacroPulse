@@ -1,12 +1,14 @@
 model:
   model_id: US_LABOUR_NOWCAST_1C
   display_name: US Labour Market Nowcast Engine
-  version: 0.2.0
-  package_version: 0.2.0
+  version: 0.4.0
+  package_version: 0.4.0
   lifecycle_status: development
   production_approved: false
-  research_status: Vintage-aware development model with release-staged pseudo-real-time backtesting; not production approved.
+  research_status: Vintage-aware development model with validated prior-only intervals,
+    a stable 15-decision point-policy candidate, and a prior-only adaptive shadow
+    challenger; not production approved.
   primary_target: PAYEMS
   secondary_targets:
-    - UNRATE
-    - CES0500000003
+  - UNRATE
+  - CES0500000003

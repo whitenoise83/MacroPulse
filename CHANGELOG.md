@@ -29,3 +29,8 @@
 
 - Added four inflation targets and baseline models.
 - Added current-data nowcast, revised-data chronological backtest, and dashboard pages.
+
+## Model 1C v0.4.0
+
+- Added stable labour policy and prior-only adaptive shadow tournament.
+- Added common-sample, switching, regime, and calibrated interval diagnostics.

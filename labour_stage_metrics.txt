@@ -1,0 +1,87 @@
+Stage metrics
+target_series        forecast_stage                   model_name  observations     rmse      mae     bias  median_ae  p90_abs_error  max_abs_error  directional_accuracy  interval_coverage  average_days_to_release
+CES0500000003          after_week_1          Labour Bridge Ridge           109    3.630    1.974    0.314      1.217          3.718         27.780                 0.936              0.606                   29.220
+CES0500000003          after_week_1 Labour Equal-Weight Ensemble           109    4.907    2.009    0.693      1.081          3.590         43.537                 0.954              0.725                   29.220
+CES0500000003          after_week_1         Labour 12-Month Mean           109    5.730    2.164    0.023      1.234          3.559         51.897                 0.954              0.817                   29.220
+CES0500000003          after_week_1          Labour Factor Ridge           109    5.735    2.305    0.672      1.168          4.006         50.233                 0.927              0.807                   29.220
+CES0500000003          after_week_1                 Labour AR(1)           109    5.778    2.237    1.094      1.149          3.701         52.599                 0.954              0.771                   29.220
+CES0500000003          after_week_2          Labour Bridge Ridge           110    5.078    2.253    0.611      1.329          3.964         43.947                 0.936              0.582                   22.191
+CES0500000003          after_week_2 Labour Equal-Weight Ensemble           110    5.285    2.028    0.758      1.061          4.140         49.145                 0.955              0.736                   22.191
+CES0500000003          after_week_2          Labour Factor Ridge           110    5.559    2.194    0.734      1.186          4.262         50.890                 0.918              0.818                   22.191
+CES0500000003          after_week_2         Labour 12-Month Mean           110    5.841    2.208    0.008      1.246          3.454         51.897                 0.955              0.800                   22.191
+CES0500000003          after_week_2                 Labour AR(1)           110    6.410    2.373    0.930      1.160          3.725         52.599                 0.955              0.791                   22.191
+CES0500000003             month_end Labour Equal-Weight Ensemble           110    5.472    2.033    0.765      1.047          4.091         51.358                 0.955              0.736                    5.755
+CES0500000003             month_end          Labour Factor Ridge           110    5.724    2.198    0.757      1.096          4.154         50.973                 0.927              0.836                    5.755
+CES0500000003             month_end          Labour Bridge Ridge           110    5.752    2.383    0.604      1.362          4.180         50.503                 0.945              0.582                    5.755
+CES0500000003             month_end         Labour 12-Month Mean           110    5.847    2.207    0.010      1.235          3.454         51.897                 0.955              0.800                    5.755
+CES0500000003             month_end                 Labour AR(1)           110    6.396    2.366    0.934      1.115          3.726         52.599                 0.955              0.782                    5.755
+CES0500000003            month_open          Labour Bridge Ridge           109    4.269    2.084    0.419      1.225          3.621         34.723                 0.936              0.642                   35.220
+CES0500000003            month_open Labour Equal-Weight Ensemble           109    5.152    2.082    0.659      1.098          3.672         45.855                 0.954              0.725                   35.220
+CES0500000003            month_open         Labour 12-Month Mean           109    5.732    2.178    0.032      1.184          3.827         51.780                 0.954              0.826                   35.220
+CES0500000003            month_open          Labour Factor Ridge           109    5.843    2.311    0.600      1.118          4.093         50.463                 0.945              0.817                   35.220
+CES0500000003            month_open                 Labour AR(1)           109    5.977    2.390    0.959      1.218          3.784         52.380                 0.954              0.752                   35.220
+CES0500000003 pre_employment_report Labour Equal-Weight Ensemble           110    5.499    2.049    0.761      1.039          4.186         51.629                 0.955              0.736                    1.000
+CES0500000003 pre_employment_report          Labour Factor Ridge           110    5.725    2.215    0.764      1.097          4.251         50.940                 0.927              0.809                    1.000
+CES0500000003 pre_employment_report         Labour 12-Month Mean           110    5.851    2.219    0.029      1.317          3.454         51.897                 0.955              0.800                    1.000
+CES0500000003 pre_employment_report          Labour Bridge Ridge           110    5.869    2.412    0.589      1.457          3.979         51.348                 0.936              0.609                    1.000
+CES0500000003 pre_employment_report                 Labour AR(1)           110    6.396    2.363    0.930      1.115          3.726         52.599                 0.955              0.782                    1.000
+       PAYEMS          after_week_1          Labour Bridge Ridge           119 1860.939  514.617  -44.281    131.166        679.403      17331.823                 0.840              0.538                   29.134
+       PAYEMS          after_week_1 Labour Equal-Weight Ensemble           119 1950.604  437.148  -31.035    104.877        517.090      19280.566                 0.908              0.672                   29.134
+       PAYEMS          after_week_1                 Labour AR(1)           119 2015.274  426.736   28.655    101.780        525.691      20747.199                 0.916              0.790                   29.134
+       PAYEMS          after_week_1         Labour 12-Month Mean           119 2037.007  476.620  -11.213     73.167       1051.350      20696.000                 0.866              0.798                   29.134
+       PAYEMS          after_week_1          Labour Factor Ridge           119 2108.677  525.596  -77.479    132.358        579.932      19762.676                 0.874              0.723                   29.134
+       PAYEMS          after_week_2          Labour Factor Ridge           120 1976.225  483.775 -137.228    142.588        543.363      19438.405                 0.892              0.733                   22.133
+       PAYEMS          after_week_2          Labour Bridge Ridge           120 1980.907  515.354  -59.573    124.004        623.061      18688.930                 0.842              0.533                   22.133
+       PAYEMS          after_week_2         Labour 12-Month Mean           120 2057.369  467.715  -11.738     72.875        895.133      20696.000                 0.867              0.800                   22.133
+       PAYEMS          after_week_2 Labour Equal-Weight Ensemble           120 2905.142  595.655  138.300    110.513        496.728      23992.183                 0.908              0.692                   22.133
+       PAYEMS          after_week_2                 Labour AR(1)           120 7184.053 1008.988  611.702    107.838        507.850      75795.437                 0.925              0.775                   22.133
+       PAYEMS             month_end          Labour Bridge Ridge           120 1969.352  507.941  -50.489    138.226        583.509      18457.491                 0.842              0.533                    5.700
+       PAYEMS             month_end         Labour 12-Month Mean           120 2058.146  467.956  -10.340     73.083        895.433      20696.000                 0.867              0.800                    5.700
+       PAYEMS             month_end          Labour Factor Ridge           120 2058.997  511.139 -159.651    138.460        570.377      18925.647                 0.850              0.750                    5.700
+       PAYEMS             month_end Labour Equal-Weight Ensemble           120 2783.419  576.598  135.232    114.855        456.010      22227.813                 0.900              0.675                    5.700
+       PAYEMS             month_end                 Labour AR(1)           120 7187.115 1017.348  615.837    113.553        507.850      75795.437                 0.917              0.775                    5.700
+       PAYEMS            month_open         Labour 12-Month Mean           119 2038.544  481.775  -11.810     73.083       1067.817      20678.083                 0.866              0.782                   35.134
+       PAYEMS            month_open          Labour Bridge Ridge           119 2206.090  572.291   -3.061    103.402        569.387      18577.146                 0.874              0.605                   35.134
+       PAYEMS            month_open          Labour Factor Ridge           119 2317.163  546.537  -73.519    118.062        547.697      20324.163                 0.899              0.731                   35.134
+       PAYEMS            month_open Labour Equal-Weight Ensemble           119 2986.179  648.642  180.869     95.507        474.886      22955.849                 0.908              0.697                   35.134
+       PAYEMS            month_open                 Labour AR(1)           119 6962.601 1018.273  619.186     98.014        529.242      72758.437                 0.916              0.798                   35.134
+       PAYEMS pre_employment_report          Labour Bridge Ridge           120 1964.724  510.769  -47.583    140.157        672.687      18405.242                 0.867              0.558                    1.000
+       PAYEMS pre_employment_report          Labour Factor Ridge           120 2054.013  507.022 -161.814    137.033        543.626      18870.582                 0.875              0.758                    1.000
+       PAYEMS pre_employment_report         Labour 12-Month Mean           120 2058.053  467.328   -8.319     75.833        895.433      20696.000                 0.867              0.817                    1.000
+       PAYEMS pre_employment_report Labour Equal-Weight Ensemble           120 2780.545  572.098  135.443    105.757        458.469      22227.813                 0.908              0.683                    1.000
+       PAYEMS pre_employment_report                 Labour AR(1)           120 7187.116 1017.355  615.724    113.360        507.850      75795.437                 0.917              0.775                    1.000
+       UNRATE          after_week_1 Labour Equal-Weight Ensemble           118    1.412    0.435    0.233      0.168          0.472         11.690                 0.483              0.602                   28.788
+       UNRATE          after_week_1          Labour Bridge Ridge           118    1.571    0.480    0.224      0.196          0.448         10.961                 0.500              0.458                   28.788
+       UNRATE          after_week_1                 Labour AR(1)           118    1.649    0.550   -0.026      0.173          0.939         11.206                 0.339              0.636                   28.788
+       UNRATE          after_week_1         Labour 12-Month Mean           118    1.803    0.797   -0.029      0.254          2.065         11.092                 0.322              0.797                   28.788
+       UNRATE          after_week_1          Labour Factor Ridge           118    1.814    0.735    0.500      0.389          0.881         12.903                 0.483              0.415                   28.788
+       UNRATE          after_week_2 Labour Equal-Weight Ensemble           119    1.136    0.359    0.174      0.185          0.433         11.175                 0.471              0.605                   21.790
+       UNRATE          after_week_2          Labour Bridge Ridge           119    1.300    0.425    0.132      0.182          0.445          9.759                 0.479              0.504                   21.790
+       UNRATE          after_week_2          Labour Factor Ridge           119    1.335    0.593    0.440      0.415          0.883         12.560                 0.471              0.403                   21.790
+       UNRATE          after_week_2                 Labour AR(1)           119    1.485    0.463   -0.050      0.173          0.693         11.206                 0.345              0.681                   21.790
+       UNRATE          after_week_2         Labour 12-Month Mean           119    1.738    0.759   -0.033      0.250          1.822         11.092                 0.353              0.790                   21.790
+       UNRATE             month_end Labour Equal-Weight Ensemble           119    1.080    0.347    0.170      0.187          0.442         10.755                 0.487              0.622                    5.361
+       UNRATE             month_end          Labour Bridge Ridge           119    1.200    0.393    0.115      0.176          0.399          8.375                 0.504              0.529                    5.361
+       UNRATE             month_end          Labour Factor Ridge           119    1.377    0.596    0.454      0.374          0.876         12.685                 0.471              0.437                    5.361
+       UNRATE             month_end                 Labour AR(1)           119    1.436    0.456   -0.058      0.172          0.693         11.206                 0.345              0.672                    5.361
+       UNRATE             month_end         Labour 12-Month Mean           119    1.733    0.753   -0.029      0.250          1.822         11.092                 0.353              0.790                    5.361
+       UNRATE            month_open                 Labour AR(1)           118    1.692    0.593   -0.056      0.191          0.939         11.105                 0.390              0.636                   34.788
+       UNRATE            month_open Labour Equal-Weight Ensemble           118    1.757    0.519    0.139      0.214          0.533         12.074                 0.525              0.559                   34.788
+       UNRATE            month_open         Labour 12-Month Mean           118    1.831    0.823   -0.031      0.275          2.103         11.067                 0.373              0.797                   34.788
+       UNRATE            month_open          Labour Factor Ridge           118    2.380    0.814    0.380      0.452          0.873         18.879                 0.517              0.381                   34.788
+       UNRATE            month_open          Labour Bridge Ridge           118    2.437    0.591    0.095      0.203          0.478         22.460                 0.559              0.466                   34.788
+       UNRATE pre_employment_report Labour Equal-Weight Ensemble           119    1.073    0.339    0.169      0.183          0.440         10.700                 0.504              0.664                    1.000
+       UNRATE pre_employment_report          Labour Bridge Ridge           119    1.182    0.381    0.109      0.164          0.391          8.154                 0.504              0.563                    1.000
+       UNRATE pre_employment_report          Labour Factor Ridge           119    1.385    0.596    0.455      0.362          0.874         12.741                 0.487              0.454                    1.000
+       UNRATE pre_employment_report                 Labour AR(1)           119    1.433    0.446   -0.058      0.173          0.677         11.206                 0.328              0.723                    1.000
+       UNRATE pre_employment_report         Labour 12-Month Mean           119    1.725    0.736   -0.020      0.242          1.733         11.092                 0.353              0.798                    1.000
+
+First hard issues
+[
+  {
+    "target_series": "UNRATE",
+    "target_period": "2025-10",
+    "kind": "missing_release",
+    "message": "No initial-release date is stored for UNRATE 2025-10."
+  }
+]

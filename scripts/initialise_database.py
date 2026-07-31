@@ -22,7 +22,10 @@ def main() -> None:
     inflation_identity = current_inflation_model_identity()
     repository.register_model_identity(
         inflation_identity.as_dict(),
-        notes="Model 1B v0.2 vintage-aware inflation validation foundation.",
+        notes=(
+            f"Model 1B v{inflation_identity.model_version} "
+            f"{inflation_identity.lifecycle_status} identity."
+        ),
     )
     print(f"Database initialised: {repository.database_path}")
     print(

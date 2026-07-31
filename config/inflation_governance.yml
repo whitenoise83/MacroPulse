@@ -1,10 +1,10 @@
 model:
   model_id: US_INFLATION_NOWCAST_1B
   display_name: MacroPulse Model 1B - US Inflation Nowcast
-  version: 0.5.0
-  lifecycle_status: development
+  version: 1.0.0
+  lifecycle_status: production
   owner: MacroPulse
-  production_status: candidate_validation
+  production_status: production
   targets:
   - CPIAUCSL
   - CPILFESL
@@ -13,16 +13,43 @@ model:
   limitations:
   - Release-staged ALFRED validation and strictly prior point-policy evaluation are
     implemented.
-  - The stable target-stage map is the Model 1B point-forecast candidate.
-  - The adaptive selector remains a shadow challenger and cannot control the headline
-    forecast.
-  - exp_weighted_q80 is the selected prior-only 80% interval candidate.
-  - Candidate validation is implemented, but live news decomposition and governed
-    candidate-forecast registration are not yet complete.
-  - Forecasts must not be described as production forecasts until freeze assessment
-    and model-owner approval are complete.
+  - The approved stable target-stage map controls production headline forecasts.
+  - The adaptive selector remains a separately stored shadow challenger and cannot
+    control the headline without a new approval cycle.
+  - exp_weighted_q80 is the approved prior-only 80% interval method.
+  - Live information sets, provenance hashes, governance signatures, and news decompositions
+    are stored in DuckDB.
+  - Forecasts are monthly log changes annualised by multiplying by 1,200 and can be
+    volatile in that presentation.
+  - Production performance must be monitored and material model or data-definition
+    changes require revalidation.
+  validation_source_version: 0.6.0
+  promoted_from_package_version: 0.6.0.post1
+  approval:
+    status: approved
+    decision: promote_to_production
+    approved_at: '2026-07-31T11:12:00+01:00'
+    approval_phrase: APPROVE MODEL 1B FREEZE
+    candidate_validation_id: 5f0cd6ea-c41f-44da-a21a-43490d8e75ce
+    candidate_validation_status: pass
+    candidate_validation_passed: 28
+    candidate_validation_failed: 0
+    candidate_validation_warnings: 0
+    operational_validation_id: 58c89931-0f6b-43ed-8815-abbc99fa4ac8
+    operational_validation_status: pass
+    operational_validation_passed: 20
+    operational_validation_failed: 0
+    operational_validation_warnings: 0
+    freeze_assessment_id: 2b7fe987-384a-451b-971f-03d5bf5106c7
+    freeze_assessment_status: pass
+    freeze_assessment_passed: 14
+    freeze_assessment_failed: 0
+    freeze_assessment_warnings: 0
+    freeze_readiness: ready_for_model_owner_signoff
+    governed_live_run_id: 905deade-2bbf-4c89-801e-ce296bb00d97
+    freeze_assessment_report: reports/inflation_freeze/model1b_freeze_assessment_20260731_110552.md
 policy_candidate:
-  status: validated_candidate
+  status: production_approved
   selection_basis: vintage stage metrics, common-sample verification, stability, bias,
     and tail-risk judgement
   stable_map:
@@ -54,10 +81,9 @@ policy_candidate:
     tail_guard: 1.1
     max_error_guard: 1.15
     role: shadow_challenger_only
-    common_sample_result: broadly superior in 4 of 16 target-stage groups; not eligible
-      for headline control
+  production_role: headline_production_policy
 interval_candidate:
-  status: validated_candidate
+  status: production_approved
   method: exp_weighted_q80
   nominal_coverage: 0.8
   minimum_prior_errors: 24
@@ -68,14 +94,62 @@ interval_candidate:
   - narrowest average half-width among tournament candidates
   - aggregate empirical coverage of 0.847
   - target-stage empirical coverage between 0.816 and 0.904
-  governance_note: candidate only; live forecast integration and news decomposition
-    remain required before freeze
+  production_role: headline_uncertainty_method
+governed_live:
+  candidate_validation_type: candidate_policy
+  require_passing_candidate_validation: true
+  persist_information_set: true
+  persist_all_components: true
+  governance_signature: sha256_canonical_payload
+  news_decomposition:
+    enabled: true
+    attribution_order:
+    - revisions
+    - removed_observations
+    - new_observations
+    - stable_policy_change
+    arithmetic_tolerance: 1.0e-08
+  operational_validation:
+    minimum_targets: 4
+    minimum_prior_errors: 24
+    maximum_news_residual: 1.0e-08
+  production_status: approved
 candidate_validation:
-  status: implemented
+  status: passed
+  passed_checks: 28
+  failed_checks: 0
+  warnings: 0
   point_policy: stable_map
   adaptive_policy: shadow_only
   interval_method: exp_weighted_q80
   required_next_steps:
-  - governed live candidate forecast
-  - inflation news decomposition
-  - freeze validation and owner signoff
+  - monitor governed live forecast performance and interval calibration
+  - retain adaptive selector as shadow-only
+  - trigger revalidation when declared production thresholds are breached
+production:
+  status: approved
+  version: 1.0.0
+  point_policy: stable_map
+  shadow_policy: adaptive_shadow_only
+  interval_method: exp_weighted_q80
+  revalidation_triggers:
+  - any target leakage or future-observation audit failure
+  - governance signature or provenance hash reproduction failure
+  - stable headline policy deviates from the approved target-stage map
+  - adaptive shadow is allowed to control a headline forecast
+  - news decomposition residual exceeds 1e-8
+  - material target, predictor, transformation, release-stage, or data-source definition
+    change
+  - production RMSE or MAE exceeds the best eligible static model by more than 10
+    percent in a target-stage group after at least 24 new evaluated forecasts
+  - production p90 absolute error exceeds the best eligible static model by more than
+    20 percent in a target-stage group after at least 24 new evaluated forecasts
+  - target-stage interval coverage falls outside 60 to 95 percent after at least 24
+    new eligible forecasts
+  - two consecutive target releases produce absolute errors above the historical 90th
+    percentile for the same target-stage policy
+  monitoring:
+    minimum_new_forecasts_before_relative_performance_retest: 24
+    minimum_new_forecasts_before_coverage_retest: 24
+    maximum_news_residual: 1.0e-08
+    nominal_interval_coverage: 0.8

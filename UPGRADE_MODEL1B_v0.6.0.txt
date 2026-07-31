@@ -1,0 +1,19 @@
+MODEL 1B v0.6.0 UPGRADE
+
+1. Stop Streamlit with Ctrl+C.
+2. Extract this ZIP into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+3. Replace destination files.
+4. Do NOT delete data\macropulse.duckdb.
+5. Run:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -e .
+   python scripts\initialise_database.py
+   python scripts\download_inflation_data.py
+   python scripts\run_inflation_nowcast.py
+   python scripts\run_inflation_operational_validation.py
+
+The first governed live run will normally have news status no_previous_run.
+No vintage backtest rerun is required.

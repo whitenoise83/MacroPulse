@@ -30,8 +30,12 @@ src/macropulse/inflation/candidate_validation.py
 src/macropulse/inflation/config.py
 src/macropulse/inflation/dataset.py
 src/macropulse/inflation/interval_calibration.py
+src/macropulse/inflation/live.py
 src/macropulse/inflation/models.py
+src/macropulse/inflation/news.py
+src/macropulse/inflation/operational_validation.py
 src/macropulse/inflation/policy.py
+src/macropulse/inflation/promotion.py
 src/macropulse/inflation/service.py
 src/macropulse/inflation/stages.py
 src/macropulse/inflation/validation.py
@@ -55,10 +59,13 @@ tests/test_fred_dates.py
 tests/test_fred_retry.py
 tests/test_inflation_candidate_validation.py
 tests/test_inflation_dataset.py
+tests/test_inflation_freeze_assessment_tooling.py
+tests/test_inflation_governed_live.py
 tests/test_inflation_integration.py
 tests/test_inflation_interval_calibration.py
 tests/test_inflation_models.py
 tests/test_inflation_policy.py
+tests/test_inflation_production_metadata.py
 tests/test_inflation_stages.py
 tests/test_inflation_transforms.py
 tests/test_inflation_validation_json.py

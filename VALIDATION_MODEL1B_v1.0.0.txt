@@ -1,0 +1,31 @@
+MacroPulse Model 1B v1.0.0 Package Validation
+==============================================
+
+Production basis
+----------------
+- Model owner explicitly approved the freeze on 31 July 2026.
+- Candidate validation: 28 passed, 0 failed, 0 warnings.
+- Governed-live operational validation: 20 passed, 0 failed, 0 warnings.
+- Freeze assessment: 14 passed, 0 failed, 0 warnings.
+- Freeze readiness: ready_for_model_owner_signoff.
+- Production point policy and interval method are unchanged from the validated governed-live candidate.
+
+Build verification
+------------------
+- All Python files compiled successfully.
+- 68 automated tests passed; 1 DuckDB integration test was skipped because the build environment does not include DuckDB.
+- A fake-repository promotion integration test verified the approval chain and idempotent rerun path.
+
+Package controls
+----------------
+- Model metadata is 1.0.0 / production.
+- Approved evidence IDs and owner approval are embedded in the governance config.
+- A guarded, idempotent production-promotion script verifies the local DuckDB evidence chain.
+- Production model card, freeze decision, runbook, and revalidation triggers are included.
+- Adaptive selection remains shadow-only.
+- Model 1A v1.0.0 production metadata and policy remain unchanged.
+- No .env file, API key, DuckDB database, cached FRED data, or user-generated reports are included.
+
+Local evidence checks performed by
+----------------------------------
+  python scripts\promote_model1b_v1.py

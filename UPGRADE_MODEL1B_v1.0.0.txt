@@ -1,0 +1,19 @@
+MacroPulse Model 1B v1.0.0 Production Upgrade
+==============================================
+
+1. Extract this package into C:\Users\Cenk\OneDrive\MacroPulse and replace files.
+2. Do not delete data\macropulse.duckdb or the reports directory.
+3. Run:
+
+   pip install -e .
+   python scripts\initialise_database.py
+   python scripts\promote_model1b_v1.py
+
+4. Run the first production forecast and validation:
+
+   python scripts\download_inflation_data.py
+   python scripts\run_inflation_nowcast.py
+   python scripts\run_inflation_operational_validation.py
+
+The promotion is idempotent. Rerunning it verifies and returns the existing
+approval instead of creating a conflicting approval record.

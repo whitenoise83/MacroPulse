@@ -3,13 +3,22 @@
 ## Model suite status
 
 - **Model 1A — US GDP Nowcast:** production v1.0.0, frozen and validated.
-- **Model 1B — US Inflation Nowcast:** development v0.2.0, vintage-aware validation foundation.
+- **Model 1B — US Inflation Nowcast:** production v1.0.0, frozen and validated.
 
-Model 1B now supports pseudo-real-time ALFRED reconstruction for headline/core CPI
-and headline/core PCE at four predeclared monthly release stages. Model 1A's
-approved production identity and policy are unchanged.
+Model 1B provides governed monthly forecasts for headline/core CPI and
+headline/core PCE. Forecasts are monthly log changes annualised by multiplying
+by 1,200.
 
-## Model 1B v0.2 workflow
+## Model 1B production policy
+
+- Headline CPI: Ridge-AR Ensemble at all four forecast stages.
+- Core CPI: 12-Month Mean at month open; Ridge-AR Ensemble thereafter.
+- Headline PCE: Bridge Ridge at all four forecast stages.
+- Core PCE: Bridge Ridge at month open; Ridge-AR Ensemble thereafter.
+- Production interval method: `exp_weighted_q80` using strictly prior errors.
+- Adaptive model selection: shadow challenger only.
+
+## Production workflow
 
 Use CMD inside Visual Studio Code:
 
@@ -19,68 +28,33 @@ cd /d C:\Users\Cenk\OneDrive\MacroPulse
 pip install -r requirements.txt
 pip install -e .
 python scripts\initialise_database.py
+python scripts\promote_model1b_v1.py
 ```
 
-Download current inflation data and the target initial-release history:
+Refresh data and run the governed production forecast:
 
 ```cmd
 python scripts\download_inflation_data.py
-python scripts\download_inflation_initial_targets.py
+python scripts\run_inflation_nowcast.py
+python scripts\run_inflation_operational_validation.py
 ```
 
-Run a smaller live-API smoke test first:
-
-```cmd
-python scripts\run_inflation_vintage_backtest.py --start 2022-01 --targets CPILFESL,PCEPILFE --stages month_end,pre_release
-```
-
-Then run the full development validation sample:
-
-```cmd
-python scripts\run_inflation_vintage_backtest.py --start 2015-01
-python scripts\run_inflation_validation.py
-```
-
-The four forecast stages are:
-
-- `month_open`
-- `mid_month`
-- `month_end`
-- `pre_release`
-
-Every historical forecast uses an ALFRED snapshot dated at the declared cutoff.
-The realised target is reconstructed from the target index's initial-release
-snapshot. Target-month observations are rejected if they appear before their
-initial release.
-
-## Current Model 1B models
-
-Each inflation target currently includes:
-
-- Inflation AR(1)
-- Inflation 12-Month Mean
-- Inflation Bridge Ridge
-- Inflation Ridge-AR Ensemble
-
-These remain development benchmarks. v0.2 validates the data and timing
-architecture; it does not freeze a production model.
-
-## Dashboard
+Open the application:
 
 ```cmd
 streamlit run app.py
 ```
 
-Open:
+The production promotion script verifies the complete approved evidence chain:
 
-- US Inflation Nowcast
-- Inflation Backtesting
+- candidate validation `5f0cd6ea-c41f-44da-a21a-43490d8e75ce` — 28/28 passed;
+- governed-live operational validation `58c89931-0f6b-43ed-8815-abbc99fa4ac8` — 20/20 passed;
+- freeze assessment `2b7fe987-384a-451b-971f-03d5bf5106c7` — 14/14 passed;
+- governed live run `905deade-2bbf-4c89-801e-ce296bb00d97`.
 
-The Inflation Backtesting page separates pseudo-real-time vintage evidence from
-the older latest-revised engineering benchmark.
+## Governance
 
-## Model 1A governance
-
-Model 1A remains `US_GDP_NOWCAST_1A v1.0.0` in production. Model 1B changes must
-not alter its approved configuration hash, code hash, stage policy, or approval
-record.
+Model 1A and Model 1B are separate production models. Changes to one model must
+not alter the other model's approved policy, version, hashes, validation history,
+or approval record. Material changes require challenger evidence, a new version,
+revalidation, and explicit model-owner approval.

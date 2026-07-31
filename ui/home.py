@@ -51,10 +51,9 @@ st.markdown(
 
 ### Model 1B — US Inflation Nowcast
 
-**Lifecycle:** Development v0.1.0. The foundation covers headline/core CPI and
-headline/core PCE with transparent AR, rolling-mean, Ridge bridge, and ensemble
-benchmarks. Vintage-aware validation and release-stage governance are intentionally
-not yet complete.
+**Lifecycle:** Production v1.0.0. The approved stable target-stage policy controls
+headline CPI, core CPI, headline PCE, and core PCE forecasts. `exp_weighted_q80`
+provides prior-only 80% intervals, while the adaptive selector remains shadow-only.
 """
 )
 

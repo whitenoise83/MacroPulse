@@ -97,9 +97,10 @@ model:
   interval_coverage: 0.8
   max_feature_carry_months: 2
   preferred_model: Stable target-stage policy candidate
-  interval_calibration_method: prior_only_rolling_absolute_error_quantile
+  interval_calibration_method: exp_weighted_q80
   interval_calibration_minimum_errors: 24
   interval_calibration_window: 48
+  interval_calibration_half_life: 18
   policy_evaluation_minimum_prior_errors: 24
   policy_evaluation_window: 36
   policy_switch_hurdle: 0.02

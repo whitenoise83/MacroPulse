@@ -1,5 +1,5 @@
 Metadata-Version: 2.4
 Name: macropulse
-Version: 1.5.0.dev0
+Version: 1.6.0
 Summary: Vintage-aware macroeconomic nowcasting platform
 Requires-Python: >=3.11

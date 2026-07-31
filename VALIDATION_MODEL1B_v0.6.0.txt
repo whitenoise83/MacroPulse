@@ -1,0 +1,14 @@
+MODEL 1B v0.6.0 PACKAGE VALIDATION
+
+- Python compilation: passed
+- Automated tests: 65 passed
+- DuckDB-only full integration test: skipped in the build container because the
+  DuckDB binary package is unavailable there
+- Governed live path: exercised with an in-memory repository fixture
+- Stable target-stage policy: verified
+- Prior-only live interval cutoff: verified
+- Governance signature sensitivity: verified
+- Existing Model 1A and Model 1B tests: passed
+- No credentials, .env file, database, cached FRED snapshots, or user reports included
+
+The user's real DuckDB migration and live FRED-backed run must be executed locally.

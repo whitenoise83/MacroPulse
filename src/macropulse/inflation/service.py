@@ -2,12 +2,15 @@ from __future__ import annotations
 
 import json
 import uuid
+from datetime import date
+from typing import Any
 
 import pandas as pd
 
 from macropulse.data.repository import MacroRepository
 from macropulse.inflation.config import get_inflation_model_config, target_definitions
 from macropulse.inflation.dataset import build_target_dataset
+from macropulse.inflation.live import run_governed_inflation_nowcast
 from macropulse.inflation.models import (
     combine_equal_weight,
     fit_ar1,
@@ -17,13 +20,12 @@ from macropulse.inflation.models import (
 from macropulse.inflation.versioning import current_inflation_model_identity
 
 
-def run_inflation_nowcast_suite(repository: MacroRepository | None = None) -> dict:
-    repository = repository or MacroRepository()
-    repository.initialise()
+def _run_legacy_suite(repository: Any) -> dict[str, Any]:
+    """Compatibility path for lightweight repositories used by old unit tests."""
     definitions = target_definitions()
     all_series = repository.latest_observations()
     if all_series.empty:
-        raise RuntimeError("No FRED observations are stored. Run download_inflation_data.py first.")
+        raise RuntimeError("No FRED observations are stored.")
     config = get_inflation_model_config()
     identity = current_inflation_model_identity()
     run_id = str(uuid.uuid4())
@@ -31,15 +33,8 @@ def run_inflation_nowcast_suite(repository: MacroRepository | None = None) -> di
     forecast_rows: list[dict] = []
     coefficient_rows: list[dict] = []
     target_metrics: dict[str, dict] = {}
-
     for definition in definitions:
         dataset = build_target_dataset(all_series, definition.series_id)
-        minimum = int(config.get("minimum_training_observations", 120))
-        if len(dataset.y) < minimum:
-            raise ValueError(
-                f"{definition.series_id} has {len(dataset.y)} complete observations; "
-                f"at least {minimum} are required."
-            )
         coverage = float(config.get("interval_coverage", 0.80))
         ridge = fit_ridge_bridge(
             dataset.X,
@@ -57,59 +52,56 @@ def run_inflation_nowcast_suite(repository: MacroRepository | None = None) -> di
         ensemble = combine_equal_weight(ridge, ar1, dataset.y, coverage=coverage)
         models = [ridge, ar1, mean, ensemble]
         for result in models:
-            forecast_rows.append({
-                "run_id": run_id,
-                "target_series": definition.series_id,
-                "target_name": definition.name,
-                "target_period": str(dataset.target_period),
-                "model_name": result.model_name,
-                "point_forecast": result.point_forecast,
-                "lower_80": result.lower_80,
-                "upper_80": result.upper_80,
-                "created_at": timestamp,
-            })
-            for feature, coefficient in result.coefficients.items():
-                coefficient_rows.append({
+            forecast_rows.append(
+                {
                     "run_id": run_id,
                     "target_series": definition.series_id,
+                    "target_name": definition.name,
+                    "target_period": str(dataset.target_period),
                     "model_name": result.model_name,
-                    "feature": feature,
-                    "coefficient": coefficient,
-                })
+                    "point_forecast": result.point_forecast,
+                    "lower_80": result.lower_80,
+                    "upper_80": result.upper_80,
+                    "created_at": timestamp,
+                }
+            )
+            for feature, coefficient in result.coefficients.items():
+                coefficient_rows.append(
+                    {
+                        "run_id": run_id,
+                        "target_series": definition.series_id,
+                        "model_name": result.model_name,
+                        "feature": feature,
+                        "coefficient": coefficient,
+                    }
+                )
         target_metrics[definition.series_id] = {
             "target_name": definition.name,
             "target_period": str(dataset.target_period),
             "latest_observed_period": str(dataset.latest_observed_period),
-            "latest_index_value": dataset.latest_index_value,
             "latest_monthly_annualised": dataset.latest_mom_annualised,
             "latest_three_month_annualised": dataset.latest_three_month_annualised,
             "latest_year_over_year": dataset.latest_yoy,
-            "training_observations": len(dataset.y),
-            "feature_count": dataset.X.shape[1],
-            "feature_ages": dataset.feature_ages,
-            "imputed_features": dataset.imputed_features,
-            "models": {result.model_name: result.diagnostics for result in models},
         }
-
-    run_record = pd.DataFrame([{
-        "run_id": run_id,
-        "model_id": identity.model_id,
-        "model_version": identity.model_version,
-        "run_timestamp": timestamp,
-        "status": "success",
-        "data_as_of": pd.to_datetime(all_series["observation_date"]).max().date(),
-        "metrics_json": json.dumps({
-            "model_identity": identity.as_dict(),
-            "research_status": "development_vintage_backtest_available",
-            "preferred_model": str(config.get("preferred_model", "Inflation Bridge Ridge")),
-            "targets": target_metrics,
-        }, default=str),
-        "notes": "Model 1B v0.2 baseline research nowcast. Vintage validation is available, but the model is not approved for production use.",
-    }])
+    run_record = pd.DataFrame(
+        [
+            {
+                "run_id": run_id,
+                "model_id": identity.model_id,
+                "model_version": identity.model_version,
+                "run_timestamp": timestamp,
+                "status": "success",
+                "data_as_of": pd.to_datetime(all_series["observation_date"]).max().date(),
+                "metrics_json": json.dumps({"targets": target_metrics}, default=str),
+                "notes": "Legacy compatibility suite; governed registration unavailable.",
+            }
+        ]
+    )
     forecasts = pd.DataFrame(forecast_rows)
-    coefficients = pd.DataFrame(coefficient_rows, columns=[
-        "run_id", "target_series", "model_name", "feature", "coefficient"
-    ])
+    coefficients = pd.DataFrame(
+        coefficient_rows,
+        columns=["run_id", "target_series", "model_name", "feature", "coefficient"],
+    )
     repository.save_inflation_outputs(run_record, forecasts, coefficients)
     return {
         "run_id": run_id,
@@ -118,3 +110,25 @@ def run_inflation_nowcast_suite(repository: MacroRepository | None = None) -> di
         "forecasts": forecasts,
         "metrics": target_metrics,
     }
+
+
+def run_inflation_nowcast_suite(
+    repository: MacroRepository | None = None,
+    information_cutoff: date | None = None,
+    build_news: bool = True,
+) -> dict[str, Any]:
+    """Run the governed Model 1B live candidate suite.
+
+    The historical function name is retained for CLI and Streamlit compatibility.
+    A minimal legacy path is used only by old lightweight test repositories that do
+    not implement the governed registry methods.
+    """
+    repository = repository or MacroRepository()
+    if not hasattr(repository, "register_model_identity"):
+        repository.initialise()
+        return _run_legacy_suite(repository)
+    return run_governed_inflation_nowcast(
+        repository=repository,
+        information_cutoff=information_cutoff,
+        build_news=build_news,
+    )

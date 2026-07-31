@@ -1,5 +1,12 @@
 # Changelog
 
+## Model 1B v1.0.0
+
+- Promoted the governed US inflation nowcast to production after owner approval.
+- Frozen the stable target-stage policy and `exp_weighted_q80` intervals.
+- Retained adaptive selection as shadow-only.
+- Added guarded production promotion, model card, runbook, and revalidation triggers.
+
 ## Model 1B v0.2.0
 
 - Added ALFRED historical information-set caching for inflation backtests.

@@ -70,3 +70,26 @@ def inflation_stage_forecast_date(
             raise ValueError("pre_release requires an initial release date.")
         return release_date - timedelta(days=1)
     raise ValueError(f"Unknown inflation forecast stage: {stage_code}")
+
+
+def infer_live_inflation_stage(
+    target_period: pd.Period | str,
+    information_cutoff: date,
+    release_date: date,
+) -> str:
+    """Return the latest predeclared stage reached by a live information cutoff."""
+    period = (
+        target_period
+        if isinstance(target_period, pd.Period)
+        else pd.Period(target_period, freq="M")
+    )
+    schedule = [
+        (inflation_stage_forecast_date(period, "month_open", release_date), "month_open"),
+        (inflation_stage_forecast_date(period, "mid_month", release_date), "mid_month"),
+        (inflation_stage_forecast_date(period, "month_end", release_date), "month_end"),
+        (inflation_stage_forecast_date(period, "pre_release", release_date), "pre_release"),
+    ]
+    reached = [item for item in schedule if item[0] <= information_cutoff]
+    if not reached:
+        return "month_open"
+    return max(reached, key=lambda item: item[0])[1]

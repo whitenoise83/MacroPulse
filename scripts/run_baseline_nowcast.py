@@ -1,8 +1,8 @@
-from macropulse.services.nowcast_service import run_baseline_nowcast
+from macropulse.services.nowcast_service import run_model_suite_nowcast
 
 
 def main() -> None:
-    result = run_baseline_nowcast()
+    result = run_model_suite_nowcast()
     print()
     print(f"Run ID: {result['run_id']}")
     print(f"Target period: {result['target_period']}")
@@ -14,7 +14,9 @@ def main() -> None:
         ].to_string(index=False)
     )
     print()
-    print(f"Imputed current-quarter features: {result['metrics']['imputed_features']}")
+    print(f"Imputed bridge features: {result['metrics']['imputed_features']}")
+    if result.get("dfm_error"):
+        print(f"DFM fallback reason: {result['dfm_error']}")
 
 
 if __name__ == "__main__":

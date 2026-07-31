@@ -1,0 +1,30 @@
+MacroPulse v0.6.1 - Robust Stage Policy and Selection Stability
+
+1. Stop Streamlit with Ctrl+C.
+2. Extract this package directly into C:\Users\Cenk\OneDrive\MacroPulse.
+3. Replace destination files when prompted.
+4. Run:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   pip install -e .
+   python scripts\initialise_database.py
+
+5. Rerun the staged backtest because v0.6.1 adds Stable Stage Policy and
+   Robust Stage-Adaptive Policy rows:
+
+   python scripts\run_staged_backtest.py --start 2015-01-01 > staged_backtest_v061.txt 2>&1
+
+6. Run validation:
+
+   python scripts\run_validation.py
+
+7. Create a governed live v0.6.1 forecast and validate again:
+
+   python scripts\download_fred_data.py
+   python scripts\run_dfm_nowcast.py
+   python scripts\run_validation.py
+
+Do not generate the final freeze assessment until the new validation output has
+been reviewed.

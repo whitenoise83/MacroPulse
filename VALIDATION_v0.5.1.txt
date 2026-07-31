@@ -1,0 +1,14 @@
+MacroPulse v0.5.1 validation
+
+Completed:
+- Compiled all Python source, UI, and test files.
+- Ran the complete automated test suite: 14 tests passed.
+- Tested safe parsing of valid, missing, and invalid metrics payloads.
+- Tested rounding and percentage formatting against the supplied run metrics.
+- Tested that production weights remain numeric and sum to one.
+- Tested readable DFM, selection, weighting, and model-identity diagnostics.
+- Confirmed raw JSON remains available only under an advanced expander.
+- Confirmed the package contains no .env, API key, DuckDB database, Parquet cache, or Python cache files.
+
+This release changes presentation only. It does not alter model estimates,
+forecast selection, production weights, backtests, information sets, or schemas.

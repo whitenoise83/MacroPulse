@@ -1,0 +1,65 @@
+UPPER-TAIL VALIDATION DIAGNOSTIC
+====================================================================================================
+Stage backtest ID: 382b4c6b-ef76-4ca1-b52f-d5e3e1ac66b1
+Model version: 0.6.1
+Created at: 2026-07-29 10:52:15.673400
+
+1. P90 comparison by forecast stage
+
+     forecast_stage  production_p90  best_static_p90  p90_ratio       best_p90_model  production_rmse  best_static_rmse  production_mae  best_static_mae  production_max  best_static_max
+pre_advance_release          5.0100           3.3715     1.4860         Bridge Ridge           2.8613            2.8613          1.8622           1.8622          8.7948           8.7948
+      after_month_2          5.3245           5.0581     1.0527 Dynamic Factor Model           2.7593            2.9766          1.8585           1.9059          7.6539           9.4947
+      after_month_1          4.7261           4.7261     1.0000 Dynamic Factor Model           4.5461            4.5461          2.2786           2.2786         24.0144          24.0144
+      early_quarter          4.1360           4.1360     1.0000 Dynamic Factor Model           6.1835            6.1835          2.4964           2.4964         34.3116          34.3116
+        quarter_end          4.7365           4.8790     0.9708         Bridge Ridge           2.6859            2.7508          1.8090           1.8748          8.0669           8.2106
+
+====================================================================================================
+2. Worst stage
+Forecast stage: pre_advance_release
+Production model: Stable Stage Policy
+Best static p90 model: Bridge Ridge
+P90 ratio: 1.4860
+
+3. Ten largest production absolute errors at the worst stage
+
+target_period forecast_date   actual  point_forecast__Stable Stage Policy  abs_error__Stable Stage Policy  point_forecast__Bridge Ridge  abs_error__Bridge Ridge  production_minus_best_abs_error
+       2020Q3    2020-10-28  28.5794                              19.7846                          8.7948                       16.8114                  11.7680                          -2.9732
+       2020Q2    2020-07-29 -39.9048                             -32.0544                          7.8504                      -16.7202                  23.1846                         -15.3342
+       2020Q1    2020-04-28  -4.9013                               2.6493                          7.5505                       -4.6484                   0.2528                           7.2977
+       2022Q1    2022-04-27  -1.4242                               5.0560                          6.4802                        7.4984                   8.9226                          -2.4424
+       2020Q4    2021-01-27   3.9341                               9.5389                          5.6048                        7.4308                   3.4967                           2.1081
+       2021Q3    2021-10-27   1.9959                               6.1136                          4.1177                        6.7967                   4.8008                          -0.6831
+       2022Q2    2022-07-27  -0.9386                               3.1448                          4.0833                        1.9543                   2.8929                           1.1905
+       2025Q1    2025-04-29  -0.2764                               2.9741                          3.2506                        2.2746                   2.5510                           0.6996
+       2021Q1    2021-04-28   6.1908                               3.3978                          2.7930                        7.9016                   1.7109                           1.0821
+       2023Q3    2023-10-25   4.7628                               2.2666                          2.4962                        2.1545                   2.6083                          -0.1121
+
+4. Quarters where production underperformed the best-p90 static model most
+
+target_period forecast_date  actual  point_forecast__Stable Stage Policy  abs_error__Stable Stage Policy  point_forecast__Bridge Ridge  abs_error__Bridge Ridge  production_minus_best_abs_error
+       2020Q1    2020-04-28 -4.9013                               2.6493                          7.5505                       -4.6484                   0.2528                           7.2977
+       2020Q4    2021-01-27  3.9341                               9.5389                          5.6048                        7.4308                   3.4967                           2.1081
+       2021Q4    2022-01-26  6.6606                               4.6973                          1.9633                        6.6431                   0.0175                           1.9458
+       2022Q2    2022-07-27 -0.9386                               3.1448                          4.0833                        1.9543                   2.8929                           1.1905
+       2015Q1    2015-04-28  0.2479                               2.1610                          1.9131                        1.0305                   0.7827                           1.1304
+       2021Q1    2021-04-28  6.1908                               3.3978                          2.7930                        7.9016                   1.7109                           1.0821
+       2015Q4    2016-01-28  0.6891                               2.3319                          1.6429                        1.3899                   0.7008                           0.9420
+       2025Q1    2025-04-29 -0.2764                               2.9741                          3.2506                        2.2746                   2.5510                           0.6996
+       2019Q1    2019-04-25  3.1227                               1.8941                          1.2287                        2.4673                   0.6554                           0.5732
+       2016Q1    2016-04-27  0.5364                               1.9413                          1.4050                        1.3804                   0.8441                           0.5609
+
+5. Stable-policy diagnostic rows for the worst stage
+
+     forecast_stage forecast_date target_period                                                                                                                                                                                                                                 details_json
+pre_advance_release    2024-01-24        2023Q4 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+pre_advance_release    2024-04-24        2024Q1 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+pre_advance_release    2024-07-24        2024Q2 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+pre_advance_release    2024-10-29        2024Q3 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+pre_advance_release    2025-01-29        2024Q4 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+pre_advance_release    2025-04-29        2025Q1 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+pre_advance_release    2025-07-29        2025Q2 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+pre_advance_release    2025-12-22        2025Q3 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+pre_advance_release    2026-02-19        2025Q4 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+pre_advance_release    2026-04-29        2026Q1 {"method": "predeclared_stable_stage_policy", "forecast_stage": "pre_advance_release", "declared_component": "Dynamic Factor Model", "selected_component": "Dynamic Factor Model", "fallback_used": false, "fallback_model": "Bridge Ridge"}
+
+Diagnostic complete.

@@ -1,0 +1,6 @@
+1. Extract into C:\Users\Cenk\OneDrive\MacroPulse and replace destination files.
+2. Activate the existing virtual environment.
+3. Run: pip install -e .
+4. Run: python scripts\initialise_database.py
+5. Run: python scripts\evaluate_inflation_policy.py --backtest-id fdd2f573-a425-4abc-8056-f9843955bac2
+6. Do not rerun the ALFRED vintage backtest.

@@ -1,0 +1,36 @@
+MacroPulse v0.3.1 upgrade
+=========================
+
+1. Stop Streamlit with Ctrl+C.
+2. Extract this ZIP directly into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+3. Replace files when Windows asks.
+4. In VS Code CMD run:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   pip install -e .
+   python scripts\initialise_database.py
+
+5. Run the upgraded backtest:
+
+   python scripts\run_backtest.py --start 2015-03-31
+
+6. Refresh the live model and dashboard:
+
+   python scripts\download_fred_data.py
+   python scripts\run_dfm_nowcast.py
+   streamlit run app.py
+
+Expected default models:
+- Bridge Ridge
+- AR(1) benchmark
+- Dynamic Factor Model
+- Bridge–DFM Ensemble
+- Rolling Bridge–DFM Ensemble
+
+The rolling ensemble uses only previously completed backtest quarters. The
+headline model is selected using trailing completed-quarter evidence, with Bridge
+Ridge as the fallback. AR(1) receives no production weight. A recent unreleased GDP quarter is displayed as a
+pending outcome rather than an error.

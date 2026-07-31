@@ -1,0 +1,16 @@
+MacroPulse Model 1B v0.5.0
+
+1. Extract this ZIP into C:\Users\Cenk\OneDrive\MacroPulse
+2. Replace destination files when prompted.
+3. Run:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -e .
+   python scripts\initialise_database.py
+
+4. Validate the completed vintage backtest:
+
+   python scripts\run_inflation_candidate_validation.py --backtest-id fdd2f573-a425-4abc-8056-f9843955bac2
+
+Do not rerun the vintage backtest. No FRED requests are made by candidate validation.

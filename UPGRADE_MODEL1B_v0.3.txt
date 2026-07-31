@@ -1,0 +1,53 @@
+MacroPulse Model 1B v0.3.0 - Prior-Only Interval Calibration
+=============================================================
+
+Purpose
+-------
+Model 1B v0.2 validated the vintage and release-timing architecture, but the
+80% intervals were too narrow because they were based on in-sample model
+residuals. v0.3 adds a separate prior-only calibration layer using realised
+pseudo-real-time forecast errors from strictly earlier target months.
+
+Important
+---------
+- Model 1A v1.0.0 is unchanged.
+- Point forecasts and vintage backtest errors are unchanged.
+- The expensive ALFRED vintage backtest does not need to be rerun.
+- The existing backtest ID can be calibrated directly from DuckDB.
+
+Install
+-------
+1. Extract this ZIP into the MacroPulse project root and replace files.
+2. In VS Code CMD:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -e .
+   python scripts\initialise_database.py
+
+Calibrate the completed backtest
+--------------------------------
+Use the validated backtest ID from v0.2:
+
+   python scripts\calibrate_inflation_intervals.py --backtest-id fdd2f573-a425-4abc-8056-f9843955bac2
+
+Then rerun validation:
+
+   python scripts\run_inflation_validation.py --backtest-id fdd2f573-a425-4abc-8056-f9843955bac2
+
+Method
+------
+- Target coverage: 80%
+- Grouping: target x forecast stage x model
+- Minimum prior errors: 24
+- Rolling calibration window: 48 months
+- Quantile: finite-sample adjusted empirical absolute-error quantile
+- Warm-up rows: no calibrated interval until the prior-error minimum is met
+- Current-month errors are never used to calibrate their own interval
+
+Backtest issue handling
+-----------------------
+Early target months with fewer than 120 complete training observations are now
+classified as expected warm-up skips rather than operational errors. Existing
+v0.2 backtest records are not modified, but the dashboard recognises the old
+message pattern and separates those rows from genuine issues.

@@ -1,0 +1,28 @@
+MacroPulse v0.5 package validation
+==================================
+
+Completed in the build environment
+----------------------------------
+- All 49 Python files compiled successfully.
+- 10 pytest tests passed.
+- Stage-date rules tested, including a Q4 pre-release cutoff in the following year.
+- Rolling empirical interval calibration tested for minimum-history fallback and prior-only use.
+- No-look-ahead audit tested for both valid and deliberately future-contaminated weight histories.
+- Configuration/code/information-set hashes tested for stability and order invariance.
+- Synthetic end-to-end staged backtest completed for all five stages:
+  4 target quarters x 5 stages x 5 models = 100 forecast rows.
+- Synthetic Dynamic Factor fits completed without failure in the five-stage test.
+- Synthetic automated validation completed successfully with all 17 checks passing
+  when the configured 20-quarter minimum was available.
+
+Not executable in the build environment
+---------------------------------------
+The build container did not contain the DuckDB or Streamlit binary packages and
+could not use the user's FRED API key. Therefore the following must be validated
+on the user's existing MacroPulse environment:
+- DuckDB schema migration against the existing database.
+- Live FRED historical-snapshot downloads.
+- Streamlit rendering with the user's stored runs.
+
+The package preserves the existing database and does not contain .env, API keys,
+DuckDB files, WAL files, or cached FRED data.

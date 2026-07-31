@@ -1,0 +1,29 @@
+MacroPulse v0.6.0 — GDP Production Specification Freeze Candidate
+
+1. Stop Streamlit with Ctrl+C.
+2. Extract this ZIP directly into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+3. Replace destination files when prompted.
+4. Run in VS Code CMD:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   pip install -e .
+   python scripts\initialise_database.py
+
+5. Re-run the full staged backtest:
+
+   python scripts\run_staged_backtest.py --start 2015-01-01
+
+6. Validate, create a governed live run, validate again, and generate the
+   freeze assessment:
+
+   python scripts\run_validation.py
+   python scripts\download_fred_data.py
+   python scripts\run_dfm_nowcast.py
+   python scripts\run_validation.py
+   python scripts\generate_freeze_assessment.py
+
+Existing .env, API key, DuckDB database, cached snapshots, historical forecasts,
+and reports are not included in the ZIP and are preserved.

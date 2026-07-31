@@ -1,0 +1,20 @@
+MacroPulse v0.6.0 package validation
+
+Completed in the build environment:
+- Python compilation of source, scripts, UI, and tests
+- 24 automated tests passed
+- Synthetic staged DFM run with 10 quarters
+- Six forecast series generated per quarter/stage
+- Stage-Adaptive Champion switched from fallback to prior-RMSE selection
+- Selected model used only prior forecast dates
+- Exact binomial coverage test verified for 41/45 observations
+- Winkler interval-score calculation verified
+- ALFRED 9999-12-31 date parsing verified without automatic-format warning
+- Effective Bridge/DFM production-weight mapping verified
+- Package inspection for credentials and user data
+
+Not executed in the build environment:
+- Live FRED calls, because the user's API key is not available
+- Migration against the user's existing DuckDB database
+- Full 2015-present live staged backtest
+- Model-owner freeze sign-off

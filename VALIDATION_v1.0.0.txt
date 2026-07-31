@@ -1,0 +1,30 @@
+MacroPulse Model 1A v1.0.0 Package Validation
+==============================================
+
+Production basis
+----------------
+- Model owner explicitly approved the freeze on 29 July 2026.
+- Approved validation ID: 7ee34d06-f393-4fb7-90ef-6239758f8503
+- Approved result: 27 passed, 0 failed, 0 warnings.
+- Freeze readiness: ready_for_model_owner_signoff.
+- Production policy is unchanged from validated model version 0.6.1.
+
+Package checks completed
+------------------------
+- All Python files compiled successfully.
+- 33 automated tests passed.
+- Version and lifecycle metadata are 1.0.0 / production.
+- Approved validation and freeze metadata are embedded in governance config.
+- Model-approval database schema and idempotent registration path are present.
+- Live production history is explicitly linked to validated model version 0.6.1.
+- No .env file, API key, DuckDB database, cached FRED data, or user report is included.
+
+Environment-specific checks not executable in the build container
+------------------------------------------------------------------
+- Migration against the user's existing DuckDB database.
+- Verification of the approved validation ID in the user's local database.
+- Verification of the user's local freeze-assessment file.
+- Live FRED requests using the user's API key.
+
+These checks are performed by:
+  python scripts\promote_model1a_v1.py

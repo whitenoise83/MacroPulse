@@ -1,0 +1,17 @@
+MacroPulse Model 1B v0.1.0 — Build Validation
+
+Completed in the build environment:
+- Full Python syntax compilation.
+- 38 automated tests passed, including all existing Model 1A tests.
+- Synthetic four-target inflation nowcast generated 16 forecast rows.
+- Synthetic chronological backtest generated results for all four targets and four models.
+- Model 1A production configuration and code hashes remained frozen at the owner-approved values.
+- ZIP inspected for .env files, API keys, DuckDB databases, cached data, and user reports.
+
+Not completed in the build environment:
+- Live FRED requests (the build environment does not have the user's FRED API key).
+- Migration against the user's existing DuckDB database.
+- Real-data inflation backtest and model-performance assessment.
+
+The included chronological backtest uses latest revised data and is not a substitute for
+vintage-aware pseudo-real-time validation.

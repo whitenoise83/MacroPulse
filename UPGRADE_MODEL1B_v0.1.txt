@@ -1,0 +1,18 @@
+MacroPulse Model 1B v0.1.0 — Inflation Nowcast Foundation
+
+This update preserves Model 1A v1.0.0 as the approved GDP production model and adds a
+separate development inflation branch.
+
+Install:
+  pip install -r requirements.txt
+  pip install -e .
+  python scripts\initialise_database.py
+
+Run:
+  python scripts\download_inflation_data.py
+  python scripts\run_inflation_nowcast.py
+  python scripts\run_inflation_backtest.py --start 2015-01
+  streamlit run app.py
+
+The chronological backtest is not vintage-aware and must not be interpreted as final
+out-of-sample validation.

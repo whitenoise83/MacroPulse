@@ -1,0 +1,23 @@
+MacroPulse v0.3 — Dynamic Factor Model update
+
+1. Stop Streamlit with Ctrl+C.
+2. Extract this ZIP directly into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+3. Replace existing files when Windows asks.
+4. In VS Code CMD run:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   pip install -e .
+   python scripts\initialise_database.py
+   python scripts\download_fred_data.py
+   python scripts\run_dfm_nowcast.py
+   streamlit run app.py
+
+5. Validate a short DFM backtest:
+
+   python scripts\run_backtest.py --start 2023-03-31
+
+Existing .env data and DuckDB content are retained. The initialise command only
+creates the new diagnostics table when it is missing.

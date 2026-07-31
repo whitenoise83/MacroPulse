@@ -1,0 +1,100 @@
+model:
+  model_id: US_GDP_NOWCAST_1A
+  display_name: MacroPulse Model 1A - US GDP Nowcast
+  version: 1.0.0
+  lifecycle_status: production
+  owner: MacroPulse
+  target_series: GDPC1
+  champion_model: Stable Stage Policy
+  shadow_challenger: Robust Stage-Adaptive Policy
+  fallback_model: Bridge Ridge
+  validation_source_version: 0.6.1
+  promoted_from_package_version: 0.6.1.post2
+  approval:
+    status: approved
+    decision: promote_to_production
+    approved_at: '2026-07-29T13:25:00+01:00'
+    approval_phrase: APPROVE MODEL 1A FREEZE
+    validation_id: 7ee34d06-f393-4fb7-90ef-6239758f8503
+    validation_status: pass
+    validation_passed: 27
+    validation_failed: 0
+    validation_warnings: 0
+    freeze_assessment_report: reports/freeze/model1a_freeze_assessment_20260729_122336.md
+    freeze_readiness: ready_for_model_owner_signoff
+  approved_config_hash: 20afe54e474247c9b7a460caa3ec7aedf56691115641f4ac1bbd4420205d46a7
+  approved_code_hash: 914938821fee082d69265afb69dfda939c597a24635a8878cf553577a6ea346d
+production_policy:
+  production_model: Stable Stage Policy
+  shadow_model: Robust Stage-Adaptive Policy
+  eligible_models:
+  - Bridge Ridge
+  - Dynamic Factor Model
+  - Bridge–DFM Ensemble
+  - Rolling Bridge–DFM Ensemble
+  stable_stage_policy:
+    early_quarter: Dynamic Factor Model
+    after_month_1: Dynamic Factor Model
+    after_month_2: Bridge–DFM Ensemble
+    quarter_end: Rolling Bridge–DFM Ensemble
+    pre_advance_release: Dynamic Factor Model
+  selection_window: 20
+  selection_min_history: 20
+  selection_switch_threshold: 0.05
+  selection_tail_ratio_limit: 1.1
+  selection_maximum_error_ratio_limit: 1.25
+  selection_score_weights:
+    rmse: 0.4
+    mae: 0.25
+    trimmed_rmse_10: 0.2
+    p90_abs_error: 0.15
+  dfm_failure_fallback: Bridge Ridge
+  stale_data_fallback: Bridge Ridge
+  interval_target: 0.8
+  interval_method: stage_specific_rolling_empirical_absolute_error
+  interval_window: 20
+  interval_min_history: 12
+  revalidation_triggers:
+  - any look-ahead audit failure
+  - DFM failure rate above 10 percent
+  - production RMSE or MAE above the best eligible static model by more than 10 percent
+    at any stage
+  - production upper-tail error above the best eligible static model by more than
+    20 percent at any stage
+  - stage-level interval coverage statistically inconsistent with the 80 percent target
+  - material data-definition or transformation change
+  - two consecutive quarters with absolute forecast error above 5 percentage points
+  performance_history_version: 0.6.1
+validation:
+  minimum_evaluated_quarters: 20
+  maximum_dfm_failure_rate: 0.1
+  champion_max_rmse_ratio_to_bridge: 1.02
+  champion_max_stage_rmse_ratio_to_best_static: 1.1
+  champion_max_stage_mae_ratio_to_best_static: 1.1
+  champion_max_stage_p90_ratio_to_best_static: 1.2
+  champion_max_stage_max_error_ratio_to_best_static: 1.25
+  interval_target_coverage: 0.8
+  interval_test_significance: 0.05
+  clustered_coverage_bootstrap_samples: 5000
+  maximum_interval_score_ratio_to_bridge: 1.1
+  maximum_news_arithmetic_gap: 1.0e-06
+  maximum_news_residual_interaction: 0.01
+  minimum_stage_history_for_interval_calibration: 12
+  robust_max_switches_per_stage: 6
+staged_backtest:
+  rolling_window: 12
+  rolling_min_history: 8
+  interval_window: 20
+  interval_min_history: 12
+  interval_coverage: 0.8
+  selection_window: 20
+  selection_min_history: 20
+  selection_switch_threshold: 0.05
+  selection_tail_ratio_limit: 1.1
+  selection_maximum_error_ratio_limit: 1.25
+  default_stages:
+  - early_quarter
+  - after_month_1
+  - after_month_2
+  - quarter_end
+  - pre_advance_release

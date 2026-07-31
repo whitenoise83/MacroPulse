@@ -1,0 +1,305 @@
+[1/47 | 1/5] 2015Q1 early_quarter as of 2015-01-15
+[1/47 | 2/5] 2015Q1 after_month_1 as of 2015-02-15
+[1/47 | 3/5] 2015Q1 after_month_2 as of 2015-03-15
+[1/47 | 4/5] 2015Q1 quarter_end as of 2015-03-31
+[1/47 | 5/5] 2015Q1 pre_advance_release as of 2015-04-28
+[2/47 | 1/5] 2015Q2 early_quarter as of 2015-04-15
+[2/47 | 2/5] 2015Q2 after_month_1 as of 2015-05-15
+[2/47 | 3/5] 2015Q2 after_month_2 as of 2015-06-15
+[2/47 | 4/5] 2015Q2 quarter_end as of 2015-06-30
+[2/47 | 5/5] 2015Q2 pre_advance_release as of 2015-07-29
+[3/47 | 1/5] 2015Q3 early_quarter as of 2015-07-15
+[3/47 | 2/5] 2015Q3 after_month_1 as of 2015-08-15
+[3/47 | 3/5] 2015Q3 after_month_2 as of 2015-09-15
+[3/47 | 4/5] 2015Q3 quarter_end as of 2015-09-30
+[3/47 | 5/5] 2015Q3 pre_advance_release as of 2015-10-28
+[4/47 | 1/5] 2015Q4 early_quarter as of 2015-10-15
+[4/47 | 2/5] 2015Q4 after_month_1 as of 2015-11-15
+[4/47 | 3/5] 2015Q4 after_month_2 as of 2015-12-15
+[4/47 | 4/5] 2015Q4 quarter_end as of 2015-12-31
+[4/47 | 5/5] 2015Q4 pre_advance_release as of 2016-01-28
+[5/47 | 1/5] 2016Q1 early_quarter as of 2016-01-15
+[5/47 | 2/5] 2016Q1 after_month_1 as of 2016-02-15
+[5/47 | 3/5] 2016Q1 after_month_2 as of 2016-03-15
+[5/47 | 4/5] 2016Q1 quarter_end as of 2016-03-31
+[5/47 | 5/5] 2016Q1 pre_advance_release as of 2016-04-27
+[6/47 | 1/5] 2016Q2 early_quarter as of 2016-04-15
+[6/47 | 2/5] 2016Q2 after_month_1 as of 2016-05-15
+[6/47 | 3/5] 2016Q2 after_month_2 as of 2016-06-15
+[6/47 | 4/5] 2016Q2 quarter_end as of 2016-06-30
+[6/47 | 5/5] 2016Q2 pre_advance_release as of 2016-07-28
+[7/47 | 1/5] 2016Q3 early_quarter as of 2016-07-15
+[7/47 | 2/5] 2016Q3 after_month_1 as of 2016-08-15
+[7/47 | 3/5] 2016Q3 after_month_2 as of 2016-09-15
+[7/47 | 4/5] 2016Q3 quarter_end as of 2016-09-30
+[7/47 | 5/5] 2016Q3 pre_advance_release as of 2016-10-27
+[8/47 | 1/5] 2016Q4 early_quarter as of 2016-10-15
+[8/47 | 2/5] 2016Q4 after_month_1 as of 2016-11-15
+[8/47 | 3/5] 2016Q4 after_month_2 as of 2016-12-15
+[8/47 | 4/5] 2016Q4 quarter_end as of 2016-12-31
+[8/47 | 5/5] 2016Q4 pre_advance_release as of 2017-01-26
+[9/47 | 1/5] 2017Q1 early_quarter as of 2017-01-15
+[9/47 | 2/5] 2017Q1 after_month_1 as of 2017-02-15
+[9/47 | 3/5] 2017Q1 after_month_2 as of 2017-03-15
+[9/47 | 4/5] 2017Q1 quarter_end as of 2017-03-31
+[9/47 | 5/5] 2017Q1 pre_advance_release as of 2017-04-27
+[10/47 | 1/5] 2017Q2 early_quarter as of 2017-04-15
+[10/47 | 2/5] 2017Q2 after_month_1 as of 2017-05-15
+[10/47 | 3/5] 2017Q2 after_month_2 as of 2017-06-15
+[10/47 | 4/5] 2017Q2 quarter_end as of 2017-06-30
+[10/47 | 5/5] 2017Q2 pre_advance_release as of 2017-07-27
+[11/47 | 1/5] 2017Q3 early_quarter as of 2017-07-15
+[11/47 | 2/5] 2017Q3 after_month_1 as of 2017-08-15
+[11/47 | 3/5] 2017Q3 after_month_2 as of 2017-09-15
+[11/47 | 4/5] 2017Q3 quarter_end as of 2017-09-30
+[11/47 | 5/5] 2017Q3 pre_advance_release as of 2017-10-26
+[12/47 | 1/5] 2017Q4 early_quarter as of 2017-10-15
+[12/47 | 2/5] 2017Q4 after_month_1 as of 2017-11-15
+[12/47 | 3/5] 2017Q4 after_month_2 as of 2017-12-15
+[12/47 | 4/5] 2017Q4 quarter_end as of 2017-12-31
+[12/47 | 5/5] 2017Q4 pre_advance_release as of 2018-01-25
+[13/47 | 1/5] 2018Q1 early_quarter as of 2018-01-15
+[13/47 | 2/5] 2018Q1 after_month_1 as of 2018-02-15
+[13/47 | 3/5] 2018Q1 after_month_2 as of 2018-03-15
+[13/47 | 4/5] 2018Q1 quarter_end as of 2018-03-31
+[13/47 | 5/5] 2018Q1 pre_advance_release as of 2018-04-26
+[14/47 | 1/5] 2018Q2 early_quarter as of 2018-04-15
+[14/47 | 2/5] 2018Q2 after_month_1 as of 2018-05-15
+[14/47 | 3/5] 2018Q2 after_month_2 as of 2018-06-15
+[14/47 | 4/5] 2018Q2 quarter_end as of 2018-06-30
+[14/47 | 5/5] 2018Q2 pre_advance_release as of 2018-07-26
+[15/47 | 1/5] 2018Q3 early_quarter as of 2018-07-15
+[15/47 | 2/5] 2018Q3 after_month_1 as of 2018-08-15
+[15/47 | 3/5] 2018Q3 after_month_2 as of 2018-09-15
+[15/47 | 4/5] 2018Q3 quarter_end as of 2018-09-30
+[15/47 | 5/5] 2018Q3 pre_advance_release as of 2018-10-25
+[16/47 | 1/5] 2018Q4 early_quarter as of 2018-10-15
+[16/47 | 2/5] 2018Q4 after_month_1 as of 2018-11-15
+[16/47 | 3/5] 2018Q4 after_month_2 as of 2018-12-15
+[16/47 | 4/5] 2018Q4 quarter_end as of 2018-12-31
+[16/47 | 5/5] 2018Q4 pre_advance_release as of 2019-02-27
+[17/47 | 1/5] 2019Q1 early_quarter as of 2019-01-15
+[17/47 | 2/5] 2019Q1 after_month_1 as of 2019-02-15
+[17/47 | 3/5] 2019Q1 after_month_2 as of 2019-03-15
+[17/47 | 4/5] 2019Q1 quarter_end as of 2019-03-31
+[17/47 | 5/5] 2019Q1 pre_advance_release as of 2019-04-25
+[18/47 | 1/5] 2019Q2 early_quarter as of 2019-04-15
+[18/47 | 2/5] 2019Q2 after_month_1 as of 2019-05-15
+[18/47 | 3/5] 2019Q2 after_month_2 as of 2019-06-15
+[18/47 | 4/5] 2019Q2 quarter_end as of 2019-06-30
+[18/47 | 5/5] 2019Q2 pre_advance_release as of 2019-07-25
+[19/47 | 1/5] 2019Q3 early_quarter as of 2019-07-15
+[19/47 | 2/5] 2019Q3 after_month_1 as of 2019-08-15
+[19/47 | 3/5] 2019Q3 after_month_2 as of 2019-09-15
+[19/47 | 4/5] 2019Q3 quarter_end as of 2019-09-30
+[19/47 | 5/5] 2019Q3 pre_advance_release as of 2019-10-29
+[20/47 | 1/5] 2019Q4 early_quarter as of 2019-10-15
+[20/47 | 2/5] 2019Q4 after_month_1 as of 2019-11-15
+[20/47 | 3/5] 2019Q4 after_month_2 as of 2019-12-15
+[20/47 | 4/5] 2019Q4 quarter_end as of 2019-12-31
+[20/47 | 5/5] 2019Q4 pre_advance_release as of 2020-01-29
+[21/47 | 1/5] 2020Q1 early_quarter as of 2020-01-15
+[21/47 | 2/5] 2020Q1 after_month_1 as of 2020-02-15
+[21/47 | 3/5] 2020Q1 after_month_2 as of 2020-03-15
+[21/47 | 4/5] 2020Q1 quarter_end as of 2020-03-31
+[21/47 | 5/5] 2020Q1 pre_advance_release as of 2020-04-28
+[22/47 | 1/5] 2020Q2 early_quarter as of 2020-04-15
+[22/47 | 2/5] 2020Q2 after_month_1 as of 2020-05-15
+[22/47 | 3/5] 2020Q2 after_month_2 as of 2020-06-15
+[22/47 | 4/5] 2020Q2 quarter_end as of 2020-06-30
+[22/47 | 5/5] 2020Q2 pre_advance_release as of 2020-07-29
+[23/47 | 1/5] 2020Q3 early_quarter as of 2020-07-15
+[23/47 | 2/5] 2020Q3 after_month_1 as of 2020-08-15
+[23/47 | 3/5] 2020Q3 after_month_2 as of 2020-09-15
+[23/47 | 4/5] 2020Q3 quarter_end as of 2020-09-30
+[23/47 | 5/5] 2020Q3 pre_advance_release as of 2020-10-28
+[24/47 | 1/5] 2020Q4 early_quarter as of 2020-10-15
+[24/47 | 2/5] 2020Q4 after_month_1 as of 2020-11-15
+[24/47 | 3/5] 2020Q4 after_month_2 as of 2020-12-15
+[24/47 | 4/5] 2020Q4 quarter_end as of 2020-12-31
+[24/47 | 5/5] 2020Q4 pre_advance_release as of 2021-01-27
+[25/47 | 1/5] 2021Q1 early_quarter as of 2021-01-15
+[25/47 | 2/5] 2021Q1 after_month_1 as of 2021-02-15
+[25/47 | 3/5] 2021Q1 after_month_2 as of 2021-03-15
+[25/47 | 4/5] 2021Q1 quarter_end as of 2021-03-31
+[25/47 | 5/5] 2021Q1 pre_advance_release as of 2021-04-28
+[26/47 | 1/5] 2021Q2 early_quarter as of 2021-04-15
+[26/47 | 2/5] 2021Q2 after_month_1 as of 2021-05-15
+[26/47 | 3/5] 2021Q2 after_month_2 as of 2021-06-15
+[26/47 | 4/5] 2021Q2 quarter_end as of 2021-06-30
+[26/47 | 5/5] 2021Q2 pre_advance_release as of 2021-07-28
+[27/47 | 1/5] 2021Q3 early_quarter as of 2021-07-15
+[27/47 | 2/5] 2021Q3 after_month_1 as of 2021-08-15
+[27/47 | 3/5] 2021Q3 after_month_2 as of 2021-09-15
+[27/47 | 4/5] 2021Q3 quarter_end as of 2021-09-30
+[27/47 | 5/5] 2021Q3 pre_advance_release as of 2021-10-27
+[28/47 | 1/5] 2021Q4 early_quarter as of 2021-10-15
+[28/47 | 2/5] 2021Q4 after_month_1 as of 2021-11-15
+[28/47 | 3/5] 2021Q4 after_month_2 as of 2021-12-15
+[28/47 | 4/5] 2021Q4 quarter_end as of 2021-12-31
+[28/47 | 5/5] 2021Q4 pre_advance_release as of 2022-01-26
+[29/47 | 1/5] 2022Q1 early_quarter as of 2022-01-15
+[29/47 | 2/5] 2022Q1 after_month_1 as of 2022-02-15
+[29/47 | 3/5] 2022Q1 after_month_2 as of 2022-03-15
+[29/47 | 4/5] 2022Q1 quarter_end as of 2022-03-31
+[29/47 | 5/5] 2022Q1 pre_advance_release as of 2022-04-27
+[30/47 | 1/5] 2022Q2 early_quarter as of 2022-04-15
+[30/47 | 2/5] 2022Q2 after_month_1 as of 2022-05-15
+[30/47 | 3/5] 2022Q2 after_month_2 as of 2022-06-15
+[30/47 | 4/5] 2022Q2 quarter_end as of 2022-06-30
+[30/47 | 5/5] 2022Q2 pre_advance_release as of 2022-07-27
+[31/47 | 1/5] 2022Q3 early_quarter as of 2022-07-15
+[31/47 | 2/5] 2022Q3 after_month_1 as of 2022-08-15
+[31/47 | 3/5] 2022Q3 after_month_2 as of 2022-09-15
+[31/47 | 4/5] 2022Q3 quarter_end as of 2022-09-30
+[31/47 | 5/5] 2022Q3 pre_advance_release as of 2022-10-26
+[32/47 | 1/5] 2022Q4 early_quarter as of 2022-10-15
+[32/47 | 2/5] 2022Q4 after_month_1 as of 2022-11-15
+[32/47 | 3/5] 2022Q4 after_month_2 as of 2022-12-15
+[32/47 | 4/5] 2022Q4 quarter_end as of 2022-12-31
+[32/47 | 5/5] 2022Q4 pre_advance_release as of 2023-01-25
+[33/47 | 1/5] 2023Q1 early_quarter as of 2023-01-15
+[33/47 | 2/5] 2023Q1 after_month_1 as of 2023-02-15
+[33/47 | 3/5] 2023Q1 after_month_2 as of 2023-03-15
+[33/47 | 4/5] 2023Q1 quarter_end as of 2023-03-31
+[33/47 | 5/5] 2023Q1 pre_advance_release as of 2023-04-26
+[34/47 | 1/5] 2023Q2 early_quarter as of 2023-04-15
+[34/47 | 2/5] 2023Q2 after_month_1 as of 2023-05-15
+[34/47 | 3/5] 2023Q2 after_month_2 as of 2023-06-15
+[34/47 | 4/5] 2023Q2 quarter_end as of 2023-06-30
+[34/47 | 5/5] 2023Q2 pre_advance_release as of 2023-07-26
+[35/47 | 1/5] 2023Q3 early_quarter as of 2023-07-15
+[35/47 | 2/5] 2023Q3 after_month_1 as of 2023-08-15
+[35/47 | 3/5] 2023Q3 after_month_2 as of 2023-09-15
+[35/47 | 4/5] 2023Q3 quarter_end as of 2023-09-30
+[35/47 | 5/5] 2023Q3 pre_advance_release as of 2023-10-25
+[36/47 | 1/5] 2023Q4 early_quarter as of 2023-10-15
+[36/47 | 2/5] 2023Q4 after_month_1 as of 2023-11-15
+[36/47 | 3/5] 2023Q4 after_month_2 as of 2023-12-15
+[36/47 | 4/5] 2023Q4 quarter_end as of 2023-12-31
+[36/47 | 5/5] 2023Q4 pre_advance_release as of 2024-01-24
+[37/47 | 1/5] 2024Q1 early_quarter as of 2024-01-15
+[37/47 | 2/5] 2024Q1 after_month_1 as of 2024-02-15
+[37/47 | 3/5] 2024Q1 after_month_2 as of 2024-03-15
+[37/47 | 4/5] 2024Q1 quarter_end as of 2024-03-31
+[37/47 | 5/5] 2024Q1 pre_advance_release as of 2024-04-24
+[38/47 | 1/5] 2024Q2 early_quarter as of 2024-04-15
+[38/47 | 2/5] 2024Q2 after_month_1 as of 2024-05-15
+[38/47 | 3/5] 2024Q2 after_month_2 as of 2024-06-15
+[38/47 | 4/5] 2024Q2 quarter_end as of 2024-06-30
+[38/47 | 5/5] 2024Q2 pre_advance_release as of 2024-07-24
+[39/47 | 1/5] 2024Q3 early_quarter as of 2024-07-15
+[39/47 | 2/5] 2024Q3 after_month_1 as of 2024-08-15
+[39/47 | 3/5] 2024Q3 after_month_2 as of 2024-09-15
+[39/47 | 4/5] 2024Q3 quarter_end as of 2024-09-30
+[39/47 | 5/5] 2024Q3 pre_advance_release as of 2024-10-29
+[40/47 | 1/5] 2024Q4 early_quarter as of 2024-10-15
+[40/47 | 2/5] 2024Q4 after_month_1 as of 2024-11-15
+[40/47 | 3/5] 2024Q4 after_month_2 as of 2024-12-15
+[40/47 | 4/5] 2024Q4 quarter_end as of 2024-12-31
+[40/47 | 5/5] 2024Q4 pre_advance_release as of 2025-01-29
+[41/47 | 1/5] 2025Q1 early_quarter as of 2025-01-15
+[41/47 | 2/5] 2025Q1 after_month_1 as of 2025-02-15
+[41/47 | 3/5] 2025Q1 after_month_2 as of 2025-03-15
+[41/47 | 4/5] 2025Q1 quarter_end as of 2025-03-31
+[41/47 | 5/5] 2025Q1 pre_advance_release as of 2025-04-29
+[42/47 | 1/5] 2025Q2 early_quarter as of 2025-04-15
+[42/47 | 2/5] 2025Q2 after_month_1 as of 2025-05-15
+[42/47 | 3/5] 2025Q2 after_month_2 as of 2025-06-15
+[42/47 | 4/5] 2025Q2 quarter_end as of 2025-06-30
+[42/47 | 5/5] 2025Q2 pre_advance_release as of 2025-07-29
+[43/47 | 1/5] 2025Q3 early_quarter as of 2025-07-15
+[43/47 | 2/5] 2025Q3 after_month_1 as of 2025-08-15
+[43/47 | 3/5] 2025Q3 after_month_2 as of 2025-09-15
+[43/47 | 4/5] 2025Q3 quarter_end as of 2025-09-30
+[43/47 | 5/5] 2025Q3 pre_advance_release as of 2025-12-22
+[44/47 | 1/5] 2025Q4 early_quarter as of 2025-10-15
+[44/47 | 2/5] 2025Q4 after_month_1 as of 2025-11-15
+[44/47 | 3/5] 2025Q4 after_month_2 as of 2025-12-15
+[44/47 | 4/5] 2025Q4 quarter_end as of 2025-12-31
+[44/47 | 5/5] 2025Q4 pre_advance_release as of 2026-02-19
+[45/47 | 1/5] 2026Q1 early_quarter as of 2026-01-15
+[45/47 | 2/5] 2026Q1 after_month_1 as of 2026-02-15
+[45/47 | 3/5] 2026Q1 after_month_2 as of 2026-03-15
+[45/47 | 4/5] 2026Q1 quarter_end as of 2026-03-31
+[45/47 | 5/5] 2026Q1 pre_advance_release as of 2026-04-29
+[46/47] 2026Q2: pending outcome
+[47/47] 2026Q3: pending outcome
+
+Staged backtest complete
+ID: 382b4c6b-ef76-4ca1-b52f-d5e3e1ac66b1
+Status: success
+Forecast rows: 1575
+Pending outcomes: 2
+Skipped stages/quarters: 0
+DFM failures: 0
+
+Stage metrics
+     forecast_stage                   model_name  observations   rmse  trimmed_rmse_10   mae  median_ae  max_abs_error  p90_abs_error   bias direction_accuracy  positive_base_rate_accuracy direction_skill interval_coverage  average_interval_width  median_interval_width  interval_score_80 win_rate  average_days_to_release raw_interval_coverage  raw_average_interval_width  coverage_p_value  coverage_ci_lower  coverage_ci_upper  target_inside_95_ci
+      early_quarter         Dynamic Factor Model            45  6.183            1.580 2.496      0.770         34.312          4.136  0.758              91.1%                     0.888889            2.2%             84.4%                   5.921                  4.799             19.213     8.9%                  106.667                 91.1%                    7.481252             0.577           0.712161           0.922546                 True
+      early_quarter Robust Stage-Adaptive Policy            45  6.183            1.580 2.496      0.770         34.312          4.136  0.758              91.1%                     0.888889            2.2%             84.4%                   5.921                  4.799             19.213     8.9%                  106.667                 91.1%                    7.481252             0.577           0.712161           0.922546                 True
+      early_quarter          Stable Stage Policy            45  6.183            1.580 2.496      0.770         34.312          4.136  0.758              91.1%                     0.888889            2.2%             84.4%                   5.921                  4.799             19.213     8.9%                  106.667                 91.1%                    7.481252             0.577           0.712161           0.922546                 True
+      early_quarter  Rolling Bridge-DFM Ensemble            45  7.500            1.771 2.879      0.794         34.996          6.046  0.742              88.9%                     0.888889            0.0%             88.9%                   7.440                  4.577             24.402     1.1%                  106.667                 84.4%                    6.487294             0.190           0.765009           0.951595                 True
+      early_quarter          Bridge-DFM Ensemble            45  7.561            1.810 2.895      0.750         35.003          6.436  0.810              88.9%                     0.888889            0.0%             88.9%                   8.412                  4.577             25.713     7.8%                  106.667                 84.4%                    6.263381             0.190           0.765009           0.951595                 True
+      early_quarter                 Bridge Ridge            45  9.375            2.111 3.523      1.008         47.297          7.865  0.862              88.9%                     0.888889            0.0%             82.2%                   9.237                  4.354             31.239    31.1%                  106.667                 82.2%                    4.593509             0.853           0.686702           0.907056                 True
+      early_quarter                        AR(1)            45  9.497            2.177 4.024      1.220         41.604          6.524 -1.370              82.2%                     0.888889           -6.7%             84.4%                  14.781                  5.747             39.471    33.3%                  106.667                 86.7%                    8.608322             0.577           0.712161           0.922546                 True
+      after_month_1         Dynamic Factor Model            45  4.546            1.818 2.279      0.905         24.014          4.726 -0.175              91.1%                     0.888889            2.2%             86.7%                   6.820                  4.579             15.958    12.6%                   75.911                 84.4%                    6.053902             0.351           0.738227           0.937429                 True
+      after_month_1 Robust Stage-Adaptive Policy            45  4.546            1.818 2.279      0.905         24.014          4.726 -0.175              91.1%                     0.888889            2.2%             86.7%                   6.820                  4.579             15.958    12.6%                   75.911                 84.4%                    6.053902             0.351           0.738227           0.937429                 True
+      after_month_1          Stable Stage Policy            45  4.546            1.818 2.279      0.905         24.014          4.726 -0.175              91.1%                     0.888889            2.2%             86.7%                   6.820                  4.579             15.958    12.6%                   75.911                 84.4%                    6.053902             0.351           0.738227           0.937429                 True
+      after_month_1  Rolling Bridge-DFM Ensemble            45  7.107            1.941 2.830      1.124         43.764          5.169 -0.582              91.1%                     0.888889            2.2%             91.1%                   8.187                  4.455             21.522     5.6%                   75.911                 84.4%                    5.585186             0.063           0.792664           0.964889                 True
+      after_month_1          Bridge-DFM Ensemble            45  7.125            2.040 2.887      1.149         43.727          5.700 -0.495              91.1%                     0.888889            2.2%             91.1%                   8.398                  4.455             21.770     3.3%                   75.911                 82.2%                    5.402219             0.063           0.792664           0.964889                 True
+      after_month_1                 Bridge Ridge            45  9.992            2.351 3.632      1.779         63.440          6.298 -0.816              88.9%                     0.888889            0.0%             84.4%                   8.362                  4.327             26.784    11.1%                   75.911                 73.3%                    4.611840             0.577           0.712161           0.922546                 True
+      after_month_1                        AR(1)            45 11.022            2.090 3.942      1.189         59.658          6.122 -1.478              86.7%                     0.888889           -2.2%             88.9%                   8.255                  5.725             33.032    42.2%                   75.911                 91.1%                    8.753019             0.190           0.765009           0.951595                 True
+      after_month_2          Bridge-DFM Ensemble            45  2.759            1.840 1.859      1.112          7.654          5.324  0.433              91.1%                     0.888889            2.2%             86.7%                   7.268                  4.441             11.955     3.7%                   45.889                 82.2%                    4.879601             0.351           0.738227           0.937429                 True
+      after_month_2 Robust Stage-Adaptive Policy            45  2.759            1.840 1.859      1.112          7.654          5.324  0.433              91.1%                     0.888889            2.2%             86.7%                   7.268                  4.441             11.955     3.7%                   45.889                 82.2%                    4.879601             0.351           0.738227           0.937429                 True
+      after_month_2          Stable Stage Policy            45  2.759            1.840 1.859      1.112          7.654          5.324  0.433              91.1%                     0.888889            2.2%             86.7%                   7.268                  4.441             11.955     3.7%                   45.889                 82.2%                    4.879601             0.351           0.738227           0.937429                 True
+      after_month_2  Rolling Bridge-DFM Ensemble            45  2.785            1.828 1.876      1.280          7.897          5.239  0.401              91.1%                     0.888889            2.2%             86.7%                   7.557                  4.441             12.371     4.4%                   45.889                 82.2%                    4.911034             0.351           0.738227           0.937429                 True
+      after_month_2         Dynamic Factor Model            45  2.977            1.814 1.906      0.969          9.495          5.058  0.685              91.1%                     0.888889            2.2%             84.4%                   7.528                  4.511             13.020    35.6%                   45.889                 75.6%                    5.121516             0.577           0.712161           0.922546                 True
+      after_month_2                 Bridge Ridge            45  4.230            2.080 2.415      1.406         21.428          5.798  0.181              91.1%                     0.888889            2.2%             77.8%                   8.017                  4.882             15.870    15.6%                   45.889                 71.1%                    4.609944             0.710           0.637307           0.874553                 True
+      after_month_2                        AR(1)            45 10.757            2.097 3.898      1.146         57.495          6.127 -1.407              86.7%                     0.888889           -2.2%             88.9%                   8.279                  5.746             32.514    33.3%                   45.889                 91.1%                    8.746068             0.190           0.765009           0.951595                 True
+        quarter_end          Stable Stage Policy            45  2.686            1.709 1.809      1.085          8.067          4.736  0.598              91.1%                     0.888889            2.2%             84.4%                   6.524                  4.401             11.364     2.2%                   30.378                 75.6%                    4.827551             0.577           0.712161           0.922546                 True
+        quarter_end  Rolling Bridge-DFM Ensemble            45  2.686            1.709 1.809      1.085          8.067          4.736  0.598              91.1%                     0.888889            2.2%             84.4%                   6.524                  4.401             11.364     2.2%                   30.378                 75.6%                    4.827551             0.577           0.712161           0.922546                 True
+        quarter_end          Bridge-DFM Ensemble            45  2.688            1.707 1.816      1.085          8.199          4.662  0.584              91.1%                     0.888889            2.2%             84.4%                   6.502                  4.401             11.355     0.0%                   30.378                 75.6%                    4.828869             0.577           0.712161           0.922546                 True
+        quarter_end Robust Stage-Adaptive Policy            45  2.741            1.738 1.859      1.085          8.211          4.879  0.635              91.1%                     0.888889            2.2%             84.4%                   6.871                  4.401             11.877     5.6%                   30.378                 77.8%                    4.692377             0.577           0.712161           0.922546                 True
+        quarter_end                 Bridge Ridge            45  2.751            1.771 1.897      1.032          8.211          4.879  0.517              91.1%                     0.888889            2.2%             88.9%                   6.848                  4.193             11.635    15.6%                   30.378                 80.0%                    4.609990             0.190           0.765009           0.951595                 True
+        quarter_end         Dynamic Factor Model            45  2.890            1.795 1.875      0.988          8.954          5.003  0.651              91.1%                     0.888889            2.2%             86.7%                   7.421                  4.486             12.778    30.0%                   30.378                 77.8%                    5.034207             0.351           0.738227           0.937429                 True
+        quarter_end                        AR(1)            45 10.697            2.092 3.886      1.154         56.933          6.136 -1.378              86.7%                     0.888889           -2.2%             86.7%                   8.242                  5.733             32.524    44.4%                   30.378                 91.1%                    8.731437             0.351           0.738227           0.937429                 True
+pre_advance_release         Dynamic Factor Model            45  2.861            1.784 1.862      1.016          8.795          5.010  0.654              91.1%                     0.888889            2.2%             86.7%                   7.444                  4.462             12.800    12.2%                    1.000                 77.8%                    5.033525             0.351           0.738227           0.937429                 True
+pre_advance_release          Stable Stage Policy            45  2.861            1.784 1.862      1.016          8.795          5.010  0.654              91.1%                     0.888889            2.2%             86.7%                   7.444                  4.462             12.800    12.2%                    1.000                 77.8%                    5.033525             0.351           0.738227           0.937429                 True
+pre_advance_release          Bridge-DFM Ensemble            45  3.438            1.604 1.977      0.989         15.518          4.236  0.767              93.3%                     0.888889            4.4%             86.7%                   5.902                  4.395             13.021     4.4%                    1.000                 82.2%                    4.827401             0.351           0.738227           0.937429                 True
+pre_advance_release  Rolling Bridge-DFM Ensemble            45  3.722            1.597 2.039      1.004         18.584          4.115  0.830              93.3%                     0.888889            4.4%             86.7%                   6.057                  4.395             13.741     0.0%                    1.000                 82.2%                    4.852972             0.351           0.738227           0.937429                 True
+pre_advance_release Robust Stage-Adaptive Policy            45  4.376            1.588 2.147      0.990         23.185          4.011  0.956              93.3%                     0.888889            4.4%             84.4%                   6.052                  4.462             15.137    10.0%                    1.000                 80.0%                    4.904860             0.577           0.712161           0.922546                 True
+pre_advance_release                 Bridge Ridge            45  4.402            1.508 2.186      1.034         23.185          3.371  0.879              93.3%                     0.888889            4.4%             86.7%                   5.687                  4.205             15.034    21.1%                    1.000                 80.0%                    4.607676             0.351           0.738227           0.937429                 True
+pre_advance_release                        AR(1)            45 10.697            2.092 3.887      1.154         56.933          6.136 -1.378              86.7%                     0.888889           -2.2%             86.7%                   8.242                  5.733             32.524    40.0%                    1.000                 91.1%                    8.731459             0.351           0.738227           0.937429                 True
+
+Stable Stage Policy components
+     forecast_stage          selected_component  forecasts
+      after_month_1        Dynamic Factor Model         45
+      after_month_2         Bridge-DFM Ensemble         45
+      early_quarter        Dynamic Factor Model         45
+pre_advance_release        Dynamic Factor Model         45
+        quarter_end Rolling Bridge-DFM Ensemble         45
+
+Robust Stage-Adaptive Policy selections
+     forecast_stage          selected_component  forecasts
+      after_month_1        Dynamic Factor Model         45
+      after_month_2         Bridge-DFM Ensemble         45
+      early_quarter        Dynamic Factor Model         45
+pre_advance_release                Bridge Ridge          6
+pre_advance_release         Bridge-DFM Ensemble          3
+pre_advance_release        Dynamic Factor Model         36
+        quarter_end                Bridge Ridge         20
+        quarter_end        Dynamic Factor Model          3
+        quarter_end Rolling Bridge-DFM Ensemble         22
+
+Robust selector stability
+     forecast_stage  forecasts  switches  average_duration  minimum_duration
+      early_quarter         45         0              45.0                45
+      after_month_1         45         0              45.0                45
+      after_month_2         45         0              45.0                45
+        quarter_end         45         2              15.0                 3
+pre_advance_release         45         4               9.0                 1
+
+Pending outcomes
+  2026Q2: No initial-release date is stored for GDPC1 2026Q2.
+  2026Q3: No initial-release date is stored for GDPC1 2026Q3.

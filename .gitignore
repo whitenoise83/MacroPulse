@@ -12,3 +12,5 @@ data/model_outputs/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/model_outputs/.gitkeep
+reports/validation/*.md
+!reports/validation/.gitkeep

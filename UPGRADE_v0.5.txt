@@ -1,0 +1,82 @@
+MacroPulse v0.5 — Model Validation and Forecast Governance
+============================================================
+
+Purpose
+-------
+This release does not start Model 2. It completes the validation infrastructure
+needed to freeze Model 1A (US GDP Nowcast) responsibly.
+
+Install
+-------
+1. Stop Streamlit with Ctrl+C.
+2. Extract this ZIP directly into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+3. Replace existing files when prompted.
+4. In VS Code CMD:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   pip install -e .
+   python scripts\initialise_database.py
+
+First validation cycle
+----------------------
+Run a smaller staged backtest first:
+
+   python scripts\run_staged_backtest.py --start 2022-01-01
+
+Then run the automated validation gates:
+
+   python scripts\run_validation.py
+
+Finally run a governed live nowcast and open the dashboard:
+
+   python scripts\download_fred_data.py
+   python scripts\run_dfm_nowcast.py
+   streamlit run app.py
+
+Full validation sample
+----------------------
+After the smaller run succeeds:
+
+   python scripts\run_staged_backtest.py --start 2015-01-01
+   python scripts\run_validation.py
+
+The first full staged run may download many historical snapshots. They are
+cached in DuckDB and reused by later runs.
+
+New functionality
+-----------------
+- Five within-quarter forecast cutoffs
+- Stage-specific Bridge/DFM/ensemble evaluation
+- Rolling empirical 80% interval calibration using prior quarters only
+- Automated no-look-ahead audit
+- Model and configuration hashes
+- Information-set hashes for each forecast
+- Versioned live forecast registry
+- Automated model-validation report
+- Validation & Governance Streamlit page
+- Pytest regression suite
+
+New DuckDB tables
+-----------------
+- model_registry
+- forecast_registry
+- stage_backtest_runs
+- stage_backtest_results
+- stage_backtest_diagnostics
+- validation_runs
+- validation_checks
+
+Important interpretation
+------------------------
+A PASS from the automated checks is necessary but not sufficient for model
+freeze. The model owner must still review stage-level errors, interval width,
+pandemic behaviour, live news decompositions, and known limitations.
+
+Model 1 scope
+-------------
+v0.5 validates Model 1A: US GDP Nowcast. Model 1B inflation and labour-market
+nowcasts still need to be developed before the full US Macro Nowcast Engine is
+complete.

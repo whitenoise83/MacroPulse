@@ -1,0 +1,59 @@
+MacroPulse v0.4 — News Decomposition and Release Tracking
+=========================================================
+
+1. Stop Streamlit with Ctrl+C.
+
+2. Extract this ZIP directly into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+   Replace existing files when Windows asks.
+
+3. In VS Code CMD:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   pip install -e .
+   python scripts\initialise_database.py
+
+4. Refresh the FRED release calendar:
+
+   python scripts\refresh_release_calendar.py
+
+5. Refresh data and run the model suite:
+
+   python scripts\download_fred_data.py
+   python scripts\run_dfm_nowcast.py
+
+The first v0.4 run stores an information-set snapshot. A later run for the same
+GDP quarter compares the new information set with that snapshot. If the latest
+pre-v0.4 run has no saved information set, the terminal will report
+"no_previous_information_set". This is expected. Run v0.4 again after the next
+data refresh to obtain a full decomposition.
+
+6. Open the application:
+
+   streamlit run app.py
+
+Open the new "News Decomposition" page.
+
+Production attribution
+----------------------
+The decomposition is additive and reconciles to the change in the Bridge–DFM
+production forecast:
+
+- Bridge feature updates under the previous Bridge model
+- Bridge model refitting
+- DFM news from newly released observations under previous DFM parameters
+- DFM effects from revisions to previously observed data
+- DFM parameter refitting
+- Changes in rolling ensemble weights
+- Residual reconciliation error
+
+The raw information-set table separately identifies new, revised, and removed
+observations in original FRED units.
+
+Release tracking
+----------------
+The release-calendar script uses each series' FRED release ID and stores recent
+and scheduled release dates. FRED notes that a scheduled release date does not
+guarantee that the data will be available on FRED at exactly that time.

@@ -1,0 +1,52 @@
+MacroPulse v0.5.2 — News reconciliation patch
+================================================
+
+Purpose
+-------
+The v0.5 validation diagnostic identified three repeated 2026Q2 runs with:
+- no raw information-set changes;
+- identical Bridge and DFM forecasts;
+- identical production weights;
+- zero production-forecast change;
+- an offsetting -0.026611 pp DFM-refit contribution and +0.026611 pp residual.
+
+The displayed waterfall still added to zero, but the residual-materiality gate
+correctly exposed the false no-change attribution path.
+
+Install
+-------
+1. Stop Streamlit with Ctrl+C.
+2. Extract this ZIP directly into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+3. Replace destination files.
+4. Run in VS Code CMD:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -e .
+   python scripts\initialise_database.py
+   python scripts\repair_news_reconciliation.py
+   python scripts\run_validation.py
+
+Expected repair output
+----------------------
+The user's diagnosed database should report:
+
+   Repaired records: 3
+
+Expected validation outcome
+---------------------------
+- News decomposition arithmetic closes: pass
+- News attribution residual is immaterial (<= 0.01 pp): pass
+- No operational-reliability failure from the three no-change records
+
+The existing after-month-1 interval coverage may remain a warning because
+41/45 = 91.1% is one observation above the configured 90% upper guide.
+
+Behaviour for future runs
+-------------------------
+When two consecutive runs contain no raw changes and have unchanged component
+forecasts and production weights, MacroPulse stores a successful zero-change
+comparison with zero contributions and zero residual. Genuine model movement is
+not suppressed: any data, component, weight, or production-forecast change
+continues through the full attribution engine.

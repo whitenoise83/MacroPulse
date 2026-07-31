@@ -8,3 +8,5 @@ requests>=2.32,<3
 scikit-learn>=1.5,<2
 statsmodels>=0.14.6,<0.16
 streamlit>=1.46,<2
+matplotlib>=3.9,<4
+scipy>=1.13,<2

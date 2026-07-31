@@ -1,0 +1,30 @@
+MacroPulse Model 1A v1.0.0 Production Promotion
+================================================
+
+Approved validation ID:
+  7ee34d06-f393-4fb7-90ef-6239758f8503
+
+Approved freeze assessment:
+  reports\freeze\model1a_freeze_assessment_20260729_122336.md
+
+Install in CMD:
+
+  cd /d C:\Users\Cenk\OneDrive\MacroPulse
+  .venv\Scripts\activate
+  pip install -r requirements.txt
+  pip install -e .
+  python scripts\initialise_database.py
+  python scripts\promote_model1a_v1.py
+
+The promotion command verifies the approved validation and live-governance evidence
+before writing the v1.0.0 approval record to DuckDB.
+
+Then create the first v1.0.0 live forecast:
+
+  python scripts\download_fred_data.py
+  python scripts\run_dfm_nowcast.py
+  python scripts\run_validation.py
+  streamlit run app.py
+
+No staged-backtest rerun is required. v1.0.0 uses the approved v0.6.1 staged
+validation history because the econometric production policy is unchanged.

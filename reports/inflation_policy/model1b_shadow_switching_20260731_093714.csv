@@ -1,0 +1,17 @@
+target_series,forecast_stage,eligible_months,switches,distinct_selected_models,stable_policy_share,most_selected_model
+CPIAUCSL,mid_month,52,3,3,0.0,Inflation Bridge Ridge
+CPIAUCSL,month_end,52,3,3,0.0,Inflation Bridge Ridge
+CPIAUCSL,month_open,50,3,3,0.52,Inflation Ridge-AR Ensemble
+CPIAUCSL,pre_release,52,3,3,0.0,Inflation Bridge Ridge
+CPILFESL,mid_month,52,3,3,0.5192307692307693,Inflation Ridge-AR Ensemble
+CPILFESL,month_end,52,3,3,0.5192307692307693,Inflation Ridge-AR Ensemble
+CPILFESL,month_open,50,2,2,0.72,Inflation 12-Month Mean
+CPILFESL,pre_release,52,4,3,0.6153846153846154,Inflation Ridge-AR Ensemble
+PCEPI,mid_month,50,3,3,0.82,Inflation Bridge Ridge
+PCEPI,month_end,52,6,4,0.5192307692307693,Inflation Bridge Ridge
+PCEPI,month_open,49,3,3,0.8367346938775511,Inflation Bridge Ridge
+PCEPI,pre_release,52,4,4,0.5,Inflation Bridge Ridge
+PCEPILFE,mid_month,50,1,2,0.28,Inflation 12-Month Mean
+PCEPILFE,month_end,52,2,3,0.09615384615384616,Inflation 12-Month Mean
+PCEPILFE,month_open,49,1,2,0.2857142857142857,Inflation 12-Month Mean
+PCEPILFE,pre_release,52,4,3,0.15384615384615385,Inflation 12-Month Mean

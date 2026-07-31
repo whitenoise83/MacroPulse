@@ -22,6 +22,10 @@ def transform_series(values: pd.Series, method: str) -> pd.Series:
         transformed = logged.diff(12) * 100.0
     elif method == "annualised_qoq_log":
         transformed = np.log(numeric.where(numeric > 0)).diff() * 400.0
+    elif method == "annualised_mom_log":
+        transformed = np.log(numeric.where(numeric > 0)).diff() * 1200.0
+    elif method == "three_month_annualised_log":
+        transformed = np.log(numeric.where(numeric > 0)).diff(3) * 400.0
     else:
         raise ValueError(f"Unsupported transformation: {method}")
 

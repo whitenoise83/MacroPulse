@@ -1,0 +1,11 @@
+MacroPulse Model 1B v0.4.0
+Stable Policy and Shadow-Selection Research
+
+1. Extract into the MacroPulse project root and replace matching files.
+2. Run:
+   pip install -e .
+   python scripts\initialise_database.py
+3. Evaluate the completed vintage backtest:
+   python scripts\evaluate_inflation_policy.py --backtest-id fdd2f573-a425-4abc-8056-f9843955bac2
+
+No FRED downloads and no vintage-backtest rerun are required.

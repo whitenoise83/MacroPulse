@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "macropulse"
-version = "0.1.0"
+version = "1.5.0.dev0"
 description = "Vintage-aware macroeconomic nowcasting platform"
 requires-python = ">=3.11"
 dependencies = []

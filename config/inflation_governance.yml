@@ -1,0 +1,81 @@
+model:
+  model_id: US_INFLATION_NOWCAST_1B
+  display_name: MacroPulse Model 1B - US Inflation Nowcast
+  version: 0.5.0
+  lifecycle_status: development
+  owner: MacroPulse
+  production_status: candidate_validation
+  targets:
+  - CPIAUCSL
+  - CPILFESL
+  - PCEPI
+  - PCEPILFE
+  limitations:
+  - Release-staged ALFRED validation and strictly prior point-policy evaluation are
+    implemented.
+  - The stable target-stage map is the Model 1B point-forecast candidate.
+  - The adaptive selector remains a shadow challenger and cannot control the headline
+    forecast.
+  - exp_weighted_q80 is the selected prior-only 80% interval candidate.
+  - Candidate validation is implemented, but live news decomposition and governed
+    candidate-forecast registration are not yet complete.
+  - Forecasts must not be described as production forecasts until freeze assessment
+    and model-owner approval are complete.
+policy_candidate:
+  status: validated_candidate
+  selection_basis: vintage stage metrics, common-sample verification, stability, bias,
+    and tail-risk judgement
+  stable_map:
+    CPIAUCSL:
+      month_open: Inflation Ridge-AR Ensemble
+      mid_month: Inflation Ridge-AR Ensemble
+      month_end: Inflation Ridge-AR Ensemble
+      pre_release: Inflation Ridge-AR Ensemble
+    CPILFESL:
+      month_open: Inflation 12-Month Mean
+      mid_month: Inflation Ridge-AR Ensemble
+      month_end: Inflation Ridge-AR Ensemble
+      pre_release: Inflation Ridge-AR Ensemble
+    PCEPI:
+      month_open: Inflation Bridge Ridge
+      mid_month: Inflation Bridge Ridge
+      month_end: Inflation Bridge Ridge
+      pre_release: Inflation Bridge Ridge
+    PCEPILFE:
+      month_open: Inflation Bridge Ridge
+      mid_month: Inflation Ridge-AR Ensemble
+      month_end: Inflation Ridge-AR Ensemble
+      pre_release: Inflation Ridge-AR Ensemble
+  shadow_selector:
+    minimum_prior_errors: 24
+    rolling_window: 36
+    switch_hurdle: 0.02
+    mae_guard: 1.05
+    tail_guard: 1.1
+    max_error_guard: 1.15
+    role: shadow_challenger_only
+    common_sample_result: broadly superior in 4 of 16 target-stage groups; not eligible
+      for headline control
+interval_candidate:
+  status: validated_candidate
+  method: exp_weighted_q80
+  nominal_coverage: 0.8
+  minimum_prior_errors: 24
+  rolling_window: 48
+  half_life_months: 18
+  selection_basis:
+  - lowest mean interval score in the predeclared tournament
+  - narrowest average half-width among tournament candidates
+  - aggregate empirical coverage of 0.847
+  - target-stage empirical coverage between 0.816 and 0.904
+  governance_note: candidate only; live forecast integration and news decomposition
+    remain required before freeze
+candidate_validation:
+  status: implemented
+  point_policy: stable_map
+  adaptive_policy: shadow_only
+  interval_method: exp_weighted_q80
+  required_next_steps:
+  - governed live candidate forecast
+  - inflation news decomposition
+  - freeze validation and owner signoff

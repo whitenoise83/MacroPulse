@@ -1,0 +1,14 @@
+MacroPulse v0.5.1 — Model History UI refinement
+
+1. Stop Streamlit with Ctrl+C.
+2. Extract this ZIP directly into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+3. Choose "Replace the files in the destination".
+4. In the activated virtual environment run:
+
+   pip install -e .
+   streamlit run app.py
+
+No database migration is required. This update does not change forecasts,
+model weights, backtests, or stored metrics. It only changes how Model History
+presents existing run information.

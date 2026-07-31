@@ -1,0 +1,12 @@
+MacroPulse v0.6.0.post1 validation
+
+- Full Python compilation: passed
+- Automated tests: 27 passed
+- No-change short circuit: passed
+- Weight-only short circuit: passed
+- Legacy no-change repair predicate: passed
+- Legacy weight-only repair predicate: passed
+- Repair idempotence guard: passed
+- Exact weight-change attribution: passed
+
+The live DuckDB repair must be run in the user's environment.

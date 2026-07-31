@@ -23,6 +23,8 @@ def build_bridge_dataset(
     observations: pd.DataFrame,
     definitions: list[SeriesDefinition],
     target_series: str,
+    target_period: pd.Period | None = None,
+    data_as_of: pd.Timestamp | None = None,
 ) -> BridgeDataset:
     if observations.empty:
         raise ValueError("No observations are available. Run the download script first.")
@@ -73,7 +75,10 @@ def build_bridge_dataset(
 
     last_target_period = target_growth.dropna().index.max()
     last_feature_period = features.dropna(how="all").index.max()
-    target_period = max(last_target_period + 1, last_feature_period)
+    inferred_target_period = max(last_target_period + 1, last_feature_period)
+    target_period = target_period or inferred_target_period
+    if not isinstance(target_period, pd.Period):
+        target_period = pd.Period(target_period, freq="Q")
 
     all_periods = pd.period_range(features.index.min(), target_period, freq="Q")
     features = features.reindex(all_periods)
@@ -99,7 +104,7 @@ def build_bridge_dataset(
             "at least 24 are required."
         )
 
-    data_as_of = observations["observation_date"].max()
+    resolved_data_as_of = data_as_of or observations["observation_date"].max()
 
     return BridgeDataset(
         target_name=target_series,
@@ -108,5 +113,5 @@ def build_bridge_dataset(
         current_features=current,
         feature_names=list(features.columns),
         imputed_features=imputed_features,
-        data_as_of=data_as_of,
+        data_as_of=pd.Timestamp(resolved_data_as_of),
     )

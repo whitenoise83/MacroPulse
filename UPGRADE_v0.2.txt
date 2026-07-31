@@ -1,0 +1,33 @@
+MacroPulse v0.2 Backtesting Upgrade
+===================================
+
+1. Stop Streamlit with Ctrl+C.
+
+2. Extract this ZIP directly into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+   Allow Windows to replace existing files.
+
+3. In VS Code CMD:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   pip install -e .
+
+4. Run a small backtest first:
+
+   python scripts\run_backtest.py --start 2023-03-31
+
+5. Start the dashboard:
+
+   streamlit run app.py
+
+6. Open the new Backtesting page.
+
+7. After the small run succeeds, extend the history:
+
+   python scripts\run_backtest.py --start 2015-03-31
+
+Historical FRED snapshots are cached in data\macropulse.duckdb, so repeated
+runs reuse them. Do not use --refresh-snapshots unless you intentionally want
+to download the same snapshots again.

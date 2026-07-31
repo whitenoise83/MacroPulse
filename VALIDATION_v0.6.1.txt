@@ -1,0 +1,21 @@
+MacroPulse v0.6.1 package validation
+
+Completed in the build environment:
+- All Python files compiled successfully.
+- Editable/wheel packaging metadata built successfully with local build isolation disabled.
+- 29 automated tests passed.
+- Stable stage-policy mapping tests passed.
+- Robust selector minimum-history, 5% switching hurdle, and tail guards passed.
+- Synthetic mixed-frequency staged run completed with 84 rows:
+  4 quarters x 3 stages x 7 forecast series.
+- Synthetic DFM failures: 0.
+- Stable and robust policy rows were produced at every tested stage.
+- ASCII-safe terminal presentation was verified in the output scripts.
+- No .env, API key, DuckDB database, cached FRED observations, or user reports
+  are included in the package.
+
+Not executable in the build environment:
+- Migration against the user's existing DuckDB database.
+- Live FRED/ALFRED requests using the user's API key.
+- The user's full 2015-present 1,575-row staged backtest.
+- Final model-owner freeze decision.

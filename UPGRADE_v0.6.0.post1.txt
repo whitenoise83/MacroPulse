@@ -1,0 +1,26 @@
+MacroPulse v0.6.0.post1 - News Attribution Hotfix
+
+Purpose
+-------
+This hotfix corrects a news-decomposition edge case where the raw information
+set and the Bridge / DFM component forecasts were unchanged, but the production
+forecast changed because the selected model or ensemble weights changed.
+
+Install
+-------
+1. Stop Streamlit with Ctrl+C.
+2. Extract this archive directly into the MacroPulse project root and replace files.
+3. Run:
+
+   pip install -e .
+   python scripts\repair_news_reconciliation.py
+   python scripts\run_validation.py
+
+Expected repair
+---------------
+The affected run should be classified as weight_only. The full forecast change
+should remain under weight_change_impact, while dfm_refit_impact and
+residual_interaction should both be zero.
+
+No staged backtest rerun is required. The econometric model version remains
+US_GDP_NOWCAST_1A v0.6.0; this is an implementation hotfix only.

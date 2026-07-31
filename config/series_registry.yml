@@ -75,3 +75,21 @@ model:
   target_series: GDPC1
   ridge_alpha: 10.0
   prediction_interval: 0.80
+
+dynamic_factor:
+  factors: 1
+  factor_orders: 1
+  idiosyncratic_ar1: true
+  maxiter: 100
+  tolerance: 0.0001
+  require_convergence: false
+
+ensemble:
+  rolling_window: 12
+  min_history: 8
+  min_weight: 0.10
+  max_weight: 0.70
+
+news:
+  revision_details_periods: 60
+  reconciliation_tolerance: 0.000001

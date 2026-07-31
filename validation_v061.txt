@@ -1,0 +1,11 @@
+Model validation complete
+Validation ID: db104301-f3c7-44a3-bc6b-d594b3a3aa17
+Status: fail
+Traceback (most recent call last):
+  File "C:\Users\Cenk\OneDrive\MacroPulse\scripts\run_validation.py", line 32, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\Cenk\OneDrive\MacroPulse\scripts\run_validation.py", line 20, in main
+    print(f"Passed: {result['passed']}")
+                     ~~~~~~^^^^^^^^^^
+KeyError: 'passed'

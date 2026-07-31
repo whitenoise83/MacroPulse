@@ -1,0 +1,18 @@
+MacroPulse v0.5.2 validation
+============================
+
+Validated in the build environment:
+- Full Python syntax compilation passed.
+- Three targeted no-change and legacy-repair detection tests passed.
+- Static inspection confirmed validation now separates:
+  1. total change minus stored contribution sum (arithmetic gap), and
+  2. residual interaction materiality.
+- Package inspection confirmed no .env, API key, DuckDB database, cached FRED
+  data, generated reports, or Python cache files are included.
+
+Not executed in the build environment:
+- Live DuckDB migration and repair against the user's database, because the
+  build environment did not include the DuckDB Python package.
+- Live FRED/ALFRED requests, because the user's API key was not available.
+
+The user should run repair_news_reconciliation.py followed by run_validation.py.

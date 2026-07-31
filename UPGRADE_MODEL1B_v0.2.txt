@@ -1,0 +1,40 @@
+MacroPulse Model 1B v0.2.0
+===========================
+
+Purpose
+-------
+Adds release-staged pseudo-real-time ALFRED inflation backtesting and the first
+formal Model 1B validation layer. Model 1A v1.0.0 remains unchanged.
+
+Install
+-------
+1. Extract directly into C:\Users\Cenk\OneDrive\MacroPulse
+2. Replace existing files when prompted.
+3. Run:
+
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   pip install -e .
+   python scripts\initialise_database.py
+
+Required data
+-------------
+python scripts\download_inflation_data.py
+python scripts\download_inflation_initial_targets.py
+
+Smoke test
+----------
+python scripts\run_inflation_vintage_backtest.py --start 2022-01 --targets CPILFESL,PCEPILFE --stages month_end,pre_release
+
+Full vintage backtest
+---------------------
+python scripts\run_inflation_vintage_backtest.py --start 2015-01
+python scripts\run_inflation_validation.py
+
+Notes
+-----
+- Historical ALFRED snapshots are cached in DuckDB.
+- The first full run can take considerable time because many information sets
+  must be downloaded.
+- Repeated runs reuse cached snapshots.
+- This remains a development model and is not approved for production use.

@@ -1,0 +1,46 @@
+MacroPulse Model 1C v0.1.0 — Labour Foundation
+
+New configuration:
+- config/labour_series_registry.yml
+- config/labour_governance.yml
+
+New Python package:
+- src/macropulse/labour/__init__.py
+- src/macropulse/labour/config.py
+- src/macropulse/labour/dataset.py
+- src/macropulse/labour/models.py
+- src/macropulse/labour/service.py
+- src/macropulse/labour/backtest.py
+- src/macropulse/labour/versioning.py
+
+New commands:
+- scripts/download_labour_data.py
+- scripts/run_labour_nowcast.py
+- scripts/run_labour_backtest.py
+
+New UI:
+- ui/labour_nowcast.py
+- ui/labour_backtesting.py
+
+New tests:
+- tests/test_labour_config.py
+- tests/test_labour_dataset.py
+- tests/test_labour_models.py
+- tests/test_labour_integration.py
+
+Updated integration files:
+- app.py
+- scripts/initialise_database.py
+- src/macropulse/settings.py
+- src/macropulse/data/repository.py
+- pyproject.toml
+- README.md
+- CHANGELOG.md
+
+Package validation:
+- 74 tests passed
+- 1 pre-existing DuckDB live integration test skipped because DuckDB is not installed in the build environment
+- Python compilation passed
+- Synthetic three-target nowcast produced 15 forecasts
+- Synthetic revised-data backtest produced all five models for all three targets
+- Model 1A and Model 1B identity regression tests passed

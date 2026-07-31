@@ -1,0 +1,11 @@
+MacroPulse Model 1C v0.2.0
+
+1. Extract into C:\Users\Cenk\OneDrive\MacroPulse and replace matching files.
+2. Preserve data\macropulse.duckdb, reports\, .env and .git\.
+3. Run:
+   pip install -e .
+   python scripts\initialise_database.py
+4. Download initial target vintages:
+   python scripts\download_labour_initial_targets.py
+5. Run the smoke test before the full historical run.
+6. Do not use --refresh-snapshots unless intentionally rebuilding the cache.

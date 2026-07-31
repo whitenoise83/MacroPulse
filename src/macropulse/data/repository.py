@@ -669,6 +669,153 @@ CREATE TABLE IF NOT EXISTS inflation_release_changes (
 CREATE INDEX IF NOT EXISTS idx_inflation_release_changes
 ON inflation_release_changes(decomposition_id, series_id, observation_date);
 
+CREATE TABLE IF NOT EXISTS labour_model_runs (
+    run_id VARCHAR PRIMARY KEY,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    run_timestamp TIMESTAMP NOT NULL,
+    status VARCHAR NOT NULL,
+    data_as_of DATE,
+    metrics_json VARCHAR,
+    notes VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS labour_forecasts (
+    run_id VARCHAR NOT NULL,
+    target_series VARCHAR NOT NULL,
+    target_name VARCHAR NOT NULL,
+    target_unit VARCHAR NOT NULL,
+    display_decimals INTEGER NOT NULL,
+    target_period VARCHAR NOT NULL,
+    model_name VARCHAR NOT NULL,
+    point_forecast DOUBLE,
+    lower_80 DOUBLE,
+    upper_80 DOUBLE,
+    diagnostics_json VARCHAR,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_forecasts_run
+ON labour_forecasts(run_id, target_series);
+
+CREATE TABLE IF NOT EXISTS labour_coefficients (
+    run_id VARCHAR NOT NULL,
+    target_series VARCHAR NOT NULL,
+    model_name VARCHAR NOT NULL,
+    feature VARCHAR NOT NULL,
+    coefficient DOUBLE
+);
+
+CREATE TABLE IF NOT EXISTS labour_backtest_runs (
+    backtest_id VARCHAR PRIMARY KEY,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    start_period VARCHAR NOT NULL,
+    status VARCHAR NOT NULL,
+    method VARCHAR NOT NULL,
+    metrics_json VARCHAR,
+    notes VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS labour_backtest_results (
+    backtest_id VARCHAR NOT NULL,
+    target_series VARCHAR NOT NULL,
+    target_name VARCHAR NOT NULL,
+    target_unit VARCHAR NOT NULL,
+    target_period VARCHAR NOT NULL,
+    model_name VARCHAR NOT NULL,
+    point_forecast DOUBLE,
+    actual DOUBLE,
+    error DOUBLE,
+    abs_error DOUBLE,
+    squared_error DOUBLE,
+    direction_correct BOOLEAN,
+    lower_80 DOUBLE,
+    upper_80 DOUBLE,
+    interval_covered BOOLEAN,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_backtest_results
+ON labour_backtest_results(backtest_id, target_series, target_period);
+
+CREATE TABLE IF NOT EXISTS labour_vintage_backtest_runs (
+    backtest_id VARCHAR PRIMARY KEY,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    start_period VARCHAR NOT NULL,
+    end_period VARCHAR NOT NULL,
+    status VARCHAR NOT NULL,
+    stage_codes_json VARCHAR,
+    target_series_json VARCHAR,
+    metrics_json VARCHAR,
+    notices_json VARCHAR,
+    notes VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS labour_vintage_backtest_results (
+    backtest_id VARCHAR NOT NULL,
+    target_series VARCHAR NOT NULL,
+    target_name VARCHAR NOT NULL,
+    target_unit VARCHAR NOT NULL,
+    forecast_stage VARCHAR NOT NULL,
+    forecast_date DATE NOT NULL,
+    target_period VARCHAR NOT NULL,
+    actual_release_date DATE NOT NULL,
+    days_to_release INTEGER NOT NULL,
+    model_name VARCHAR NOT NULL,
+    point_forecast DOUBLE,
+    actual DOUBLE,
+    error DOUBLE,
+    abs_error DOUBLE,
+    squared_error DOUBLE,
+    direction_correct BOOLEAN,
+    lower_80 DOUBLE,
+    upper_80 DOUBLE,
+    interval_covered BOOLEAN,
+    training_observations INTEGER,
+    imputed_feature_count INTEGER,
+    information_set_hash VARCHAR,
+    target_leakage BOOLEAN,
+    max_observation_date DATE,
+    regime VARCHAR,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_vintage_results
+ON labour_vintage_backtest_results(backtest_id, target_series, forecast_stage, target_period);
+
+CREATE TABLE IF NOT EXISTS labour_validation_runs (
+    validation_id VARCHAR PRIMARY KEY,
+    backtest_id VARCHAR NOT NULL,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    status VARCHAR NOT NULL,
+    passed_gates INTEGER NOT NULL,
+    failed_gates INTEGER NOT NULL,
+    warning_gates INTEGER NOT NULL,
+    report_path VARCHAR,
+    summary_json VARCHAR,
+    notes VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS labour_validation_checks (
+    validation_id VARCHAR NOT NULL,
+    gate_name VARCHAR NOT NULL,
+    check_name VARCHAR NOT NULL,
+    status VARCHAR NOT NULL,
+    observed_value VARCHAR,
+    threshold VARCHAR,
+    details_json VARCHAR,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_validation_checks
+ON labour_validation_checks(validation_id, gate_name, status);
+
 '''
 
 
@@ -899,6 +1046,78 @@ class MacroRepository:
                 connection.register(f"_{table}", frame)
                 connection.execute(f"INSERT INTO {table} SELECT * FROM _{table}")
                 connection.unregister(f"_{table}")
+
+    def save_labour_outputs(
+        self,
+        run_record: pd.DataFrame,
+        forecasts: pd.DataFrame,
+        coefficients: pd.DataFrame,
+    ) -> None:
+        with self.connect() as connection:
+            for table, frame in [
+                ("labour_model_runs", run_record),
+                ("labour_forecasts", forecasts),
+                ("labour_coefficients", coefficients),
+            ]:
+                if frame.empty:
+                    continue
+                connection.register(f"_{table}", frame)
+                connection.execute(f"INSERT INTO {table} SELECT * FROM _{table}")
+                connection.unregister(f"_{table}")
+
+    def save_labour_backtest_outputs(
+        self,
+        run_record: pd.DataFrame,
+        results: pd.DataFrame,
+    ) -> None:
+        with self.connect() as connection:
+            connection.register("_labour_backtest_run", run_record)
+            connection.execute(
+                "INSERT INTO labour_backtest_runs SELECT * FROM _labour_backtest_run"
+            )
+            connection.unregister("_labour_backtest_run")
+            if not results.empty:
+                connection.register("_labour_backtest_results", results)
+                connection.execute(
+                    "INSERT INTO labour_backtest_results SELECT * FROM _labour_backtest_results"
+                )
+                connection.unregister("_labour_backtest_results")
+
+    def save_labour_vintage_backtest_outputs(
+        self,
+        run_record: pd.DataFrame,
+        results: pd.DataFrame,
+    ) -> None:
+        with self.connect() as connection:
+            connection.register("_labour_vintage_run", run_record)
+            connection.execute(
+                "INSERT INTO labour_vintage_backtest_runs SELECT * FROM _labour_vintage_run"
+            )
+            connection.unregister("_labour_vintage_run")
+            if not results.empty:
+                connection.register("_labour_vintage_results", results)
+                connection.execute(
+                    "INSERT INTO labour_vintage_backtest_results SELECT * FROM _labour_vintage_results"
+                )
+                connection.unregister("_labour_vintage_results")
+
+    def save_labour_validation_outputs(
+        self,
+        run_record: pd.DataFrame,
+        checks: pd.DataFrame,
+    ) -> None:
+        with self.connect() as connection:
+            connection.register("_labour_validation_run", run_record)
+            connection.execute(
+                "INSERT INTO labour_validation_runs SELECT * FROM _labour_validation_run"
+            )
+            connection.unregister("_labour_validation_run")
+            if not checks.empty:
+                connection.register("_labour_validation_checks", checks)
+                connection.execute(
+                    "INSERT INTO labour_validation_checks SELECT * FROM _labour_validation_checks"
+                )
+                connection.unregister("_labour_validation_checks")
 
     def save_inflation_backtest_outputs(
         self,

@@ -1,0 +1,106 @@
+targets:
+  PAYEMS:
+    name: Nonfarm Payroll Change
+    frequency: M
+    transform: diff
+    unit: thousands of jobs
+    display_decimals: 0
+    source: FRED
+    start_date: '1985-01-01'
+  UNRATE:
+    name: Unemployment Rate
+    frequency: M
+    transform: level
+    unit: percent
+    display_decimals: 2
+    source: FRED
+    start_date: '1985-01-01'
+  CES0500000003:
+    name: Average Hourly Earnings Growth
+    frequency: M
+    transform: annualised_mom_log
+    unit: annualised percent
+    display_decimals: 2
+    source: FRED
+    start_date: '2006-03-01'
+features:
+  ICSA:
+    name: Initial Unemployment Claims
+    frequency: W
+    monthly_aggregation: mean
+    transform: mom_log_pct
+    source: FRED
+    start_date: '1985-01-01'
+  CCSA:
+    name: Continued Claims
+    frequency: W
+    monthly_aggregation: mean
+    transform: mom_log_pct
+    source: FRED
+    start_date: '1985-01-01'
+  JTSJOL:
+    name: Job Openings - Total Nonfarm
+    frequency: M
+    transform: mom_log_pct
+    source: FRED
+    start_date: '2000-12-01'
+  JTSQUR:
+    name: Quits - Total Nonfarm
+    frequency: M
+    transform: mom_log_pct
+    source: FRED
+    start_date: '2000-12-01'
+  CIVPART:
+    name: Labour Force Participation Rate
+    frequency: M
+    transform: level
+    source: FRED
+    start_date: '1985-01-01'
+  EMRATIO:
+    name: Employment-Population Ratio
+    frequency: M
+    transform: level
+    source: FRED
+    start_date: '1985-01-01'
+  TEMPHELPS:
+    name: Temporary Help Services Employment
+    frequency: M
+    transform: diff
+    source: FRED
+    start_date: '1990-01-01'
+  AWHI:
+    name: Aggregate Weekly Hours Index - Production and Nonsupervisory Employees
+    frequency: M
+    transform: level
+    source: FRED
+    start_date: '1985-01-01'
+  MANEMP:
+    name: Manufacturing Employment
+    frequency: M
+    transform: diff
+    source: FRED
+    start_date: '1985-01-01'
+  INDPRO:
+    name: Industrial Production Index
+    frequency: M
+    transform: mom_log_pct
+    source: FRED
+    start_date: '1985-01-01'
+model:
+  target_lags: [1, 2, 3, 6, 12]
+  cross_target_lags: [1, 2]
+  feature_lags: [0, 1, 2]
+  ridge_alpha: 10.0
+  factor_ridge_alpha: 8.0
+  factor_components: 4
+  rolling_mean_window: 12
+  minimum_training_observations: 120
+  interval_coverage: 0.80
+  max_feature_carry_months: 4
+  ensemble_members:
+    - Labour Bridge Ridge
+    - Labour AR(1)
+    - Labour Factor Ridge
+backtest:
+  start_date: '2016-01'
+  minimum_training_observations: 120

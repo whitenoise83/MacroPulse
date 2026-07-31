@@ -1,0 +1,16 @@
+MacroPulse Model 1C v0.1.0 installation
+
+1. Extract the package into C:\Users\Cenk\OneDrive\MacroPulse and replace destination files.
+2. Do not delete data\macropulse.duckdb, reports, or .env.
+3. Run:
+
+   cd /d C:\Users\Cenk\OneDrive\MacroPulse
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   pip install -e .
+   python scripts\initialise_database.py
+   python scripts\download_labour_data.py
+   python scripts\run_labour_nowcast.py
+   python scripts\run_labour_backtest.py --start 2016-01
+
+Model 1A and Model 1B remain v1.0.0 production. Model 1C is v0.1.0 development.

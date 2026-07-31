@@ -1,0 +1,28 @@
+Model 1C v0.1.0 package validation
+
+Result:
+- 74 tests passed
+- 1 skipped: pre-existing Model 1B DuckDB integration test because DuckDB is unavailable in the build environment
+- Python compilation passed
+
+Model 1C coverage:
+- Labour registry and identity tests
+- Synthetic mixed-frequency dataset construction
+- Payroll and unemployment target transformations
+- Five-model suite test
+- Synthetic three-target nowcast: 15 forecasts
+- Synthetic chronological backtest: all five models for all three targets
+- Model 1A and Model 1B regression tests
+
+Security and packaging:
+- No .env file
+- No API key
+- No DuckDB database
+- No cached FRED observations
+- No generated user reports
+
+Limitations:
+- Live FRED download and local DuckDB migration were not executed in the build environment.
+- v0.1.0 is latest-revised engineering evidence only.
+- No vintage-aware labour backtest or production policy is included.
+- Intervals are in-sample residual quantiles and are development diagnostics only.

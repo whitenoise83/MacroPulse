@@ -19,6 +19,8 @@ class Settings:
     governance_path: Path = PROJECT_ROOT / "config" / "model_governance.yml"
     inflation_registry_path: Path = PROJECT_ROOT / "config" / "inflation_series_registry.yml"
     inflation_governance_path: Path = PROJECT_ROOT / "config" / "inflation_governance.yml"
+    labour_registry_path: Path = PROJECT_ROOT / "config" / "labour_series_registry.yml"
+    labour_governance_path: Path = PROJECT_ROOT / "config" / "labour_governance.yml"
     raw_data_dir: Path = PROJECT_ROOT / "data" / "raw"
     processed_data_dir: Path = PROJECT_ROOT / "data" / "processed"
     model_output_dir: Path = PROJECT_ROOT / "data" / "model_outputs"

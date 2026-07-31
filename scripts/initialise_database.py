@@ -3,6 +3,7 @@ import yaml
 from macropulse.data.repository import MacroRepository
 from macropulse.governance.versioning import current_model_identity
 from macropulse.inflation.versioning import current_inflation_model_identity
+from macropulse.labour.versioning import current_labour_model_identity
 from macropulse.settings import settings
 
 
@@ -27,6 +28,15 @@ def main() -> None:
             f"{inflation_identity.lifecycle_status} identity."
         ),
     )
+
+    labour_identity = current_labour_model_identity()
+    repository.register_model_identity(
+        labour_identity.as_dict(),
+        notes=(
+            f"Model 1C v{labour_identity.model_version} "
+            f"{labour_identity.lifecycle_status} identity."
+        ),
+    )
     print(f"Database initialised: {repository.database_path}")
     print(
         f"Model registered: {gdp_identity['model_id']} v{gdp_identity['model_version']} "
@@ -36,8 +46,14 @@ def main() -> None:
         f"Model registered: {inflation_identity.model_id} v{inflation_identity.model_version} "
         f"({inflation_identity.lifecycle_status})"
     )
+    print(
+        f"Model registered: {labour_identity.model_id} v{labour_identity.model_version} "
+        f"({labour_identity.lifecycle_status})"
+    )
     print(f"Inflation configuration hash: {inflation_identity.config_hash[:12]}...")
     print(f"Inflation code hash: {inflation_identity.code_hash[:12]}...")
+    print(f"Labour configuration hash: {labour_identity.config_hash[:12]}...")
+    print(f"Labour code hash: {labour_identity.code_hash[:12]}...")
 
 
 if __name__ == "__main__":

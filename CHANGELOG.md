@@ -1,5 +1,12 @@
 # Changelog
 
+## Model 1C v0.1.0
+
+- Added the US labour-market nowcast foundation.
+- Added payroll, unemployment-rate, and wage-growth targets.
+- Added five development models, current-data runs, DuckDB persistence, and revised-data backtesting.
+- Added dedicated labour dashboard pages while preserving Model 1A and Model 1B production identities.
+
 ## Model 1B v1.0.0
 
 - Promoted the governed US inflation nowcast to production after owner approval.

@@ -1,0 +1,10 @@
+Model 1C v0.2.0 package verification
+
+- Python compilation: passed
+- Automated tests collected: 78
+- Automated tests: 77 passed, 1 skipped
+- New Model 1C vintage tests: passed
+- Synthetic five-stage, five-model vintage backtest: passed
+- Model 1A production identity preservation tests: passed
+- Model 1B production metadata tests: passed
+- Live DuckDB migration not executed in the build container because duckdb was unavailable there.

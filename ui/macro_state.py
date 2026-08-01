@@ -162,3 +162,76 @@ with st.expander("Provenance"):
     st.write(f"Source bundle hash: `{run['source_bundle_hash']}`")
     st.write(f"State hash: `{run['state_hash']}`")
     st.write(f"Git commit: `{run['git_commit']}`")
+
+st.divider()
+st.header("Historical pseudo-real-time reconstruction")
+
+history_run = repository.query_df(
+    """
+    SELECT *
+    FROM macro_state_history_runs
+    ORDER BY created_at DESC
+    LIMIT 1
+    """
+)
+if history_run.empty:
+    st.info(
+        "Run `python scripts\\run_macro_state_history.py --start 2015-01-01 "
+        "--end 2026-08-01` to build the first historical reconstruction."
+    )
+else:
+    history_meta = history_run.iloc[0]
+    history_states = repository.query_df(
+        """
+        SELECT *
+        FROM macro_state_history_states
+        WHERE reconstruction_id = ?
+        ORDER BY state_date
+        """,
+        [history_meta["reconstruction_id"]],
+    )
+    st.caption(
+        f"{history_meta['start_date']} to {history_meta['end_date']} | "
+        f"{int(history_meta['months_reconstructed'])} reconstructed months | "
+        f"Coverage {float(history_meta['coverage_ratio'] or 0):.1%} | "
+        f"Longest contiguous run "
+        f"{int(history_meta['longest_contiguous_months'] or 0)} months | "
+        f"Source mode {history_meta['source_mode'] or 'legacy'} | "
+        f"No-look-ahead audit: "
+        f"{'pass' if history_meta['no_look_ahead_pass'] else 'fail'}"
+    )
+
+    score_chart = history_states.set_index("state_date")[
+        ["growth_score", "inflation_score", "labour_score"]
+    ]
+    st.line_chart(score_chart)
+
+    regime_counts = (
+        history_states["primary_regime_label"]
+        .value_counts()
+        .rename_axis("Regime")
+        .reset_index(name="Months")
+    )
+    st.subheader("Regime frequency")
+    st.dataframe(
+        regime_counts,
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    st.subheader("Latest historical states")
+    st.dataframe(
+        history_states[
+            [
+                "state_date",
+                "growth_score",
+                "inflation_score",
+                "labour_score",
+                "primary_regime_label",
+                "possible_regime_count",
+                "source_cutoff_spread_days",
+            ]
+        ].tail(24),
+        use_container_width=True,
+        hide_index=True,
+    )

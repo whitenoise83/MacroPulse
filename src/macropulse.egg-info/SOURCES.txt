@@ -63,8 +63,11 @@ src/macropulse/labour/vintage.py
 src/macropulse/labour/vintage_backtest.py
 src/macropulse/macro_state/__init__.py
 src/macropulse/macro_state/engine.py
+src/macropulse/macro_state/history.py
+src/macropulse/macro_state/history_service.py
 src/macropulse/macro_state/service.py
 src/macropulse/macro_state/versioning.py
+src/macropulse/macro_state/vintage_history.py
 src/macropulse/models/__init__.py
 src/macropulse/models/baseline.py
 src/macropulse/models/dynamic_factor.py
@@ -110,8 +113,12 @@ tests/test_labour_production_metadata.py
 tests/test_labour_production_promotion.py
 tests/test_labour_vintage.py
 tests/test_macro_state_engine.py
+tests/test_macro_state_history.py
+tests/test_macro_state_history_integration.py
 tests/test_macro_state_identity.py
 tests/test_macro_state_integration.py
+tests/test_macro_state_vintage_history.py
+tests/test_macro_state_vintage_history_integration.py
 tests/test_model1a_identity_frozen.py
 tests/test_news_no_change.py
 tests/test_production_promotion.py

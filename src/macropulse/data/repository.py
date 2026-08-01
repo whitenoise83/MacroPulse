@@ -1070,6 +1070,134 @@ CREATE TABLE IF NOT EXISTS macro_state_regimes (
 CREATE INDEX IF NOT EXISTS idx_macro_state_regimes_run
 ON macro_state_regimes(run_id, is_primary);
 
+
+CREATE TABLE IF NOT EXISTS macro_state_history_runs (
+    reconstruction_id VARCHAR PRIMARY KEY,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    months_requested INTEGER NOT NULL,
+    months_reconstructed INTEGER NOT NULL,
+    no_look_ahead_pass BOOLEAN NOT NULL,
+    config_hash VARCHAR NOT NULL,
+    code_hash VARCHAR NOT NULL,
+    git_commit VARCHAR,
+    created_at TIMESTAMP NOT NULL,
+    notes VARCHAR
+);
+
+
+ALTER TABLE macro_state_history_runs
+ADD COLUMN IF NOT EXISTS source_mode VARCHAR;
+
+ALTER TABLE macro_state_history_runs
+ADD COLUMN IF NOT EXISTS gdp_source_id VARCHAR;
+
+ALTER TABLE macro_state_history_runs
+ADD COLUMN IF NOT EXISTS inflation_source_id VARCHAR;
+
+ALTER TABLE macro_state_history_runs
+ADD COLUMN IF NOT EXISTS labour_source_id VARCHAR;
+
+ALTER TABLE macro_state_history_runs
+ADD COLUMN IF NOT EXISTS coverage_ratio DOUBLE;
+
+ALTER TABLE macro_state_history_runs
+ADD COLUMN IF NOT EXISTS longest_contiguous_months INTEGER;
+
+CREATE TABLE IF NOT EXISTS macro_state_history_states (
+    reconstruction_id VARCHAR NOT NULL,
+    state_date DATE NOT NULL,
+    growth_score DOUBLE NOT NULL,
+    inflation_score DOUBLE NOT NULL,
+    labour_score DOUBLE NOT NULL,
+    growth_lower DOUBLE NOT NULL,
+    growth_upper DOUBLE NOT NULL,
+    inflation_lower DOUBLE NOT NULL,
+    inflation_upper DOUBLE NOT NULL,
+    labour_lower DOUBLE NOT NULL,
+    labour_upper DOUBLE NOT NULL,
+    growth_label VARCHAR NOT NULL,
+    inflation_label VARCHAR NOT NULL,
+    labour_label VARCHAR NOT NULL,
+    primary_regime VARCHAR NOT NULL,
+    primary_regime_label VARCHAR NOT NULL,
+    primary_regime_strength DOUBLE NOT NULL,
+    possible_regimes_json VARCHAR NOT NULL,
+    possible_regime_count INTEGER NOT NULL,
+    source_cutoff_spread_days INTEGER NOT NULL,
+    no_look_ahead_pass BOOLEAN NOT NULL,
+    source_bundle_hash VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_history_state_unique
+ON macro_state_history_states(reconstruction_id, state_date);
+
+CREATE TABLE IF NOT EXISTS macro_state_history_inputs (
+    reconstruction_id VARCHAR NOT NULL,
+    state_date DATE NOT NULL,
+    source_model_id VARCHAR NOT NULL,
+    source_model_version VARCHAR NOT NULL,
+    source_run_id VARCHAR NOT NULL,
+    source_target VARCHAR NOT NULL,
+    source_target_name VARCHAR NOT NULL,
+    target_period VARCHAR NOT NULL,
+    forecast_stage VARCHAR,
+    point_forecast DOUBLE NOT NULL,
+    lower_80 DOUBLE NOT NULL,
+    upper_80 DOUBLE NOT NULL,
+    information_cutoff DATE NOT NULL,
+    data_as_of DATE,
+    source_hash VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_history_inputs
+ON macro_state_history_inputs(reconstruction_id, state_date);
+
+
+ALTER TABLE macro_state_history_inputs
+ADD COLUMN IF NOT EXISTS source_validation_id VARCHAR;
+
+ALTER TABLE macro_state_history_inputs
+ADD COLUMN IF NOT EXISTS interval_source VARCHAR;
+
+ALTER TABLE macro_state_history_inputs
+ADD COLUMN IF NOT EXISTS actual_release_date DATE;
+
+ALTER TABLE macro_state_history_inputs
+ADD COLUMN IF NOT EXISTS target_leakage BOOLEAN;
+
+ALTER TABLE macro_state_history_inputs
+ADD COLUMN IF NOT EXISTS max_observation_date DATE;
+
+ALTER TABLE macro_state_history_inputs
+ADD COLUMN IF NOT EXISTS model_name VARCHAR;
+
+ALTER TABLE macro_state_history_inputs
+ADD COLUMN IF NOT EXISTS information_set_hash VARCHAR;
+
+
+CREATE TABLE IF NOT EXISTS macro_state_history_durations (
+    reconstruction_id VARCHAR NOT NULL,
+    primary_regime VARCHAR NOT NULL,
+    primary_regime_label VARCHAR NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    months INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS macro_state_history_transitions (
+    reconstruction_id VARCHAR NOT NULL,
+    from_regime VARCHAR NOT NULL,
+    to_regime VARCHAR NOT NULL,
+    transition_probability DOUBLE NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
 '''
 
 
@@ -2065,4 +2193,186 @@ class MacroRepository:
                 "SELECT * FROM _macro_state_regimes"
             )
             connection.unregister("_macro_state_regimes")
+
+    def save_macro_state_history(
+        self,
+        metadata: pd.DataFrame,
+        states: pd.DataFrame,
+        inputs: pd.DataFrame,
+        durations: pd.DataFrame,
+        transitions: pd.DataFrame,
+    ) -> None:
+        metadata_columns = [
+            "reconstruction_id",
+            "model_id",
+            "model_version",
+            "start_date",
+            "end_date",
+            "months_requested",
+            "months_reconstructed",
+            "no_look_ahead_pass",
+            "config_hash",
+            "code_hash",
+            "git_commit",
+            "created_at",
+            "notes",
+            "source_mode",
+            "gdp_source_id",
+            "inflation_source_id",
+            "labour_source_id",
+            "coverage_ratio",
+            "longest_contiguous_months",
+        ]
+        state_columns = [
+            "reconstruction_id",
+            "state_date",
+            "growth_score",
+            "inflation_score",
+            "labour_score",
+            "growth_lower",
+            "growth_upper",
+            "inflation_lower",
+            "inflation_upper",
+            "labour_lower",
+            "labour_upper",
+            "growth_label",
+            "inflation_label",
+            "labour_label",
+            "primary_regime",
+            "primary_regime_label",
+            "primary_regime_strength",
+            "possible_regimes_json",
+            "possible_regime_count",
+            "source_cutoff_spread_days",
+            "no_look_ahead_pass",
+            "source_bundle_hash",
+            "created_at",
+        ]
+        input_columns = [
+            "reconstruction_id",
+            "state_date",
+            "source_model_id",
+            "source_model_version",
+            "source_run_id",
+            "source_target",
+            "source_target_name",
+            "target_period",
+            "forecast_stage",
+            "point_forecast",
+            "lower_80",
+            "upper_80",
+            "information_cutoff",
+            "data_as_of",
+            "source_hash",
+            "created_at",
+            "source_validation_id",
+            "interval_source",
+            "actual_release_date",
+            "target_leakage",
+            "max_observation_date",
+            "model_name",
+            "information_set_hash",
+        ]
+        duration_columns = [
+            "reconstruction_id",
+            "primary_regime",
+            "primary_regime_label",
+            "start_date",
+            "end_date",
+            "months",
+            "created_at",
+        ]
+        transition_columns = [
+            "reconstruction_id",
+            "from_regime",
+            "to_regime",
+            "transition_probability",
+            "created_at",
+        ]
+
+        with self.connect() as connection:
+            connection.register("_m1d_hist_meta", metadata[metadata_columns])
+            connection.execute(
+                """
+                INSERT INTO macro_state_history_runs (
+                    reconstruction_id, model_id, model_version, start_date,
+                    end_date, months_requested, months_reconstructed,
+                    no_look_ahead_pass, config_hash, code_hash, git_commit,
+                    created_at, notes, source_mode, gdp_source_id,
+                    inflation_source_id, labour_source_id, coverage_ratio,
+                    longest_contiguous_months
+                )
+                SELECT * FROM _m1d_hist_meta
+                """
+            )
+            connection.unregister("_m1d_hist_meta")
+
+            connection.register("_m1d_hist_states", states[state_columns])
+            connection.execute(
+                """
+                INSERT INTO macro_state_history_states (
+                    reconstruction_id, state_date, growth_score,
+                    inflation_score, labour_score, growth_lower,
+                    growth_upper, inflation_lower, inflation_upper,
+                    labour_lower, labour_upper, growth_label,
+                    inflation_label, labour_label, primary_regime,
+                    primary_regime_label, primary_regime_strength,
+                    possible_regimes_json, possible_regime_count,
+                    source_cutoff_spread_days, no_look_ahead_pass,
+                    source_bundle_hash, created_at
+                )
+                SELECT * FROM _m1d_hist_states
+                """
+            )
+            connection.unregister("_m1d_hist_states")
+
+            connection.register("_m1d_hist_inputs", inputs[input_columns])
+            connection.execute(
+                """
+                INSERT INTO macro_state_history_inputs (
+                    reconstruction_id, state_date, source_model_id,
+                    source_model_version, source_run_id, source_target,
+                    source_target_name, target_period, forecast_stage,
+                    point_forecast, lower_80, upper_80,
+                    information_cutoff, data_as_of, source_hash, created_at,
+                    source_validation_id, interval_source,
+                    actual_release_date, target_leakage,
+                    max_observation_date, model_name, information_set_hash
+                )
+                SELECT * FROM _m1d_hist_inputs
+                """
+            )
+            connection.unregister("_m1d_hist_inputs")
+
+            if not durations.empty:
+                connection.register(
+                    "_m1d_hist_durations", durations[duration_columns]
+                )
+                connection.execute(
+                    """
+                    INSERT INTO macro_state_history_durations (
+                        reconstruction_id, primary_regime,
+                        primary_regime_label, start_date, end_date,
+                        months, created_at
+                    )
+                    SELECT * FROM _m1d_hist_durations
+                    """
+                )
+                connection.unregister("_m1d_hist_durations")
+
+            if not transitions.empty:
+                connection.register(
+                    "_m1d_hist_transitions",
+                    transitions[transition_columns],
+                )
+                connection.execute(
+                    """
+                    INSERT INTO macro_state_history_transitions (
+                        reconstruction_id, from_regime, to_regime,
+                        transition_probability, created_at
+                    )
+                    SELECT * FROM _m1d_hist_transitions
+                    """
+                )
+                connection.unregister("_m1d_hist_transitions")
 

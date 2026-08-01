@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.1.0
+  version: 0.2.1
   lifecycle_status: development
-  research_status: Transparent foundation candidate; not production approved.
+  research_status: Production-lineage vintage reconstruction candidate; not production approved.
 
 required_sources:
   GDP:
@@ -113,3 +113,34 @@ governance:
     core_pce_upper_80: 4.0
     payroll_lower_80: 0.0
     unemployment_upper_80: 5.0
+
+history:
+
+  source_mode: production_vintage_backtests
+  state_anchor: month_end
+  target_alignment: exact_target_period
+  require_approved_validation_lineage: true
+  require_no_target_leakage: true
+  require_max_observation_date_not_after_forecast_date: true
+  interval_policy: approved_calibration_preferred_with_vintage_fallback
+  gdp_month_stage_map:
+    first_month: early_quarter
+    second_month: after_month_1
+    third_month: quarter_end
+  inflation_stage: month_end
+  labour_stage: month_end
+  default_start_date: 2015-01-01
+  frequency: month_end
+  minimum_complete_months: 24
+  maximum_source_age_days:
+    GDP: 120
+    inflation: 62
+    labour: 62
+  uncertainty_samples: 729
+  transition_minimum_count: 3
+  use_latest_successful_run_on_or_before_state_date: true
+  allow_cross_version_history: true
+  accepted_lifecycle_statuses:
+    - production
+    - candidate
+    - development

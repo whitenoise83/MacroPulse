@@ -1,0 +1,12 @@
+MacroPulse Model 1D v0.1.0 installation
+
+1. Create and switch to model1d-development.
+2. Extract this ZIP into C:\Users\Cenk\OneDrive\MacroPulse.
+3. Preserve .env, .git, data\macropulse.duckdb, and reports\.
+4. Run:
+   pip install -e .
+   python scripts\initialise_database.py
+5. Ensure successful v1.0.0 production runs exist for Models 1A, 1B, and 1C.
+6. Run:
+   python scripts\run_macro_state.py --as-of 2026-08-01
+7. Start Streamlit and open Unified Macro State.

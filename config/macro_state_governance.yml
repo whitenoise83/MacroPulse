@@ -1,0 +1,115 @@
+model:
+  model_id: US_MACRO_STATE_1D
+  display_name: US Unified Macro State Engine
+  version: 0.1.0
+  lifecycle_status: development
+  research_status: Transparent foundation candidate; not production approved.
+
+required_sources:
+  GDP:
+    model_id: US_GDP_NOWCAST_1A
+    model_version: 1.0.0
+    lifecycle_status: production
+  inflation:
+    model_id: US_INFLATION_NOWCAST_1B
+    model_version: 1.0.0
+    lifecycle_status: production
+  labour:
+    model_id: US_LABOUR_NOWCAST_1C
+    model_version: 1.0.0
+    lifecycle_status: production
+
+inputs:
+  inflation_weights:
+    PCEPILFE: 0.40
+    CPILFESL: 0.30
+    PCEPI: 0.20
+    CPIAUCSL: 0.10
+  labour_weights:
+    PAYEMS: 0.40
+    UNRATE: 0.35
+    CES0500000003: 0.25
+
+score_anchors:
+  growth:
+    - [0.0, -2.0]
+    - [1.0, -1.0]
+    - [2.0, 0.0]
+    - [3.0, 1.0]
+    - [4.0, 2.0]
+  inflation:
+    PCEPILFE:
+      - [0.5, -2.0]
+      - [1.5, -1.0]
+      - [2.0, 0.0]
+      - [3.0, 1.0]
+      - [4.5, 2.0]
+    PCEPI:
+      - [0.5, -2.0]
+      - [1.5, -1.0]
+      - [2.0, 0.0]
+      - [3.0, 1.0]
+      - [4.5, 2.0]
+    CPILFESL:
+      - [0.8, -2.0]
+      - [1.8, -1.0]
+      - [2.3, 0.0]
+      - [3.3, 1.0]
+      - [4.8, 2.0]
+    CPIAUCSL:
+      - [0.8, -2.0]
+      - [1.8, -1.0]
+      - [2.3, 0.0]
+      - [3.3, 1.0]
+      - [4.8, 2.0]
+  labour:
+    PAYEMS:
+      - [-50.0, -2.0]
+      - [50.0, -1.0]
+      - [100.0, 0.0]
+      - [175.0, 1.0]
+      - [275.0, 2.0]
+    UNRATE:
+      - [3.5, 2.0]
+      - [4.0, 1.0]
+      - [4.5, 0.0]
+      - [5.5, -1.0]
+      - [6.5, -2.0]
+    CES0500000003:
+      - [2.0, -2.0]
+      - [2.8, -1.0]
+      - [3.3, 0.0]
+      - [4.0, 1.0]
+      - [5.0, 2.0]
+
+labels:
+  growth:
+    - [-1.25, Contraction risk]
+    - [-0.40, Below-trend growth]
+    - [0.40, Trend-like growth]
+    - [1.25, Above-trend growth]
+    - [2.01, Strong expansion]
+  inflation:
+    - [-1.25, Low inflation]
+    - [-0.40, Disinflationary pressure]
+    - [0.40, Target-consistent pressure]
+    - [1.25, Elevated inflation pressure]
+    - [2.01, High inflation pressure]
+  labour:
+    - [-1.25, Material labour slack]
+    - [-0.40, Cooling labour market]
+    - [0.40, Broadly balanced labour market]
+    - [1.25, Tight labour market]
+    - [2.01, Very tight labour market]
+
+governance:
+  maximum_preferred_cutoff_spread_days: 45
+  maximum_allowed_cutoff_spread_days: 120
+  minimum_dimension_confidence: 30
+  state_score_bounds: [-2.0, 2.0]
+  require_production_source_registry: true
+  risk_thresholds:
+    gdp_lower_80: 0.0
+    core_pce_upper_80: 4.0
+    payroll_lower_80: 0.0
+    unemployment_upper_80: 5.0

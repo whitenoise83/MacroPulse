@@ -990,6 +990,86 @@ CREATE TABLE IF NOT EXISTS labour_release_changes (
 CREATE INDEX IF NOT EXISTS idx_labour_release_changes
 ON labour_release_changes(decomposition_id, series_id, observation_date);
 
+
+CREATE TABLE IF NOT EXISTS macro_state_runs (
+    run_id VARCHAR PRIMARY KEY,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    run_timestamp TIMESTAMP NOT NULL,
+    state_as_of DATE NOT NULL,
+    status VARCHAR NOT NULL,
+    primary_regime VARCHAR NOT NULL,
+    overall_confidence DOUBLE NOT NULL,
+    gdp_run_id VARCHAR NOT NULL,
+    inflation_run_id VARCHAR NOT NULL,
+    labour_run_id VARCHAR NOT NULL,
+    oldest_source_cutoff DATE NOT NULL,
+    newest_source_cutoff DATE NOT NULL,
+    cutoff_spread_days INTEGER NOT NULL,
+    config_hash VARCHAR NOT NULL,
+    code_hash VARCHAR NOT NULL,
+    git_commit VARCHAR,
+    source_bundle_hash VARCHAR NOT NULL,
+    state_hash VARCHAR NOT NULL,
+    metrics_json VARCHAR,
+    notes VARCHAR
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_runs_as_of
+ON macro_state_runs(state_as_of, run_timestamp);
+
+CREATE TABLE IF NOT EXISTS macro_state_dimensions (
+    run_id VARCHAR NOT NULL,
+    dimension VARCHAR NOT NULL,
+    score DOUBLE NOT NULL,
+    lower_score DOUBLE NOT NULL,
+    upper_score DOUBLE NOT NULL,
+    label VARCHAR NOT NULL,
+    confidence DOUBLE NOT NULL,
+    previous_run_id VARCHAR,
+    previous_score DOUBLE,
+    delta_score DOUBLE,
+    details_json VARCHAR,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_dimensions_unique
+ON macro_state_dimensions(run_id, dimension);
+
+CREATE TABLE IF NOT EXISTS macro_state_inputs (
+    run_id VARCHAR NOT NULL,
+    source_model_id VARCHAR NOT NULL,
+    source_model_version VARCHAR NOT NULL,
+    source_run_id VARCHAR NOT NULL,
+    source_target VARCHAR NOT NULL,
+    source_target_name VARCHAR NOT NULL,
+    target_period VARCHAR NOT NULL,
+    forecast_stage VARCHAR,
+    point_forecast DOUBLE NOT NULL,
+    lower_80 DOUBLE NOT NULL,
+    upper_80 DOUBLE NOT NULL,
+    information_cutoff DATE NOT NULL,
+    data_as_of DATE,
+    source_hash VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_inputs_run
+ON macro_state_inputs(run_id, source_model_id, source_target);
+
+CREATE TABLE IF NOT EXISTS macro_state_regimes (
+    run_id VARCHAR NOT NULL,
+    regime_code VARCHAR NOT NULL,
+    regime_label VARCHAR NOT NULL,
+    is_primary BOOLEAN NOT NULL,
+    rule_strength DOUBLE NOT NULL,
+    rationale VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_regimes_run
+ON macro_state_regimes(run_id, is_primary);
+
 '''
 
 
@@ -1878,4 +1958,111 @@ class MacroRepository:
                 connection.register("_validation_checks", checks)
                 connection.execute("INSERT INTO validation_checks SELECT * FROM _validation_checks")
                 connection.unregister("_validation_checks")
+
+    def save_macro_state_outputs(
+        self,
+        run_record: pd.DataFrame,
+        dimensions: pd.DataFrame,
+        inputs: pd.DataFrame,
+        regimes: pd.DataFrame,
+    ) -> None:
+        run_columns = [
+            "run_id",
+            "model_id",
+            "model_version",
+            "run_timestamp",
+            "state_as_of",
+            "status",
+            "primary_regime",
+            "overall_confidence",
+            "gdp_run_id",
+            "inflation_run_id",
+            "labour_run_id",
+            "oldest_source_cutoff",
+            "newest_source_cutoff",
+            "cutoff_spread_days",
+            "config_hash",
+            "code_hash",
+            "git_commit",
+            "source_bundle_hash",
+            "state_hash",
+            "metrics_json",
+            "notes",
+        ]
+        dimension_columns = [
+            "run_id",
+            "dimension",
+            "score",
+            "lower_score",
+            "upper_score",
+            "label",
+            "confidence",
+            "previous_run_id",
+            "previous_score",
+            "delta_score",
+            "details_json",
+            "created_at",
+        ]
+        input_columns = [
+            "run_id",
+            "source_model_id",
+            "source_model_version",
+            "source_run_id",
+            "source_target",
+            "source_target_name",
+            "target_period",
+            "forecast_stage",
+            "point_forecast",
+            "lower_80",
+            "upper_80",
+            "information_cutoff",
+            "data_as_of",
+            "source_hash",
+            "created_at",
+        ]
+        regime_columns = [
+            "run_id",
+            "regime_code",
+            "regime_label",
+            "is_primary",
+            "rule_strength",
+            "rationale",
+            "created_at",
+        ]
+        with self.connect() as connection:
+            connection.register(
+                "_macro_state_run", run_record[run_columns]
+            )
+            connection.execute(
+                "INSERT INTO macro_state_runs SELECT * FROM _macro_state_run"
+            )
+            connection.unregister("_macro_state_run")
+
+            connection.register(
+                "_macro_state_dimensions",
+                dimensions[dimension_columns],
+            )
+            connection.execute(
+                "INSERT INTO macro_state_dimensions "
+                "SELECT * FROM _macro_state_dimensions"
+            )
+            connection.unregister("_macro_state_dimensions")
+
+            connection.register(
+                "_macro_state_inputs", inputs[input_columns]
+            )
+            connection.execute(
+                "INSERT INTO macro_state_inputs "
+                "SELECT * FROM _macro_state_inputs"
+            )
+            connection.unregister("_macro_state_inputs")
+
+            connection.register(
+                "_macro_state_regimes", regimes[regime_columns]
+            )
+            connection.execute(
+                "INSERT INTO macro_state_regimes "
+                "SELECT * FROM _macro_state_regimes"
+            )
+            connection.unregister("_macro_state_regimes")
 

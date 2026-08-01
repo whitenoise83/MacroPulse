@@ -1,0 +1,11 @@
+MacroPulse Model 1C v1.0.0 production upgrade
+
+1. Stop Streamlit.
+2. Extract the release into C:\Users\Cenk\OneDrive\MacroPulse.
+3. Preserve .env, .git, data\macropulse.duckdb, and reports\.
+4. Run:
+   pip install -e .
+   python scripts\initialise_database.py
+   python scripts\promote_model1c_v1.py
+5. Run the first production forecast and operational validation.
+6. Commit and tag the production release.

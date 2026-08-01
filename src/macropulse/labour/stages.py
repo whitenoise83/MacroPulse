@@ -73,3 +73,27 @@ def labour_stage_forecast_date(
             raise ValueError("pre_employment_report requires an initial release date.")
         return release_date - timedelta(days=1)
     raise ValueError(f"Unknown labour forecast stage: {stage_code}")
+
+
+def infer_live_labour_stage(
+    target_period: pd.Period | str,
+    information_cutoff: date,
+    release_date: date,
+) -> str:
+    """Return the latest predeclared labour stage reached by a live cutoff."""
+    period = (
+        target_period
+        if isinstance(target_period, pd.Period)
+        else pd.Period(target_period, freq="M")
+    )
+    schedule = [
+        (labour_stage_forecast_date(period, "month_open", release_date), "month_open"),
+        (labour_stage_forecast_date(period, "after_week_1", release_date), "after_week_1"),
+        (labour_stage_forecast_date(period, "after_week_2", release_date), "after_week_2"),
+        (labour_stage_forecast_date(period, "month_end", release_date), "month_end"),
+        (labour_stage_forecast_date(period, "pre_employment_report", release_date), "pre_employment_report"),
+    ]
+    reached = [item for item in schedule if item[0] <= information_cutoff]
+    if not reached:
+        return "month_open"
+    return max(reached, key=lambda item: item[0])[1]

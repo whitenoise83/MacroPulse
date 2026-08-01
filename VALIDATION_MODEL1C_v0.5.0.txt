@@ -1,0 +1,9 @@
+MacroPulse Model 1C v0.5.0 package validation
+
+- Python compilation: passed
+- Candidate-validation synthetic reconstruction: 39/39 checks passed
+- Non-integration suite: 86 passed, 1 skipped
+- Integration tests run separately: 5 passed
+- Total observed: 91 passed, 1 skipped
+- No FRED/ALFRED calls are made by candidate validation
+- No database, credentials, cached data, or user reports are included

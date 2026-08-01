@@ -14,6 +14,7 @@ pages = {
         st.Page("ui/inflation_nowcast.py", title="US Inflation Nowcast", icon="🌡️"),
         st.Page("ui/inflation_news.py", title="Inflation News", icon="🧾"),
         st.Page("ui/labour_nowcast.py", title="US Labour Nowcast", icon="👷"),
+        st.Page("ui/labour_news.py", title="Labour News", icon="📋"),
         st.Page("ui/news_decomposition.py", title="GDP News Decomposition", icon="📰"),
         st.Page("ui/data_explorer.py", title="Data Explorer", icon="🗃️"),
         st.Page("ui/model_comparison.py", title="Model Comparison", icon="⚖️"),

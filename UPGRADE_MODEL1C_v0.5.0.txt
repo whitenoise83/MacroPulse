@@ -1,0 +1,11 @@
+MacroPulse Model 1C v0.5.0
+
+1. Extract directly into C:\Users\Cenk\OneDrive\MacroPulse and replace files.
+2. Preserve .env, .git, data\macropulse.duckdb, and reports\.
+3. Run:
+   pip install -e .
+   python scripts\initialise_database.py
+4. Run candidate validation:
+   python scripts\run_labour_candidate_validation.py --backtest-id 834e0655-ba81-4b96-b42c-e1cdda73b847
+
+No FRED download or vintage-backtest rerun is required.

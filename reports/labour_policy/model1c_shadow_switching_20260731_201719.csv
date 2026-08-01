@@ -1,0 +1,16 @@
+target_series,forecast_stage,eligible_months,switches,distinct_selected_models,stable_policy_share,most_selected_model
+CES0500000003,after_week_1,85,5,4,0.4235294117647059,Labour Bridge Ridge
+CES0500000003,after_week_2,86,5,3,0.5813953488372093,Labour Equal-Weight Ensemble
+CES0500000003,month_end,86,6,4,0.6162790697674418,Labour Equal-Weight Ensemble
+CES0500000003,month_open,85,4,3,0.0,Labour Equal-Weight Ensemble
+CES0500000003,pre_employment_report,86,5,3,0.6627906976744186,Labour Equal-Weight Ensemble
+PAYEMS,after_week_1,95,4,3,0.042105263157894736,Labour 12-Month Mean
+PAYEMS,after_week_2,96,5,4,0.0,Labour 12-Month Mean
+PAYEMS,month_end,96,4,3,0.0,Labour 12-Month Mean
+PAYEMS,month_open,95,5,3,0.8526315789473684,Labour 12-Month Mean
+PAYEMS,pre_employment_report,96,4,3,0.0,Labour 12-Month Mean
+UNRATE,after_week_1,94,1,2,0.8191489361702128,Labour Equal-Weight Ensemble
+UNRATE,after_week_2,95,1,2,0.8526315789473684,Labour Equal-Weight Ensemble
+UNRATE,month_end,95,3,3,0.7894736842105263,Labour Equal-Weight Ensemble
+UNRATE,month_open,94,4,3,0.6382978723404256,Labour Equal-Weight Ensemble
+UNRATE,pre_employment_report,95,4,3,0.7368421052631579,Labour Equal-Weight Ensemble

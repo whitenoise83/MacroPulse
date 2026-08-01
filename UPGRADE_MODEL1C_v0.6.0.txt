@@ -1,0 +1,11 @@
+1. Stop Streamlit.
+2. Extract the ZIP into the MacroPulse project root and replace matching files.
+3. Preserve .env, .git, data/macropulse.duckdb, and reports/.
+4. Activate .venv.
+5. Run: pip install -e .
+6. Run: python scripts\initialise_database.py
+7. Refresh data: python scripts\download_labour_data.py
+8. Run: python scripts\run_labour_nowcast.py
+9. Validate: python scripts\run_labour_operational_validation.py
+
+Do not rerun the vintage backtest, interval calibration, or candidate validation.

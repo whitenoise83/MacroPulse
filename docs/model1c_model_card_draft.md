@@ -49,3 +49,17 @@ be reviewed before candidate validation.
 
 v0.5.0 will formalise candidate-validation gates after the fixed-versus-shadow
 common-sample results are reviewed.
+
+## v0.5.0 candidate policy
+
+The stable 15-decision target-stage policy is the point-forecast candidate. The
+adaptive selector remains shadow-only because its common-sample gains are concentrated
+in unemployment-rate groups while payroll and earnings performance generally worsens.
+The candidate uncertainty method is the strictly prior `exp_weighted_q80` calibration.
+Production use remains prohibited until governed live forecasts, news decomposition,
+operational validation, freeze assessment, and owner approval are complete.
+
+
+## v0.6.0 governed live candidate
+
+Candidate validation `0540c6ee-2d96-493a-adfe-a76c5c91cf31` passed 39/39 gates. The governed live implementation stores the stable policy headline, prior-only `exp_weighted_q80` intervals, adaptive shadow forecasts, the complete information set, provenance hashes, and a governance signature. Labour news attribution separates new observations, revisions/removals, model refit, and stable-policy stage changes. Production approval remains pending live operational validation, freeze assessment, and model-owner signoff.

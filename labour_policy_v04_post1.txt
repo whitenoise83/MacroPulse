@@ -1,0 +1,186 @@
+Model 1C policy evaluation complete
+Backtest ID: 834e0655-ba81-4b96-b42c-e1cdda73b847
+Calibration ID: 3576b19a-27b0-4ee4-bf59-910d9c821c1b
+
+Stable candidate policy
+target_series        forecast_stage                   model_name
+CES0500000003          after_week_1          Labour Bridge Ridge
+CES0500000003          after_week_2 Labour Equal-Weight Ensemble
+CES0500000003             month_end Labour Equal-Weight Ensemble
+CES0500000003            month_open          Labour Bridge Ridge
+CES0500000003 pre_employment_report Labour Equal-Weight Ensemble
+       PAYEMS          after_week_1 Labour Equal-Weight Ensemble
+       PAYEMS          after_week_2          Labour Bridge Ridge
+       PAYEMS             month_end          Labour Bridge Ridge
+       PAYEMS            month_open         Labour 12-Month Mean
+       PAYEMS pre_employment_report          Labour Bridge Ridge
+       UNRATE          after_week_1 Labour Equal-Weight Ensemble
+       UNRATE          after_week_2 Labour Equal-Weight Ensemble
+       UNRATE             month_end Labour Equal-Weight Ensemble
+       UNRATE            month_open Labour Equal-Weight Ensemble
+       UNRATE pre_employment_report Labour Equal-Weight Ensemble
+
+Fixed-policy performance
+target_series        forecast_stage  observations     rmse     mae    bias  median_ae  p90_abs_error  max_abs_error  directional_accuracy                   model_name
+CES0500000003          after_week_1           109    3.630   1.974   0.314      1.217          3.718         27.780                 0.936          Labour Bridge Ridge
+CES0500000003          after_week_2           110    5.285   2.028   0.758      1.061          4.140         49.145                 0.955 Labour Equal-Weight Ensemble
+CES0500000003             month_end           110    5.472   2.033   0.765      1.047          4.091         51.358                 0.955 Labour Equal-Weight Ensemble
+CES0500000003            month_open           109    4.269   2.084   0.419      1.225          3.621         34.723                 0.936          Labour Bridge Ridge
+CES0500000003 pre_employment_report           110    5.499   2.049   0.761      1.039          4.186         51.629                 0.955 Labour Equal-Weight Ensemble
+       PAYEMS          after_week_1           119 1950.604 437.148 -31.035    104.877        517.090      19280.566                 0.908 Labour Equal-Weight Ensemble
+       PAYEMS          after_week_2           120 1980.907 515.354 -59.573    124.004        623.061      18688.930                 0.842          Labour Bridge Ridge
+       PAYEMS             month_end           120 1969.352 507.941 -50.489    138.226        583.509      18457.491                 0.842          Labour Bridge Ridge
+       PAYEMS            month_open           119 2038.544 481.775 -11.810     73.083       1067.817      20678.083                 0.866         Labour 12-Month Mean
+       PAYEMS pre_employment_report           120 1964.724 510.769 -47.583    140.157        672.687      18405.242                 0.867          Labour Bridge Ridge
+       UNRATE          after_week_1           118    1.412   0.435   0.233      0.168          0.472         11.690                 0.483 Labour Equal-Weight Ensemble
+       UNRATE          after_week_2           119    1.136   0.359   0.174      0.185          0.433         11.175                 0.471 Labour Equal-Weight Ensemble
+       UNRATE             month_end           119    1.080   0.347   0.170      0.187          0.442         10.755                 0.487 Labour Equal-Weight Ensemble
+       UNRATE            month_open           118    1.757   0.519   0.139      0.214          0.533         12.074                 0.525 Labour Equal-Weight Ensemble
+       UNRATE pre_employment_report           119    1.073   0.339   0.169      0.183          0.440         10.700                 0.504 Labour Equal-Weight Ensemble
+
+Prior-only shadow performance
+target_series        forecast_stage  observations     rmse     mae   bias  median_ae  p90_abs_error  max_abs_error  directional_accuracy      model_name
+CES0500000003          after_week_1            85    5.632   2.411  0.670      1.126          4.297         43.537                 0.929 Adaptive shadow
+CES0500000003          after_week_2            86    6.117   2.322  0.866      1.000          4.355         50.890                 0.953 Adaptive shadow
+CES0500000003             month_end            86    6.624   2.520  0.701      1.082          4.402         51.897                 0.942 Adaptive shadow
+CES0500000003            month_open            85    6.534   2.552  0.872      1.107          4.630         50.463                 0.941 Adaptive shadow
+CES0500000003 pre_employment_report            86    6.624   2.522  0.729      1.051          4.316         51.897                 0.942 Adaptive shadow
+       PAYEMS          after_week_1            95 2264.623 564.881 72.835    125.000        880.654      20696.000                 0.905 Adaptive shadow
+       PAYEMS          after_week_2            96 2302.910 596.992 55.448    106.833       1086.625      20696.000                 0.812 Adaptive shadow
+       PAYEMS             month_end            96 2304.875 601.905 53.156    105.417       1086.625      20696.000                 0.792 Adaptive shadow
+       PAYEMS            month_open            95 2281.770 596.021  7.026    118.062       1254.617      20678.083                 0.832 Adaptive shadow
+       PAYEMS pre_employment_report            96 2305.269 605.726 56.201    110.057       1086.625      20696.000                 0.781 Adaptive shadow
+       UNRATE          after_week_1            94    1.577   0.489  0.213      0.181          0.497         11.690                 0.479 Adaptive shadow
+       UNRATE          after_week_2            95    1.265   0.398  0.149      0.185          0.449         11.175                 0.463 Adaptive shadow
+       UNRATE             month_end            95    1.202   0.379  0.132      0.182          0.444         10.755                 0.484 Adaptive shadow
+       UNRATE            month_open            94    2.793   0.696 -0.030      0.204          0.559         22.460                 0.489 Adaptive shadow
+       UNRATE pre_employment_report            95    1.194   0.360  0.121      0.174          0.441         10.700                 0.516 Adaptive shadow
+
+Fixed versus shadow on identical eligible months
+target_series        forecast_stage  fixed_observations  fixed_rmse  fixed_mae  fixed_bias  fixed_median_ae  fixed_p90_abs_error  fixed_max_abs_error  fixed_directional_accuracy             fixed_model_name  shadow_observations  shadow_rmse  shadow_mae  shadow_bias  shadow_median_ae  shadow_p90_abs_error  shadow_max_abs_error  shadow_directional_accuracy shadow_model_name  shadow_to_fixed_rmse_ratio  shadow_to_fixed_mae_ratio  shadow_to_fixed_p90_abs_error_ratio  shadow_to_fixed_max_abs_error_ratio  absolute_bias_improved  directional_accuracy_improved  shadow_rmse_improved  shadow_mae_improved  shadow_tail_improved
+CES0500000003          after_week_1                  85       4.036      2.181       0.367            1.255                4.297               27.780                       0.929          Labour Bridge Ridge                   85        5.632       2.411        0.670             1.126                 4.297                43.537                        0.929   Adaptive shadow                       1.396                      1.106                                1.000                                1.567                   False                          False                 False                False                 False
+CES0500000003          after_week_2                  86       5.934      2.279       0.887            1.049                4.355               49.145                       0.953 Labour Equal-Weight Ensemble                   86        6.117       2.322        0.866             1.000                 4.355                50.890                        0.953   Adaptive shadow                       1.031                      1.019                                1.000                                1.036                    True                          False                 False                False                 False
+CES0500000003             month_end                  86       6.147      2.279       0.901            1.064                4.402               51.358                       0.953 Labour Equal-Weight Ensemble                   86        6.624       2.520        0.701             1.082                 4.402                51.897                        0.942   Adaptive shadow                       1.078                      1.106                                1.000                                1.010                    True                          False                 False                False                 False
+CES0500000003            month_open                  85       4.742      2.261       0.494            1.292                4.147               34.723                       0.929          Labour Bridge Ridge                   85        6.534       2.552        0.872             1.107                 4.630                50.463                        0.941   Adaptive shadow                       1.378                      1.129                                1.117                                1.453                   False                           True                 False                False                 False
+CES0500000003 pre_employment_report                  86       6.178      2.299       0.898            1.038                4.316               51.629                       0.953 Labour Equal-Weight Ensemble                   86        6.624       2.522        0.729             1.051                 4.316                51.897                        0.942   Adaptive shadow                       1.072                      1.097                                1.000                                1.005                    True                          False                 False                False                 False
+       PAYEMS          after_week_1                  95    2182.727    530.966     -30.868          117.470              632.279            19280.566                       0.895 Labour Equal-Weight Ensemble                   95     2264.623     564.881       72.835           125.000               880.654             20696.000                        0.905   Adaptive shadow                       1.038                      1.064                                1.393                                1.073                   False                           True                 False                False                 False
+       PAYEMS          after_week_2                  96    2214.218    625.638     -68.132          157.266              818.245            18688.930                       0.812          Labour Bridge Ridge                   96     2302.910     596.992       55.448           106.833              1086.625             20696.000                        0.812   Adaptive shadow                       1.040                      0.954                                1.328                                1.107                    True                          False                 False                 True                 False
+       PAYEMS             month_end                  96    2201.187    614.469     -53.523          152.793              821.758            18457.491                       0.812          Labour Bridge Ridge                   96     2304.875     601.905       53.156           105.417              1086.625             20696.000                        0.792   Adaptive shadow                       1.047                      0.980                                1.322                                1.121                    True                          False                 False                 True                 False
+       PAYEMS            month_open                  95    2281.291    589.961     -12.475          100.583             1254.617            20678.083                       0.842         Labour 12-Month Mean                   95     2281.770     596.021        7.026           118.062              1254.617             20678.083                        0.832   Adaptive shadow                       1.000                      1.010                                1.000                                1.000                    True                          False                 False                False                 False
+       PAYEMS pre_employment_report                  96    2196.031    618.014     -49.759          163.134              826.179            18405.242                       0.844          Labour Bridge Ridge                   96     2305.269     605.726       56.201           110.057              1086.625             20696.000                        0.781   Adaptive shadow                       1.050                      0.980                                1.315                                1.124                   False                          False                 False                 True                 False
+       UNRATE          after_week_1                  94       1.580      0.514       0.273            0.237                0.511               11.690                       0.479 Labour Equal-Weight Ensemble                   94        1.577       0.489        0.213             0.181                 0.497                11.690                        0.479   Adaptive shadow                       0.998                      0.953                                0.972                                1.000                    True                          False                  True                 True                  True
+       UNRATE          after_week_2                  95       1.269      0.418       0.198            0.238                0.463               11.175                       0.474 Labour Equal-Weight Ensemble                   95        1.265       0.398        0.149             0.185                 0.449                11.175                        0.463   Adaptive shadow                       0.997                      0.952                                0.971                                1.000                    True                          False                  True                 True                  True
+       UNRATE             month_end                  95       1.207      0.403       0.194            0.221                0.452               10.755                       0.495 Labour Equal-Weight Ensemble                   95        1.202       0.379        0.132             0.182                 0.444                10.755                        0.484   Adaptive shadow                       0.996                      0.940                                0.983                                1.000                    True                          False                  True                 True                  True
+       UNRATE            month_open                  94       1.967      0.616       0.161            0.245                0.575               12.074                       0.500 Labour Equal-Weight Ensemble                   94        2.793       0.696       -0.030             0.204                 0.559                22.460                        0.489   Adaptive shadow                       1.420                      1.129                                0.973                                1.860                    True                          False                 False                False                  True
+       UNRATE pre_employment_report                  95       1.199      0.393       0.192            0.205                0.444               10.700                       0.516 Labour Equal-Weight Ensemble                   95        1.194       0.360        0.121             0.174                 0.441                10.700                        0.516   Adaptive shadow                       0.995                      0.915                                0.993                                1.000                    True                          False                  True                 True                  True
+
+Shadow switching stability
+target_series        forecast_stage  eligible_months  switches  distinct_selected_models  stable_policy_share          most_selected_model
+CES0500000003          after_week_1               85         5                         4                0.424          Labour Bridge Ridge
+CES0500000003          after_week_2               86         5                         3                0.581 Labour Equal-Weight Ensemble
+CES0500000003             month_end               86         6                         4                0.616 Labour Equal-Weight Ensemble
+CES0500000003            month_open               85         4                         3                0.000 Labour Equal-Weight Ensemble
+CES0500000003 pre_employment_report               86         5                         3                0.663 Labour Equal-Weight Ensemble
+       PAYEMS          after_week_1               95         4                         3                0.042         Labour 12-Month Mean
+       PAYEMS          after_week_2               96         5                         4                0.000         Labour 12-Month Mean
+       PAYEMS             month_end               96         4                         3                0.000         Labour 12-Month Mean
+       PAYEMS            month_open               95         5                         3                0.853         Labour 12-Month Mean
+       PAYEMS pre_employment_report               96         4                         3                0.000         Labour 12-Month Mean
+       UNRATE          after_week_1               94         1                         2                0.819 Labour Equal-Weight Ensemble
+       UNRATE          after_week_2               95         1                         2                0.853 Labour Equal-Weight Ensemble
+       UNRATE             month_end               95         3                         3                0.789 Labour Equal-Weight Ensemble
+       UNRATE            month_open               94         4                         3                0.638 Labour Equal-Weight Ensemble
+       UNRATE pre_employment_report               95         4                         3                0.737 Labour Equal-Weight Ensemble
+
+Fixed-policy regime performance
+target_series        forecast_stage               regime  observations     rmse      mae     bias  median_ae  p90_abs_error  max_abs_error  directional_accuracy
+CES0500000003          after_week_1 pandemic_dislocation            22    7.496    5.030    2.714      3.646          8.125         27.780                 0.773
+CES0500000003          after_week_1            post_2021            54    1.562    1.187   -0.423      1.044          2.643          4.335                 1.000
+CES0500000003          after_week_1         pre_pandemic            33    1.439    1.225   -0.081      1.082          2.415          2.693                 0.939
+CES0500000003          after_week_2 pandemic_dislocation            22   11.482    5.828    3.313      3.940          9.443         49.145                 0.864
+CES0500000003          after_week_2            post_2021            54    1.438    1.070    0.112      0.838          2.059          5.270                 1.000
+CES0500000003          after_week_2         pre_pandemic            34    1.338    1.091    0.131      0.980          2.090          2.890                 0.941
+CES0500000003             month_end pandemic_dislocation            22   11.917    5.844    3.352      3.974          7.223         51.358                 0.864
+CES0500000003             month_end            post_2021            54    1.434    1.082    0.115      0.884          2.056          5.139                 1.000
+CES0500000003             month_end         pre_pandemic            34    1.311    1.077    0.123      0.963          2.038          2.729                 0.941
+CES0500000003            month_open pandemic_dislocation            22    8.884    5.199    3.147      3.065         10.095         34.723                 0.773
+CES0500000003            month_open            post_2021            54    1.700    1.237   -0.388      0.994          2.756          6.202                 1.000
+CES0500000003            month_open         pre_pandemic            33    1.692    1.394   -0.078      1.150          2.601          4.880                 0.939
+CES0500000003 pre_employment_report pandemic_dislocation            22   11.981    5.920    3.342      4.029          7.255         51.629                 0.864
+CES0500000003 pre_employment_report            post_2021            54    1.431    1.086    0.114      0.918          2.112          5.185                 1.000
+CES0500000003 pre_employment_report         pre_pandemic            34    1.308    1.075    0.120      0.948          2.021          2.727                 0.941
+       PAYEMS          after_week_1 pandemic_dislocation            22 4525.617 1889.335 -246.877    527.049       3315.723      19280.566                 0.727
+       PAYEMS          after_week_1            post_2021            54  186.132  140.158   49.206    113.040        254.863        653.076                 0.926
+       PAYEMS          after_week_1         pre_pandemic            43   86.314   67.134  -21.372     58.434        156.319        206.075                 0.977
+       PAYEMS          after_week_2 pandemic_dislocation            22 4609.361 2195.985 -310.660    703.997       5038.257      18688.930                 0.682
+       PAYEMS          after_week_2            post_2021            54  236.765  184.704    3.063    154.529        385.281        747.248                 0.796
+       PAYEMS          after_week_2         pre_pandemic            44   99.481   80.838  -10.902     72.405        165.269        236.913                 0.977
+       PAYEMS             month_end pandemic_dislocation            22 4582.070 2157.395 -250.858    602.281       4680.714      18457.491                 0.727
+       PAYEMS             month_end            post_2021            54  235.321  178.781    2.192    152.055        350.508        825.616                 0.778
+       PAYEMS             month_end         pre_pandemic            44  107.983   87.183  -14.957     73.445        173.587        249.564                 0.977
+       PAYEMS            month_open pandemic_dislocation            22 4736.307 2251.045   95.364   1109.958       3376.933      20678.083                 0.409
+       PAYEMS            month_open            post_2021            54  119.403   97.580  -56.586     72.250        207.392        249.417                 0.963
+       PAYEMS            month_open         pre_pandemic            43   74.170   59.045  -10.413     48.083         99.533        217.917                 0.977
+       PAYEMS pre_employment_report pandemic_dislocation            22 4571.788 2167.041 -243.112    715.622       4598.898      18405.242                 0.773
+       PAYEMS pre_employment_report            post_2021            54  230.964  181.128    4.920    163.134        346.695        799.361                 0.815
+       PAYEMS pre_employment_report         pre_pandemic            44  107.510   87.193  -14.254     73.404        178.347        241.420                 0.977
+       UNRATE          after_week_1 pandemic_dislocation            22    3.233    1.477    0.550      0.423          4.099         11.690                 0.864
+       UNRATE          after_week_1            post_2021            53    0.274    0.238    0.207      0.236          0.423          0.526                 0.321
+       UNRATE          after_week_1         pre_pandemic            43    0.176    0.145    0.103      0.123          0.272          0.449                 0.488
+       UNRATE          after_week_2 pandemic_dislocation            22    2.596    1.073    0.224      0.373          1.198         11.175                 0.864
+       UNRATE          after_week_2            post_2021            53    0.278    0.243    0.209      0.239          0.431          0.526                 0.321
+       UNRATE          after_week_2         pre_pandemic            44    0.170    0.141    0.107      0.120          0.251          0.465                 0.455
+       UNRATE             month_end pandemic_dislocation            22    2.466    1.032    0.207      0.372          1.341         10.755                 0.909
+       UNRATE             month_end            post_2021            53    0.272    0.237    0.209      0.228          0.429          0.528                 0.321
+       UNRATE             month_end         pre_pandemic            44    0.169    0.137    0.105      0.116          0.251          0.468                 0.477
+       UNRATE            month_open pandemic_dislocation            22    4.037    1.905    0.090      0.467          7.783         12.074                 0.818
+       UNRATE            month_open            post_2021            53    0.286    0.248    0.206      0.239          0.449          0.615                 0.358
+       UNRATE            month_open         pre_pandemic            43    0.180    0.145    0.083      0.136          0.283          0.441                 0.581
+       UNRATE pre_employment_report pandemic_dislocation            22    2.452    1.015    0.219      0.327          1.347         10.700                 0.909
+       UNRATE pre_employment_report            post_2021            53    0.259    0.227    0.200      0.224          0.395          0.487                 0.358
+       UNRATE pre_employment_report         pre_pandemic            44    0.169    0.137    0.105      0.114          0.254          0.468                 0.477
+
+Stable-policy interval diagnostics: exp_weighted_q80
+target_series        forecast_stage  observations  coverage  average_half_width  mean_interval_score  median_interval_score  minimum_prior_errors
+CES0500000003          after_week_1            85     0.824               3.263               12.531                  6.789                    24
+CES0500000003          after_week_2            86     0.802               2.900               14.660                  5.683                    24
+CES0500000003             month_end            86     0.791               2.880               14.565                  5.893                    24
+CES0500000003            month_open            85     0.824               3.158               14.006                  5.928                    24
+CES0500000003 pre_employment_report            86     0.802               2.909               14.647                  6.140                    24
+       PAYEMS          after_week_1            95     0.821             435.348             4399.801                717.608                    24
+       PAYEMS          after_week_2            96     0.833             598.229             4921.006                791.960                    24
+       PAYEMS             month_end            96     0.823             598.078             4910.398                718.651                    24
+       PAYEMS            month_open            95     0.842             654.924             4630.023                498.833                    24
+       PAYEMS pre_employment_report            96     0.833             602.909             4905.611                738.066                    24
+       UNRATE          after_week_1            94     0.777               0.468                3.638                  0.855                    24
+       UNRATE          after_week_2            95     0.789               0.408                2.749                  0.827                    24
+       UNRATE             month_end            95     0.779               0.412                2.651                  0.838                    24
+       UNRATE            month_open            94     0.798               0.476                4.607                  0.904                    24
+       UNRATE pre_employment_report            95     0.789               0.395                2.630                  0.754                    24
+
+Shadow-policy interval diagnostics
+target_series        forecast_stage  observations  coverage  average_half_width  mean_interval_score  median_interval_score  minimum_prior_errors
+CES0500000003          after_week_1            85     0.812               2.985               15.288                  6.789                    24
+CES0500000003          after_week_2            86     0.779               2.846               14.936                  5.683                    24
+CES0500000003             month_end            86     0.802               2.872               16.782                  5.893                    24
+CES0500000003            month_open            85     0.776               3.038               17.423                  6.202                    24
+CES0500000003 pre_employment_report            86     0.814               2.853               16.710                  6.015                    24
+       PAYEMS          after_week_1            95     0.832             486.205             4284.935                765.667                    24
+       PAYEMS          after_week_2            96     0.833             547.890             4519.417                700.219                    24
+       PAYEMS             month_end            96     0.812             556.365             4538.805                691.329                    24
+       PAYEMS            month_open            95     0.842             662.559             4645.293                604.239                    24
+       PAYEMS pre_employment_report            96     0.823             552.528             4535.746                691.495                    24
+       UNRATE          after_week_1            94     0.777               0.440                3.566                  0.852                    24
+       UNRATE          after_week_2            95     0.800               0.384                2.683                  0.797                    24
+       UNRATE             month_end            95     0.768               0.384                2.583                  0.838                    24
+       UNRATE            month_open            94     0.830               0.440                5.650                  0.798                    24
+       UNRATE pre_employment_report            95     0.800               0.363                2.551                  0.702                    24
+
+Report: C:\Users\Cenk\OneDrive\MacroPulse\reports\labour_policy\model1c_policy_evaluation_20260731_201719.md
+Fixed-policy CSV: C:\Users\Cenk\OneDrive\MacroPulse\reports\labour_policy\model1c_fixed_policy_metrics_20260731_201719.csv
+Shadow-policy CSV: C:\Users\Cenk\OneDrive\MacroPulse\reports\labour_policy\model1c_shadow_policy_metrics_20260731_201719.csv
+Common-sample comparison CSV: C:\Users\Cenk\OneDrive\MacroPulse\reports\labour_policy\model1c_common_sample_policy_comparison_20260731_201719.csv
+Shadow-switching CSV: C:\Users\Cenk\OneDrive\MacroPulse\reports\labour_policy\model1c_shadow_switching_20260731_201719.csv
+Regime CSV: C:\Users\Cenk\OneDrive\MacroPulse\reports\labour_policy\model1c_fixed_policy_regimes_20260731_201719.csv
+Fixed-policy intervals CSV: C:\Users\Cenk\OneDrive\MacroPulse\reports\labour_policy\model1c_fixed_policy_intervals_20260731_201719.csv
+Shadow-policy intervals CSV: C:\Users\Cenk\OneDrive\MacroPulse\reports\labour_policy\model1c_shadow_policy_intervals_20260731_201719.csv

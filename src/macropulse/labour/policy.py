@@ -357,19 +357,58 @@ def attach_calibrated_intervals(
     selected: pd.DataFrame,
     calibrated: pd.DataFrame,
 ) -> pd.DataFrame:
+    """Attach the selected prior-only intervals to policy forecasts.
+
+    Vintage backtest rows already contain development-time residual intervals with
+    columns such as ``lower_80``, ``upper_80`` and ``interval_covered``.  Merging
+    calibrated rows without removing those legacy columns makes pandas create
+    ``*_x``/``*_y`` suffixes, leaving no canonical ``interval_covered`` column for
+    the policy summary.  The policy tournament must use the validated prior-only
+    calibration exclusively, so legacy interval columns are deliberately dropped
+    before the one-to-one merge.
+    """
     if selected.empty or calibrated.empty:
         return pd.DataFrame()
+
     keys = ["target_series", "forecast_stage", "target_period", "model_name"]
+    calibration_columns = [
+        "calibration_id",
+        "interval_method",
+        "lower_80",
+        "upper_80",
+        "interval_covered",
+        "interval_half_width",
+        "interval_score",
+        "prior_error_count",
+        "calibration_cutoff_period",
+    ]
+    required_calibrated = set(keys + calibration_columns + ["calibration_status"])
+    missing = sorted(required_calibrated.difference(calibrated.columns))
+    if missing:
+        raise ValueError(
+            "Calibrated labour intervals are missing required columns: "
+            f"{missing}"
+        )
+
     usable = calibrated.loc[
         (calibrated["calibration_status"] == "calibrated")
         & (calibrated["interval_method"] == SELECTED_INTERVAL_METHOD)
     ].copy()
-    columns = keys + [
-        "calibration_id", "interval_method", "lower_80", "upper_80",
-        "interval_covered", "interval_half_width", "interval_score",
-        "prior_error_count", "calibration_cutoff_period",
-    ]
-    merged = selected.merge(usable[columns], on=keys, how="inner", validate="one_to_one")
+    if usable.empty:
+        return pd.DataFrame()
+
+    # Remove raw/residual interval fields from vintage backtest policy rows.
+    # The calibrated fields below are the sole source of interval diagnostics.
+    selected_clean = selected.drop(
+        columns=[column for column in calibration_columns if column in selected.columns],
+        errors="ignore",
+    ).copy()
+    merged = selected_clean.merge(
+        usable[keys + calibration_columns],
+        on=keys,
+        how="inner",
+        validate="one_to_one",
+    )
     return merged.sort_values(["target_series", "forecast_stage", "target_period"])
 
 
@@ -517,7 +556,7 @@ def run_labour_policy_evaluation(
         for stage, model in stage_map.items()
     ]
     lines = [
-        "# MacroPulse Model 1C v0.4.0 Stable Policy Tournament",
+        "# MacroPulse Model 1C v0.4.0.post1 Stable Policy Tournament",
         "",
         f"- Backtest ID: `{backtest_id}`",
         f"- Calibration ID: `{calibration_id or 'not available'}`",

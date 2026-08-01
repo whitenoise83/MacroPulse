@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from macropulse.labour.config import get_labour_series_definitions
-from macropulse.labour.service import run_labour_nowcast_suite
+from macropulse.labour.live import estimate_target_models
 
 
 def synthetic_labour_observations() -> pd.DataFrame:
@@ -33,29 +33,11 @@ def synthetic_labour_observations() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-class FakeLabourRepository:
-    def __init__(self, observations: pd.DataFrame):
-        self.observations = observations
-        self.saved = None
-
-    def initialise(self) -> None:
-        return None
-
-    def latest_observations(self) -> pd.DataFrame:
-        return self.observations.copy()
-
-    def save_labour_outputs(self, run_record, forecasts, coefficients) -> None:
-        self.saved = (run_record.copy(), forecasts.copy(), coefficients.copy())
-
-
-def test_labour_nowcast_produces_fifteen_forecasts():
-    repository = FakeLabourRepository(synthetic_labour_observations())
-    result = run_labour_nowcast_suite(repository)
-    assert len(result["forecasts"]) == 15
-    assert repository.saved is not None
-    assert len(repository.saved[1]) == 15
-    assert set(result["forecasts"]["target_series"]) == {
-        "PAYEMS",
-        "UNRATE",
-        "CES0500000003",
-    }
+def test_labour_model_suite_produces_fifteen_components():
+    observations = synthetic_labour_observations()
+    forecasts = []
+    for target in ["PAYEMS", "UNRATE", "CES0500000003"]:
+        _, models = estimate_target_models(observations, target)
+        forecasts.extend((target, name, result.point_forecast) for name, result in models.items())
+    assert len(forecasts) == 15
+    assert {row[0] for row in forecasts} == {"PAYEMS", "UNRATE", "CES0500000003"}

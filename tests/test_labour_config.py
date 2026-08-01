@@ -11,10 +11,10 @@ def test_labour_registry_has_declared_targets_and_features():
     assert len(feature_definitions()) == 10
 
 
-def test_labour_identity_is_v040_development_candidate():
+def test_labour_identity_is_v060_governed_candidate():
     identity = current_labour_model_identity()
     assert identity.model_id == "US_LABOUR_NOWCAST_1C"
-    assert identity.model_version == "0.4.0"
+    assert identity.model_version == "0.6.0"
     assert identity.lifecycle_status == "development"
     assert len(identity.config_hash) == 64
     assert len(identity.code_hash) == 64

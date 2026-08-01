@@ -1,14 +1,151 @@
 model:
   model_id: US_LABOUR_NOWCAST_1C
   display_name: US Labour Market Nowcast Engine
-  version: 0.4.0
-  package_version: 0.4.0
-  lifecycle_status: development
-  production_approved: false
-  research_status: Vintage-aware development model with validated prior-only intervals,
-    a stable 15-decision point-policy candidate, and a prior-only adaptive shadow
-    challenger; not production approved.
+  version: 1.0.0
+  package_version: 1.0.0
+  lifecycle_status: production
+  production_approved: true
+  production_status: production
+  research_status: Owner-approved production labour nowcast with a stable 15-decision
+    point policy, strictly prior exp_weighted_q80 intervals, governed live registration,
+    provenance signatures, news decomposition, and an adaptive shadow challenger.
   primary_target: PAYEMS
   secondary_targets:
   - UNRATE
   - CES0500000003
+  validation_source_version: 0.6.0
+  promoted_from_package_version: 0.6.0.post1
+  approval:
+    status: approved
+    decision: promote_to_production
+    approved_at: '2026-08-01T16:12:00+01:00'
+    approval_phrase: APPROVE MODEL 1C FREEZE
+    candidate_validation_id: 0540c6ee-2d96-493a-adfe-a76c5c91cf31
+    candidate_validation_status: pass
+    candidate_validation_passed: 39
+    candidate_validation_failed: 0
+    candidate_validation_warnings: 0
+    operational_validation_id: f535fdc2-c75c-4da8-a0f8-e3d1b80416f3
+    operational_validation_status: pass
+    operational_validation_passed: 20
+    operational_validation_failed: 0
+    operational_validation_warnings: 0
+    freeze_assessment_id: 7eb22dae-54c8-423e-ad1e-9977db08d388
+    freeze_assessment_status: pass
+    freeze_assessment_passed: 14
+    freeze_assessment_failed: 0
+    freeze_assessment_warnings: 0
+    freeze_readiness: ready_for_model_owner_signoff
+    governed_live_run_id: 56adddf6-2438-43cf-97b0-24e4801ac9a4
+    freeze_assessment_report: reports/labour_freeze/model1c_freeze_assessment_20260801_161037.md
+policy_candidate:
+  status: production_approved
+  selection_basis: Vintage stage metrics, target-appropriate bias limits, common-sample
+    shadow verification, crisis-tail guards, directional accuracy, regime evidence,
+    and stage stability.
+  stable_map:
+    PAYEMS:
+      month_open: Labour 12-Month Mean
+      after_week_1: Labour Equal-Weight Ensemble
+      after_week_2: Labour Bridge Ridge
+      month_end: Labour Bridge Ridge
+      pre_employment_report: Labour Bridge Ridge
+    UNRATE:
+      month_open: Labour Equal-Weight Ensemble
+      after_week_1: Labour Equal-Weight Ensemble
+      after_week_2: Labour Equal-Weight Ensemble
+      month_end: Labour Equal-Weight Ensemble
+      pre_employment_report: Labour Equal-Weight Ensemble
+    CES0500000003:
+      month_open: Labour Bridge Ridge
+      after_week_1: Labour Bridge Ridge
+      after_week_2: Labour Equal-Weight Ensemble
+      month_end: Labour Equal-Weight Ensemble
+      pre_employment_report: Labour Equal-Weight Ensemble
+  shadow_selector:
+    minimum_prior_errors: 24
+    rolling_window: 36
+    switch_hurdle: 0.03
+    mae_guard: 1.05
+    median_guard: 1.1
+    tail_guard: 1.1
+    max_error_guard: 1.15
+    directional_guard: 0.03
+    role: shadow_challenger_only
+    common_sample_result: Broadly superior in 4 of 15 target-stage groups, concentrated
+      in UNRATE; materially weaker for payroll and earnings, so not eligible for headline
+      control.
+  production_role: headline_production_policy
+interval_candidate:
+  status: production_approved
+  method: exp_weighted_q80
+  nominal_coverage: 0.8
+  minimum_prior_errors: 24
+  rolling_window: 48
+  decay: 0.94
+  observed_aggregate_coverage: 0.809
+  observed_target_stage_range:
+    lower: 0.777
+    upper: 0.842
+  governance_note: Production intervals use only strictly earlier target-month errors
+    and preserve the calibration cutoff month in the governed forecast record.
+  production_role: headline_uncertainty_method
+candidate_validation:
+  validation_id: 0540c6ee-2d96-493a-adfe-a76c5c91cf31
+  status: passed
+  passed_checks: 39
+  failed_checks: 0
+  warnings: 0
+  point_policy: stable_map
+  adaptive_policy: shadow_only
+  interval_method: exp_weighted_q80
+governed_live:
+  status: production
+  candidate_validation_type: candidate_policy
+  require_passing_candidate_validation: true
+  persist_information_set: true
+  persist_all_components: true
+  governance_signature: sha256_canonical_payload
+  news_decomposition:
+    enabled: true
+    attribution_order:
+    - revisions
+    - removed_observations
+    - new_observations
+    - stable_policy_change
+    arithmetic_tolerance: 1.0e-08
+  operational_validation:
+    minimum_targets: 3
+    minimum_prior_errors: 24
+    maximum_news_residual: 1.0e-08
+  production_status: approved
+production:
+  status: approved
+  version: 1.0.0
+  point_policy: stable_map
+  shadow_policy: adaptive_shadow_only
+  interval_method: exp_weighted_q80
+  revalidation_triggers:
+  - any target leakage or future-observation audit failure
+  - governance signature or provenance hash reproduction failure
+  - stable headline policy deviates from the approved target-stage map
+  - adaptive shadow is allowed to control a headline forecast
+  - labour news decomposition residual exceeds 1e-8
+  - material target, predictor, transformation, release-stage, or data-source definition
+    change
+  - production RMSE or MAE exceeds the best eligible static model by more than 10
+    percent in a target-stage group after at least 24 new evaluated forecasts
+  - production p90 absolute error exceeds the best eligible static model by more than
+    20 percent in a target-stage group after at least 24 new evaluated forecasts
+  - target-stage interval coverage falls outside 60 to 95 percent after at least 24
+    new eligible forecasts
+  - two consecutive target releases produce absolute errors above the historical 90th
+    percentile for the same target-stage policy
+  - a structural release-calendar exception is introduced or an existing exception
+    is reclassified
+  monitoring:
+    minimum_new_forecasts_before_relative_performance_retest: 24
+    minimum_new_forecasts_before_interval_retest: 24
+    retain_all_original_forecasts: true
+    retain_shadow_forecasts: true
+    retain_news_decompositions: true

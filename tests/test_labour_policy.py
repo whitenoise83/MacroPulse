@@ -154,3 +154,40 @@ def test_regime_summary_preserves_all_present_regimes() -> None:
     assert set(summary["regime"]) == {
         "pre_pandemic", "pandemic_dislocation", "post_2021"
     }
+
+
+def test_calibrated_intervals_replace_raw_vintage_interval_columns() -> None:
+    fixed = select_fixed_policy(_synthetic_results(30))
+    fixed["lower_80"] = fixed["point_forecast"] - 0.5
+    fixed["upper_80"] = fixed["point_forecast"] + 0.5
+    fixed["interval_covered"] = False
+
+    rows = []
+    for row in _synthetic_results(30).itertuples(index=False):
+        rows.append(
+            {
+                "calibration_id": "cal",
+                "target_series": row.target_series,
+                "forecast_stage": row.forecast_stage,
+                "target_period": row.target_period,
+                "model_name": row.model_name,
+                "interval_method": "exp_weighted_q80",
+                "lower_80": row.point_forecast - 3.0,
+                "upper_80": row.point_forecast + 3.0,
+                "interval_covered": True,
+                "interval_half_width": 3.0,
+                "interval_score": 6.0,
+                "prior_error_count": 24,
+                "calibration_cutoff_period": "2019-12",
+                "calibration_status": "calibrated",
+            }
+        )
+
+    attached = attach_calibrated_intervals(fixed, pd.DataFrame(rows))
+    assert "interval_covered" in attached.columns
+    assert "interval_covered_x" not in attached.columns
+    assert "interval_covered_y" not in attached.columns
+    assert attached["interval_covered"].all()
+    assert (attached["interval_half_width"] == 3.0).all()
+    summary = summarise_intervals(attached)
+    assert float(summary.iloc[0]["coverage"]) == 1.0

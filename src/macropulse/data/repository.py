@@ -857,6 +857,139 @@ CREATE TABLE IF NOT EXISTS labour_validation_checks (
 CREATE INDEX IF NOT EXISTS idx_labour_validation_checks
 ON labour_validation_checks(validation_id, gate_name, status);
 
+CREATE TABLE IF NOT EXISTS labour_live_runs (
+    run_id VARCHAR PRIMARY KEY,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    run_timestamp TIMESTAMP NOT NULL,
+    information_cutoff DATE NOT NULL,
+    data_as_of DATE,
+    status VARCHAR NOT NULL,
+    candidate_validation_id VARCHAR NOT NULL,
+    backtest_id VARCHAR NOT NULL,
+    config_hash VARCHAR NOT NULL,
+    code_hash VARCHAR NOT NULL,
+    git_commit VARCHAR,
+    information_set_hash VARCHAR NOT NULL,
+    model_state_hash VARCHAR NOT NULL,
+    governance_signature VARCHAR NOT NULL,
+    metrics_json VARCHAR,
+    notes VARCHAR
+);
+
+CREATE TABLE IF NOT EXISTS labour_live_forecasts (
+    run_id VARCHAR NOT NULL,
+    target_series VARCHAR NOT NULL,
+    target_name VARCHAR NOT NULL,
+    target_unit VARCHAR NOT NULL,
+    display_decimals INTEGER NOT NULL,
+    target_period VARCHAR NOT NULL,
+    forecast_stage VARCHAR NOT NULL,
+    information_cutoff DATE NOT NULL,
+    estimated_release_date DATE,
+    stable_model_name VARCHAR NOT NULL,
+    stable_point_forecast DOUBLE,
+    lower_80 DOUBLE,
+    upper_80 DOUBLE,
+    interval_half_width DOUBLE,
+    interval_method VARCHAR NOT NULL,
+    interval_prior_errors INTEGER NOT NULL,
+    interval_cutoff_period VARCHAR,
+    shadow_model_name VARCHAR NOT NULL,
+    shadow_point_forecast DOUBLE,
+    shadow_selection_reason VARCHAR,
+    shadow_prior_errors INTEGER,
+    latest_observed_period VARCHAR,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_labour_live_forecasts_unique
+ON labour_live_forecasts(run_id, target_series);
+
+CREATE TABLE IF NOT EXISTS labour_live_components (
+    run_id VARCHAR NOT NULL,
+    target_series VARCHAR NOT NULL,
+    target_name VARCHAR NOT NULL,
+    target_unit VARCHAR NOT NULL,
+    display_decimals INTEGER NOT NULL,
+    target_period VARCHAR NOT NULL,
+    forecast_stage VARCHAR NOT NULL,
+    model_name VARCHAR NOT NULL,
+    point_forecast DOUBLE,
+    raw_lower_80 DOUBLE,
+    raw_upper_80 DOUBLE,
+    role VARCHAR NOT NULL,
+    diagnostics_json VARCHAR,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_live_components
+ON labour_live_components(run_id, target_series, model_name);
+
+CREATE TABLE IF NOT EXISTS labour_live_information_sets (
+    run_id VARCHAR NOT NULL,
+    series_id VARCHAR NOT NULL,
+    observation_date DATE NOT NULL,
+    value DOUBLE,
+    realtime_start DATE,
+    realtime_end DATE,
+    retrieved_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_live_information_sets
+ON labour_live_information_sets(run_id, series_id, observation_date);
+
+CREATE TABLE IF NOT EXISTS labour_news_runs (
+    decomposition_id VARCHAR PRIMARY KEY,
+    current_run_id VARCHAR NOT NULL,
+    previous_run_id VARCHAR,
+    target_series VARCHAR NOT NULL,
+    target_period VARCHAR NOT NULL,
+    status VARCHAR NOT NULL,
+    previous_forecast DOUBLE,
+    current_forecast DOUBLE,
+    total_change DOUBLE,
+    new_data_impact DOUBLE,
+    revision_impact DOUBLE,
+    model_refit_impact DOUBLE,
+    policy_change_impact DOUBLE,
+    residual_interaction DOUBLE,
+    details_json VARCHAR,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_news_runs_current
+ON labour_news_runs(current_run_id, target_series);
+
+CREATE TABLE IF NOT EXISTS labour_news_contributions (
+    decomposition_id VARCHAR NOT NULL,
+    target_series VARCHAR NOT NULL,
+    contribution_type VARCHAR NOT NULL,
+    model_name VARCHAR,
+    series_id VARCHAR,
+    impact DOUBLE,
+    details_json VARCHAR,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_news_contributions
+ON labour_news_contributions(decomposition_id, contribution_type, series_id);
+
+CREATE TABLE IF NOT EXISTS labour_release_changes (
+    decomposition_id VARCHAR NOT NULL,
+    target_series VARCHAR NOT NULL,
+    series_id VARCHAR NOT NULL,
+    observation_date DATE NOT NULL,
+    change_type VARCHAR NOT NULL,
+    previous_value DOUBLE,
+    current_value DOUBLE,
+    value_change DOUBLE,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_labour_release_changes
+ON labour_release_changes(decomposition_id, series_id, observation_date);
+
 '''
 
 
@@ -1179,6 +1312,153 @@ class MacroRepository:
                     "INSERT INTO labour_validation_checks SELECT * FROM _labour_validation_checks"
                 )
                 connection.unregister("_labour_validation_checks")
+
+    def save_labour_live_outputs(
+        self,
+        run_record: pd.DataFrame,
+        forecasts: pd.DataFrame,
+        components: pd.DataFrame,
+    ) -> None:
+        with self.connect() as connection:
+            connection.register("_labour_live_run", run_record)
+            connection.execute("INSERT INTO labour_live_runs SELECT * FROM _labour_live_run")
+            connection.unregister("_labour_live_run")
+            if not forecasts.empty:
+                connection.register("_labour_live_forecasts", forecasts)
+                connection.execute(
+                    "INSERT INTO labour_live_forecasts SELECT * FROM _labour_live_forecasts"
+                )
+                connection.unregister("_labour_live_forecasts")
+            if not components.empty:
+                connection.register("_labour_live_components", components)
+                connection.execute(
+                    "INSERT INTO labour_live_components SELECT * FROM _labour_live_components"
+                )
+                connection.unregister("_labour_live_components")
+
+    def save_labour_live_information_set(
+        self,
+        run_id: str,
+        observations: pd.DataFrame,
+    ) -> int:
+        if observations.empty:
+            return 0
+        frame = observations.copy()
+        frame["run_id"] = run_id
+        if "retrieved_at" not in frame.columns:
+            frame["retrieved_at"] = pd.Timestamp.now(tz="UTC").tz_localize(None)
+        for column in ["realtime_start", "realtime_end"]:
+            if column not in frame.columns:
+                frame[column] = pd.NaT
+        frame = frame[
+            [
+                "run_id", "series_id", "observation_date", "value",
+                "realtime_start", "realtime_end", "retrieved_at",
+            ]
+        ]
+        with self.connect() as connection:
+            connection.execute(
+                "DELETE FROM labour_live_information_sets WHERE run_id = ?", [run_id]
+            )
+            connection.register("_labour_live_information_set", frame)
+            connection.execute(
+                "INSERT INTO labour_live_information_sets "
+                "SELECT * FROM _labour_live_information_set"
+            )
+            connection.unregister("_labour_live_information_set")
+        return int(len(frame))
+
+    def labour_live_information_set(self, run_id: str) -> pd.DataFrame:
+        return self.query_df(
+            """
+            SELECT series_id, observation_date, value, realtime_start, realtime_end,
+                   retrieved_at
+            FROM labour_live_information_sets
+            WHERE run_id = ?
+            ORDER BY series_id, observation_date
+            """,
+            [run_id],
+        )
+
+    def save_labour_news_outputs(
+        self,
+        runs: pd.DataFrame,
+        contributions: pd.DataFrame,
+        changes: pd.DataFrame,
+    ) -> None:
+        with self.connect() as connection:
+            if not runs.empty:
+                current_ids = runs["current_run_id"].dropna().astype(str).unique().tolist()
+                for current_id in current_ids:
+                    existing = connection.execute(
+                        "SELECT decomposition_id FROM labour_news_runs WHERE current_run_id = ?",
+                        [current_id],
+                    ).fetchall()
+                    ids = [row[0] for row in existing]
+                    if ids:
+                        placeholders = ", ".join(["?"] * len(ids))
+                        connection.execute(
+                            f"DELETE FROM labour_news_contributions WHERE decomposition_id IN ({placeholders})",
+                            ids,
+                        )
+                        connection.execute(
+                            f"DELETE FROM labour_release_changes WHERE decomposition_id IN ({placeholders})",
+                            ids,
+                        )
+                    connection.execute(
+                        "DELETE FROM labour_news_runs WHERE current_run_id = ?", [current_id]
+                    )
+                connection.register("_labour_news_runs", runs)
+                connection.execute("INSERT INTO labour_news_runs SELECT * FROM _labour_news_runs")
+                connection.unregister("_labour_news_runs")
+            if not contributions.empty:
+                connection.register("_labour_news_contributions", contributions)
+                connection.execute(
+                    "INSERT INTO labour_news_contributions "
+                    "SELECT * FROM _labour_news_contributions"
+                )
+                connection.unregister("_labour_news_contributions")
+            if not changes.empty:
+                connection.register("_labour_release_changes", changes)
+                connection.execute(
+                    "INSERT INTO labour_release_changes SELECT * FROM _labour_release_changes"
+                )
+                connection.unregister("_labour_release_changes")
+
+    def record_labour_news_failure(self, current_run_id: str, error: str) -> None:
+        forecasts = self.query_df(
+            "SELECT target_series, target_period, stable_point_forecast "
+            "FROM labour_live_forecasts WHERE run_id = ? ORDER BY target_series",
+            [current_run_id],
+        )
+        timestamp = pd.Timestamp.now(tz="UTC").tz_localize(None)
+        rows = []
+        import json
+        import uuid
+        import numpy as np
+        for row in forecasts.itertuples(index=False):
+            rows.append(
+                {
+                    "decomposition_id": str(uuid.uuid4()),
+                    "current_run_id": current_run_id,
+                    "previous_run_id": None,
+                    "target_series": str(row.target_series),
+                    "target_period": str(row.target_period),
+                    "status": "failed",
+                    "previous_forecast": np.nan,
+                    "current_forecast": float(row.stable_point_forecast),
+                    "total_change": np.nan,
+                    "new_data_impact": np.nan,
+                    "revision_impact": np.nan,
+                    "model_refit_impact": np.nan,
+                    "policy_change_impact": np.nan,
+                    "residual_interaction": np.nan,
+                    "details_json": json.dumps({"error": error}, default=str),
+                    "created_at": timestamp,
+                }
+            )
+        if rows:
+            self.save_labour_news_outputs(pd.DataFrame(rows), pd.DataFrame(), pd.DataFrame())
 
     def save_inflation_backtest_outputs(
         self,

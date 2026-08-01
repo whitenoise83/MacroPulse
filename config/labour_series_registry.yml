@@ -87,24 +87,42 @@ features:
     source: FRED
     start_date: '1985-01-01'
 model:
-  target_lags: [1, 2, 3, 6, 12]
-  cross_target_lags: [1, 2]
-  feature_lags: [0, 1, 2]
+  target_lags:
+  - 1
+  - 2
+  - 3
+  - 6
+  - 12
+  cross_target_lags:
+  - 1
+  - 2
+  feature_lags:
+  - 0
+  - 1
+  - 2
   ridge_alpha: 10.0
   factor_ridge_alpha: 8.0
   factor_components: 4
   rolling_mean_window: 12
   minimum_training_observations: 120
-  interval_coverage: 0.80
+  interval_coverage: 0.8
   interval_calibration_method: exp_weighted_q80
   interval_calibration_minimum_errors: 24
   interval_calibration_window: 48
   interval_calibration_decay: 0.94
   max_feature_carry_months: 4
   ensemble_members:
-    - Labour Bridge Ridge
-    - Labour AR(1)
-    - Labour Factor Ridge
+  - Labour Bridge Ridge
+  - Labour AR(1)
+  - Labour Factor Ridge
+  policy_evaluation_minimum_prior_errors: 24
+  policy_evaluation_window: 36
+  policy_switch_hurdle: 0.03
+  policy_mae_guard: 1.05
+  policy_median_guard: 1.1
+  policy_tail_guard: 1.1
+  policy_max_error_guard: 1.15
+  policy_directional_guard: 0.03
 backtest:
-  start_date: '2016-01'
+  start_date: 2016-01
   minimum_training_observations: 120

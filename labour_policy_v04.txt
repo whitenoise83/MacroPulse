@@ -1,0 +1,38 @@
+Traceback (most recent call last):
+  File "C:\Users\Cenk\OneDrive\MacroPulse\scripts\evaluate_labour_policy.py", line 79, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\Cenk\OneDrive\MacroPulse\scripts\evaluate_labour_policy.py", line 34, in main
+    result = run_labour_policy_evaluation(backtest_id=args.backtest_id)
+  File "C:\Users\Cenk\OneDrive\MacroPulse\src\macropulse\labour\policy.py", line 487, in run_labour_policy_evaluation
+    fixed_interval_summary = summarise_intervals(fixed_intervals)
+  File "C:\Users\Cenk\OneDrive\MacroPulse\src\macropulse\labour\policy.py", line 381, in summarise_intervals
+    .agg(
+     ~~~^
+        observations=("interval_covered", "count"),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        minimum_prior_errors=("prior_error_count", "min"),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Cenk\OneDrive\MacroPulse\.venv\Lib\site-packages\pandas\core\groupby\generic.py", line 1432, in aggregate
+    result = op.agg()
+  File "C:\Users\Cenk\OneDrive\MacroPulse\.venv\Lib\site-packages\pandas\core\apply.py", line 190, in agg
+    return self.agg_dict_like()
+           ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Cenk\OneDrive\MacroPulse\.venv\Lib\site-packages\pandas\core\apply.py", line 423, in agg_dict_like
+    return self.agg_or_apply_dict_like(op_name="agg")
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Cenk\OneDrive\MacroPulse\.venv\Lib\site-packages\pandas\core\apply.py", line 1603, in agg_or_apply_dict_like
+    result_index, result_data = self.compute_dict_like(
+                                ~~~~~~~~~~~~~~~~~~~~~~^
+        op_name, selected_obj, selection, kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Cenk\OneDrive\MacroPulse\.venv\Lib\site-packages\pandas\core\apply.py", line 462, in compute_dict_like
+    func = self.normalize_dictlike_arg(op_name, selected_obj, func)
+  File "C:\Users\Cenk\OneDrive\MacroPulse\.venv\Lib\site-packages\pandas\core\apply.py", line 663, in normalize_dictlike_arg
+    raise KeyError(f"Column(s) {list(cols)} do not exist")
+KeyError: "Column(s) ['interval_covered'] do not exist"

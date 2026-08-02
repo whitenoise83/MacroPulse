@@ -1,0 +1,11 @@
+Model 1D v0.2.2 installation
+
+1. Stay on model1d-development.
+2. Extract into C:\Users\Cenk\OneDrive\MacroPulse.
+3. Replace destination files.
+4. Run:
+   pip install -e .
+5. Validate:
+   python -m pytest -q tests\test_macro_state_history_diagnostics.py
+6. Diagnose the latest production-vintage reconstruction:
+   python scripts\run_macro_state_history_diagnostics.py

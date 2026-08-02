@@ -64,6 +64,7 @@ src/macropulse/labour/vintage_backtest.py
 src/macropulse/macro_state/__init__.py
 src/macropulse/macro_state/engine.py
 src/macropulse/macro_state/history.py
+src/macropulse/macro_state/history_diagnostics.py
 src/macropulse/macro_state/history_service.py
 src/macropulse/macro_state/service.py
 src/macropulse/macro_state/versioning.py
@@ -114,6 +115,7 @@ tests/test_labour_production_promotion.py
 tests/test_labour_vintage.py
 tests/test_macro_state_engine.py
 tests/test_macro_state_history.py
+tests/test_macro_state_history_diagnostics.py
 tests/test_macro_state_history_integration.py
 tests/test_macro_state_identity.py
 tests/test_macro_state_integration.py

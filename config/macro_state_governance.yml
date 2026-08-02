@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.2.1
+  version: 0.2.2
   lifecycle_status: development
-  research_status: Production-lineage vintage reconstruction candidate; not production approved.
+  research_status: Coverage and uncertainty diagnostics candidate; not production approved.
 
 required_sources:
   GDP:
@@ -138,6 +138,16 @@ history:
     labour: 62
   uncertainty_samples: 729
   transition_minimum_count: 3
+  uncertainty_candidate:
+    method: deterministic_gaussian_copula
+    draws: 4096
+    seed: 12022
+    marginal_coverage: 0.80
+    probability_floor: 0.01
+    correlation:
+      - [1.00, 0.20, 0.55]
+      - [0.20, 1.00, 0.25]
+      - [0.55, 0.25, 1.00]
   use_latest_successful_run_on_or_before_state_date: true
   allow_cross_version_history: true
   accepted_lifecycle_statuses:

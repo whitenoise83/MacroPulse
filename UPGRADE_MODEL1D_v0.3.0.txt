@@ -1,0 +1,17 @@
+Model 1D v0.3.0 installation
+
+1. Stay on branch model1d-development.
+2. Extract this ZIP into C:\Users\Cenk\OneDrive\MacroPulse.
+3. Replace files in the destination.
+4. Run:
+   pip install -e .
+   python scripts\initialise_database.py
+5. Validate:
+   python -m pytest -q tests\test_macro_state_tournament.py tests\test_macro_state_tournament_pipeline.py tests\test_macro_state_tournament_integration.py
+6. Run the tournament:
+   python scripts\run_macro_state_tournament.py
+7. Review the report under:
+   reports\macro_state_tournament\
+
+The selected winner is provisional. Do not promote or merge Model 1D to master
+based on v0.3 alone.

@@ -235,3 +235,178 @@ else:
         use_container_width=True,
         hide_index=True,
     )
+
+st.divider()
+st.header("Model 1D specification tournament")
+st.caption(
+    "Chronological normalization, weighting, threshold, and uncertainty "
+    "comparison. The winner remains provisional."
+)
+
+if st.button("Run Model 1D tournament"):
+    from macropulse.macro_state.tournament_service import (
+        run_macro_state_tournament,
+    )
+
+    with st.spinner(
+        "Evaluating core specifications and uncertainty candidates..."
+    ):
+        try:
+            tournament_result = run_macro_state_tournament(repository)
+            st.success(
+                "Tournament complete: "
+                f"{tournament_result['tournament_id']}"
+            )
+        except Exception as exc:
+            st.error(str(exc))
+
+tournament_run = repository.query_df(
+    """
+    SELECT *
+    FROM macro_state_tournament_runs
+    WHERE status = 'success'
+    ORDER BY created_at DESC
+    LIMIT 1
+    """
+)
+if tournament_run.empty:
+    st.info(
+        "Run `python scripts\\run_macro_state_tournament.py` after the "
+        "production-vintage history has been reconstructed."
+    )
+else:
+    tournament_meta = tournament_run.iloc[0]
+    tournament_id = str(tournament_meta["tournament_id"])
+    st.subheader("Provisional tournament winner")
+    winner_cols = st.columns(4)
+    winner_cols[0].metric(
+        "Validation score",
+        f"{float(tournament_meta['selected_validation_score']):.1f}",
+    )
+    winner_cols[1].metric(
+        "Holdout rank",
+        int(tournament_meta["selected_holdout_rank"]),
+    )
+    winner_cols[2].metric(
+        "Core candidates",
+        int(tournament_meta["core_candidates"]),
+    )
+    winner_cols[3].metric(
+        "Uncertainty candidates",
+        int(tournament_meta["uncertainty_candidates"]),
+    )
+    st.code(str(tournament_meta["selected_candidate_id"]))
+    st.warning(
+        "This is a research-tournament winner, not an approved Model 1D "
+        "candidate or production policy."
+    )
+
+    final_candidates = repository.query_df(
+        """
+        SELECT *
+        FROM macro_state_tournament_candidates
+        WHERE tournament_id = ?
+          AND candidate_type = 'uncertainty'
+        ORDER BY validation_rank, candidate_id
+        """,
+        [tournament_id],
+    )
+    final_metrics = repository.query_df(
+        """
+        SELECT *
+        FROM macro_state_tournament_metrics
+        WHERE tournament_id = ?
+          AND candidate_id IN (
+              SELECT candidate_id
+              FROM macro_state_tournament_candidates
+              WHERE tournament_id = ?
+                AND candidate_type = 'uncertainty'
+          )
+        ORDER BY candidate_id, split
+        """,
+        [tournament_id, tournament_id],
+    )
+    leaderboard = final_candidates.merge(
+        final_metrics.loc[final_metrics["split"] == "validation"][
+            [
+                "candidate_id",
+                "brier_score",
+                "log_loss",
+                "coverage_80",
+                "top1_accuracy",
+                "exact_regime_accuracy",
+            ]
+        ],
+        on="candidate_id",
+        how="left",
+    )
+    st.subheader("Final validation leaderboard")
+    st.dataframe(
+        leaderboard[
+            [
+                "validation_rank",
+                "candidate_id",
+                "normalization_id",
+                "inflation_weights_id",
+                "labour_weights_id",
+                "threshold_id",
+                "uncertainty_id",
+                "validation_score",
+                "holdout_rank",
+                "holdout_score",
+                "exact_regime_accuracy",
+                "brier_score",
+                "log_loss",
+                "coverage_80",
+                "top1_accuracy",
+            ]
+        ].head(15),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    selected_monthly = repository.query_df(
+        """
+        SELECT *
+        FROM macro_state_tournament_monthly
+        WHERE tournament_id = ?
+          AND candidate_id = ?
+        ORDER BY state_date
+        """,
+        [
+            tournament_id,
+            tournament_meta["selected_candidate_id"],
+        ],
+    )
+    if not selected_monthly.empty:
+        st.subheader("Selected specification: forecast versus realised scores")
+        st.line_chart(
+            selected_monthly.set_index("state_date")[
+                [
+                    "forecast_growth",
+                    "actual_growth",
+                    "forecast_inflation",
+                    "actual_inflation",
+                    "forecast_labour",
+                    "actual_labour",
+                ]
+            ]
+        )
+        st.subheader("Selected specification: recent uncertainty audit")
+        st.dataframe(
+            selected_monthly[
+                [
+                    "state_date",
+                    "split",
+                    "forecast_regime",
+                    "actual_regime",
+                    "top_regime",
+                    "top_probability",
+                    "actual_regime_probability",
+                    "coverage_80",
+                    "effective_regimes",
+                ]
+            ].tail(24),
+            use_container_width=True,
+            hide_index=True,
+        )

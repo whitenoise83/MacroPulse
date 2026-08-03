@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.2.2
+  version: 0.3.0
   lifecycle_status: development
-  research_status: Coverage and uncertainty diagnostics candidate; not production approved.
+  research_status: Normalization, weighting, threshold, and uncertainty tournament; not production approved.
 
 required_sources:
   GDP:
@@ -154,3 +154,175 @@ history:
     - production
     - candidate
     - development
+
+tournament:
+  status: research_tournament
+  source_mode: latest_production_vintage_reconstruction
+  training_months: 36
+  validation_months: 18
+  minimum_holdout_months: 12
+  top_core_candidates: 12
+  score_deadzone: 0.25
+  random_seed: 13030
+  uncertainty_draws: 1024
+  core_metric_weights:
+    dimension_rmse: 0.28
+    exact_regime_accuracy: 0.22
+    family_accuracy: 0.14
+    sign_accuracy: 0.10
+    churn_gap: 0.08
+    distribution_jsd: 0.08
+    regime_collapse_penalty: 0.10
+  uncertainty_metric_weights:
+    brier_score: 0.40
+    log_loss: 0.30
+    coverage_gap: 0.15
+    mean_effective_regimes: 0.10
+    top1_accuracy: 0.05
+  final_score_weights:
+    core: 0.70
+    uncertainty: 0.30
+  normalization_candidates:
+    policy_anchors:
+      method: policy_anchors
+    target_centered:
+      method: target_centered
+      centers:
+        GDPC1: 2.0
+        PCEPILFE: 2.0
+        CPILFESL: 2.3
+        PCEPI: 2.0
+        CPIAUCSL: 2.3
+        PAYEMS: 100.0
+        UNRATE: 4.5
+        CES0500000003: 3.3
+      scales:
+        GDPC1: 1.0
+        PCEPILFE: 1.0
+        CPILFESL: 1.0
+        PCEPI: 1.0
+        CPIAUCSL: 1.0
+        PAYEMS: 75.0
+        UNRATE: 1.0
+        CES0500000003: 0.7
+      orientation:
+        GDPC1: 1.0
+        PCEPILFE: 1.0
+        CPILFESL: 1.0
+        PCEPI: 1.0
+        CPIAUCSL: 1.0
+        PAYEMS: 1.0
+        UNRATE: -1.0
+        CES0500000003: 1.0
+    expanding_robust_z:
+      method: expanding_robust_z
+      minimum_history: 18
+      clip: 2.0
+      fallback: target_centered
+  inflation_weight_candidates:
+    policy:
+      PCEPILFE: 0.40
+      CPILFESL: 0.30
+      PCEPI: 0.20
+      CPIAUCSL: 0.10
+    equal:
+      PCEPILFE: 0.25
+      CPILFESL: 0.25
+      PCEPI: 0.25
+      CPIAUCSL: 0.25
+    core_heavy:
+      PCEPILFE: 0.45
+      CPILFESL: 0.35
+      PCEPI: 0.10
+      CPIAUCSL: 0.10
+  labour_weight_candidates:
+    policy:
+      PAYEMS: 0.40
+      UNRATE: 0.35
+      CES0500000003: 0.25
+    equal:
+      PAYEMS: 0.3333333333
+      UNRATE: 0.3333333333
+      CES0500000003: 0.3333333334
+    hard_data:
+      PAYEMS: 0.50
+      UNRATE: 0.40
+      CES0500000003: 0.10
+  threshold_candidates:
+    baseline:
+      hard_growth_max: -0.75
+      hard_labour_max: -0.75
+      stag_growth_max: -0.75
+      stag_inflation_min: 0.75
+      overheat_growth_min: 0.75
+      overheat_inflation_min: 0.75
+      overheat_labour_min: 0.50
+      disinflation_growth_min: 0.25
+      disinflation_inflation_max: -0.25
+      disinflation_labour_min: -0.50
+      balanced_growth_min: -0.25
+      balanced_growth_max: 0.75
+      balanced_inflation_min: -0.40
+      balanced_inflation_max: 0.40
+      balanced_labour_min: -0.50
+      balanced_labour_max: 0.75
+      reflation_growth_min: 0.25
+      reflation_inflation_min: 0.25
+      slowdown_growth_max: -0.25
+      slowdown_inflation_max: 0.25
+    conservative:
+      hard_growth_max: -1.00
+      hard_labour_max: -1.00
+      stag_growth_max: -1.00
+      stag_inflation_min: 1.00
+      overheat_growth_min: 1.00
+      overheat_inflation_min: 1.00
+      overheat_labour_min: 0.75
+      disinflation_growth_min: 0.50
+      disinflation_inflation_max: -0.50
+      disinflation_labour_min: -0.50
+      balanced_growth_min: -0.40
+      balanced_growth_max: 0.60
+      balanced_inflation_min: -0.30
+      balanced_inflation_max: 0.30
+      balanced_labour_min: -0.40
+      balanced_labour_max: 0.60
+      reflation_growth_min: 0.50
+      reflation_inflation_min: 0.50
+      slowdown_growth_max: -0.50
+      slowdown_inflation_max: 0.25
+    sensitive:
+      hard_growth_max: -0.50
+      hard_labour_max: -0.50
+      stag_growth_max: -0.50
+      stag_inflation_min: 0.50
+      overheat_growth_min: 0.50
+      overheat_inflation_min: 0.50
+      overheat_labour_min: 0.25
+      disinflation_growth_min: 0.10
+      disinflation_inflation_max: -0.10
+      disinflation_labour_min: -0.75
+      balanced_growth_min: -0.40
+      balanced_growth_max: 0.90
+      balanced_inflation_min: -0.60
+      balanced_inflation_max: 0.60
+      balanced_labour_min: -0.75
+      balanced_labour_max: 1.00
+      reflation_growth_min: 0.10
+      reflation_inflation_min: 0.10
+      slowdown_growth_max: -0.10
+      slowdown_inflation_max: 0.40
+  uncertainty_candidates:
+    independent_normal:
+      method: independent_normal
+    fixed_gaussian_copula:
+      method: fixed_gaussian_copula
+      correlation:
+        - [1.00, 0.20, 0.55]
+        - [0.20, 1.00, 0.25]
+        - [0.55, 0.25, 1.00]
+    expanding_residual_copula:
+      method: expanding_residual_copula
+      minimum_history: 24
+      shrinkage: 0.50
+      fallback: fixed_gaussian_copula

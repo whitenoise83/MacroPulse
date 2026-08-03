@@ -1198,6 +1198,133 @@ CREATE TABLE IF NOT EXISTS macro_state_history_transitions (
     created_at TIMESTAMP NOT NULL
 );
 
+
+CREATE TABLE IF NOT EXISTS macro_state_tournament_runs (
+    tournament_id VARCHAR PRIMARY KEY,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    reconstruction_id VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    status VARCHAR NOT NULL,
+    training_start DATE NOT NULL,
+    training_end DATE NOT NULL,
+    validation_start DATE NOT NULL,
+    validation_end DATE NOT NULL,
+    holdout_start DATE NOT NULL,
+    holdout_end DATE NOT NULL,
+    training_months INTEGER NOT NULL,
+    validation_months INTEGER NOT NULL,
+    holdout_months INTEGER NOT NULL,
+    core_candidates INTEGER NOT NULL,
+    uncertainty_candidates INTEGER NOT NULL,
+    selected_candidate_id VARCHAR NOT NULL,
+    selected_core_candidate_id VARCHAR NOT NULL,
+    selected_validation_score DOUBLE NOT NULL,
+    selected_holdout_rank INTEGER,
+    config_hash VARCHAR NOT NULL,
+    code_hash VARCHAR NOT NULL,
+    git_commit VARCHAR,
+    baseline_metrics_json VARCHAR NOT NULL,
+    metrics_json VARCHAR NOT NULL,
+    report_path VARCHAR,
+    notes VARCHAR
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_tournament_runs
+ON macro_state_tournament_runs(created_at, status);
+
+CREATE TABLE IF NOT EXISTS macro_state_tournament_candidates (
+    tournament_id VARCHAR NOT NULL,
+    candidate_id VARCHAR NOT NULL,
+    candidate_type VARCHAR NOT NULL,
+    core_candidate_id VARCHAR NOT NULL,
+    normalization_id VARCHAR NOT NULL,
+    inflation_weights_id VARCHAR NOT NULL,
+    labour_weights_id VARCHAR NOT NULL,
+    threshold_id VARCHAR NOT NULL,
+    uncertainty_id VARCHAR,
+    selected BOOLEAN NOT NULL,
+    validation_rank INTEGER,
+    holdout_rank INTEGER,
+    validation_score DOUBLE,
+    holdout_score DOUBLE,
+    config_json VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_tournament_candidate_unique
+ON macro_state_tournament_candidates(tournament_id, candidate_id);
+
+CREATE TABLE IF NOT EXISTS macro_state_tournament_metrics (
+    tournament_id VARCHAR NOT NULL,
+    candidate_id VARCHAR NOT NULL,
+    split VARCHAR NOT NULL,
+    months INTEGER NOT NULL,
+    dimension_rmse DOUBLE,
+    dimension_mae DOUBLE,
+    exact_regime_accuracy DOUBLE,
+    family_accuracy DOUBLE,
+    sign_accuracy DOUBLE,
+    forecast_churn DOUBLE,
+    actual_churn DOUBLE,
+    churn_gap DOUBLE,
+    distribution_jsd DOUBLE,
+    forecast_regime_entropy DOUBLE,
+    actual_regime_entropy DOUBLE,
+    regime_collapse_penalty DOUBLE,
+    forecast_regime_count INTEGER,
+    actual_regime_count INTEGER,
+    brier_score DOUBLE,
+    log_loss DOUBLE,
+    coverage_80 DOUBLE,
+    coverage_gap DOUBLE,
+    mean_top_probability DOUBLE,
+    mean_effective_regimes DOUBLE,
+    top1_accuracy DOUBLE,
+    core_score DOUBLE,
+    uncertainty_score DOUBLE,
+    final_score DOUBLE,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_tournament_metrics
+ON macro_state_tournament_metrics(tournament_id, candidate_id, split);
+
+CREATE TABLE IF NOT EXISTS macro_state_tournament_monthly (
+    tournament_id VARCHAR NOT NULL,
+    candidate_id VARCHAR NOT NULL,
+    core_candidate_id VARCHAR NOT NULL,
+    uncertainty_id VARCHAR NOT NULL,
+    state_date DATE NOT NULL,
+    split VARCHAR NOT NULL,
+    forecast_growth DOUBLE NOT NULL,
+    forecast_inflation DOUBLE NOT NULL,
+    forecast_labour DOUBLE NOT NULL,
+    actual_growth DOUBLE NOT NULL,
+    actual_inflation DOUBLE NOT NULL,
+    actual_labour DOUBLE NOT NULL,
+    growth_lower DOUBLE NOT NULL,
+    growth_upper DOUBLE NOT NULL,
+    inflation_lower DOUBLE NOT NULL,
+    inflation_upper DOUBLE NOT NULL,
+    labour_lower DOUBLE NOT NULL,
+    labour_upper DOUBLE NOT NULL,
+    forecast_regime VARCHAR NOT NULL,
+    actual_regime VARCHAR NOT NULL,
+    top_regime VARCHAR NOT NULL,
+    top_probability DOUBLE NOT NULL,
+    actual_regime_probability DOUBLE NOT NULL,
+    brier_score DOUBLE NOT NULL,
+    log_loss DOUBLE NOT NULL,
+    coverage_80 BOOLEAN NOT NULL,
+    effective_regimes DOUBLE NOT NULL,
+    probabilities_json VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_tournament_monthly
+ON macro_state_tournament_monthly(tournament_id, candidate_id, state_date);
+
 '''
 
 
@@ -2375,4 +2502,157 @@ class MacroRepository:
                     """
                 )
                 connection.unregister("_m1d_hist_transitions")
+
+    def save_macro_state_tournament(
+        self,
+        run_record: pd.DataFrame,
+        candidates: pd.DataFrame,
+        metrics: pd.DataFrame,
+        monthly: pd.DataFrame,
+    ) -> None:
+        run_columns = [
+            "tournament_id",
+            "model_id",
+            "model_version",
+            "reconstruction_id",
+            "created_at",
+            "status",
+            "training_start",
+            "training_end",
+            "validation_start",
+            "validation_end",
+            "holdout_start",
+            "holdout_end",
+            "training_months",
+            "validation_months",
+            "holdout_months",
+            "core_candidates",
+            "uncertainty_candidates",
+            "selected_candidate_id",
+            "selected_core_candidate_id",
+            "selected_validation_score",
+            "selected_holdout_rank",
+            "config_hash",
+            "code_hash",
+            "git_commit",
+            "baseline_metrics_json",
+            "metrics_json",
+            "report_path",
+            "notes",
+        ]
+        candidate_columns = [
+            "tournament_id",
+            "candidate_id",
+            "candidate_type",
+            "core_candidate_id",
+            "normalization_id",
+            "inflation_weights_id",
+            "labour_weights_id",
+            "threshold_id",
+            "uncertainty_id",
+            "selected",
+            "validation_rank",
+            "holdout_rank",
+            "validation_score",
+            "holdout_score",
+            "config_json",
+            "created_at",
+        ]
+        metric_columns = [
+            "tournament_id",
+            "candidate_id",
+            "split",
+            "months",
+            "dimension_rmse",
+            "dimension_mae",
+            "exact_regime_accuracy",
+            "family_accuracy",
+            "sign_accuracy",
+            "forecast_churn",
+            "actual_churn",
+            "churn_gap",
+            "distribution_jsd",
+            "forecast_regime_entropy",
+            "actual_regime_entropy",
+            "regime_collapse_penalty",
+            "forecast_regime_count",
+            "actual_regime_count",
+            "brier_score",
+            "log_loss",
+            "coverage_80",
+            "coverage_gap",
+            "mean_top_probability",
+            "mean_effective_regimes",
+            "top1_accuracy",
+            "core_score",
+            "uncertainty_score",
+            "final_score",
+            "created_at",
+        ]
+        monthly_columns = [
+            "tournament_id",
+            "candidate_id",
+            "core_candidate_id",
+            "uncertainty_id",
+            "state_date",
+            "split",
+            "forecast_growth",
+            "forecast_inflation",
+            "forecast_labour",
+            "actual_growth",
+            "actual_inflation",
+            "actual_labour",
+            "growth_lower",
+            "growth_upper",
+            "inflation_lower",
+            "inflation_upper",
+            "labour_lower",
+            "labour_upper",
+            "forecast_regime",
+            "actual_regime",
+            "top_regime",
+            "top_probability",
+            "actual_regime_probability",
+            "brier_score",
+            "log_loss",
+            "coverage_80",
+            "effective_regimes",
+            "probabilities_json",
+            "created_at",
+        ]
+        with self.connect() as connection:
+            connection.register("_m1d_tournament_run", run_record[run_columns])
+            connection.execute(
+                "INSERT INTO macro_state_tournament_runs "
+                "SELECT * FROM _m1d_tournament_run"
+            )
+            connection.unregister("_m1d_tournament_run")
+
+            connection.register(
+                "_m1d_tournament_candidates",
+                candidates[candidate_columns],
+            )
+            connection.execute(
+                "INSERT INTO macro_state_tournament_candidates "
+                "SELECT * FROM _m1d_tournament_candidates"
+            )
+            connection.unregister("_m1d_tournament_candidates")
+
+            connection.register(
+                "_m1d_tournament_metrics", metrics[metric_columns]
+            )
+            connection.execute(
+                "INSERT INTO macro_state_tournament_metrics "
+                "SELECT * FROM _m1d_tournament_metrics"
+            )
+            connection.unregister("_m1d_tournament_metrics")
+
+            connection.register(
+                "_m1d_tournament_monthly", monthly[monthly_columns]
+            )
+            connection.execute(
+                "INSERT INTO macro_state_tournament_monthly "
+                "SELECT * FROM _m1d_tournament_monthly"
+            )
+            connection.unregister("_m1d_tournament_monthly")
 

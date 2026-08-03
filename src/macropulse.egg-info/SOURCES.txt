@@ -67,6 +67,8 @@ src/macropulse/macro_state/history.py
 src/macropulse/macro_state/history_diagnostics.py
 src/macropulse/macro_state/history_service.py
 src/macropulse/macro_state/service.py
+src/macropulse/macro_state/tournament.py
+src/macropulse/macro_state/tournament_service.py
 src/macropulse/macro_state/versioning.py
 src/macropulse/macro_state/vintage_history.py
 src/macropulse/models/__init__.py
@@ -119,6 +121,9 @@ tests/test_macro_state_history_diagnostics.py
 tests/test_macro_state_history_integration.py
 tests/test_macro_state_identity.py
 tests/test_macro_state_integration.py
+tests/test_macro_state_tournament.py
+tests/test_macro_state_tournament_integration.py
+tests/test_macro_state_tournament_pipeline.py
 tests/test_macro_state_vintage_history.py
 tests/test_macro_state_vintage_history_integration.py
 tests/test_model1a_identity_frozen.py

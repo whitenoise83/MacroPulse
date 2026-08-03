@@ -1,0 +1,9 @@
+Model 1D v0.3.0 build validation
+
+........s                                                                [100%]
+=========================== short test summary info ============================
+SKIPPED [1] mnt/data/model1d_v030_testtree/tests/test_macro_state_tournament_integration.py:16: DuckDB runtime is stubbed in the build environment.
+
+Python compilation: passed
+Synthetic full tournament: 81 core candidates; staged uncertainty pipeline passed.
+DuckDB persistence integration test remains active and runs locally when duckdb.connect returns a real connection.

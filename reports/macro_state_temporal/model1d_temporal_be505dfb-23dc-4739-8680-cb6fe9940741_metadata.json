@@ -1,0 +1,21 @@
+{
+  "diagnostic_id": "be505dfb-23dc-4739-8680-cb6fe9940741",
+  "gate_failures": [
+    "naive-baseline dominance rate is below the gate",
+    "transition recall is below the gate",
+    "false-transition rate exceeds the gate",
+    "regime-collapse fold rate exceeds the gate",
+    "block-bootstrap margin versus the strongest naive baseline is not strictly positive"
+  ],
+  "model_id": "US_MACRO_STATE_1D",
+  "model_version": "0.3.2",
+  "report_path": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_temporal\\model1d_temporal_be505dfb-23dc-4739-8680-cb6fe9940741.md",
+  "selected_governance_pass": false,
+  "selected_policy_id": "raw_monthly",
+  "source_candidate_id": "expanding_robust_z__policy__equal__sensitive__independent_normal",
+  "source_stability_id": "4d97b730-7dcb-4ee6-9f89-bf5fff542a9d",
+  "warnings": [
+    "The v0.3.1 source candidate failed its promotion gates.",
+    "The temporal research leader fails one or more candidate gates."
+  ]
+}

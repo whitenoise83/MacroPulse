@@ -1,0 +1,11 @@
+Model 1D v0.3.2 build validation
+
+Temporal diagnostic tests:
+...........                                                              [100%]
+11 passed
+
+Python compilation: passed
+Governance YAML parse: passed
+
+The existing v0.3.0 and v0.3.1 local suites previously passed 15 tests in the
+user environment. The complete local v0.3.2 command therefore contains 26 tests.

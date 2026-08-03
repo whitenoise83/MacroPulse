@@ -1,0 +1,6 @@
+Model 1D v0.3.2.post2 validation
+
+- `pyproject.toml` remains valid TOML syntax.
+- MacroPulse version remains 1.13.0.
+- Runtime dependency `tabulate>=0.9.0` is declared.
+- No implementation files are changed.

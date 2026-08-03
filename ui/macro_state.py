@@ -6,6 +6,7 @@ import streamlit as st
 from macropulse.data.repository import MacroRepository
 from macropulse.macro_state.service import run_macro_state
 from macropulse.macro_state.versioning import current_macro_state_identity
+from macropulse.settings import settings
 
 
 st.title("Unified US Macro State — Model 1D")
@@ -605,3 +606,81 @@ else:
         use_container_width=True,
         hide_index=True,
     )
+
+st.divider()
+st.header("Model 1D regime-target and temporal-decision diagnostics")
+st.caption(
+    "Diagnoses continuous-score performance, eight-regime classification, "
+    "turning-point detection, and four causal temporal decision policies. "
+    "The v0.3.1 source candidate and consumed audit remain research-only."
+)
+
+if st.button("Run Model 1D temporal diagnostics"):
+    from macropulse.macro_state.temporal_diagnostics_service import (
+        run_macro_state_temporal_diagnostics,
+    )
+
+    with st.spinner("Evaluating temporal policies and transition diagnostics..."):
+        try:
+            temporal_result = run_macro_state_temporal_diagnostics(repository)
+            st.success(
+                "Temporal diagnostics complete: "
+                f"{temporal_result['diagnostic_id']}"
+            )
+            temporal_cols = st.columns(4)
+            temporal_cols[0].metric(
+                "Research leader",
+                temporal_result["selected_policy_id"],
+            )
+            temporal_cols[1].metric(
+                "Stability score",
+                f"{temporal_result['selected_stability_score']:.1f}",
+            )
+            temporal_cols[2].metric(
+                "Consumed-audit rank",
+                temporal_result["selected_audit_rank"],
+            )
+            temporal_cols[3].metric(
+                "Governance gate",
+                "Pass" if temporal_result["selected_governance_pass"] else "Fail",
+            )
+            st.subheader("Temporal policy stability leaderboard")
+            st.dataframe(
+                temporal_result["policy_stability"][
+                    [
+                        "stability_rank",
+                        "policy_id",
+                        "stability_score",
+                        "median_fold_rank",
+                        "baseline_dominance_rate",
+                        "mean_exact_regime_accuracy",
+                        "mean_family_accuracy",
+                        "mean_transition_f1",
+                        "mean_false_transition_rate",
+                        "bootstrap_margin_lower",
+                        "audit_rank",
+                        "governance_pass",
+                    ]
+                ],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Source target decomposition")
+            st.dataframe(
+                temporal_result["target_selection"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.caption(f"Report: {temporal_result['report_path']}")
+        except Exception as exc:
+            st.error(str(exc))
+
+latest_temporal_reports = sorted(
+    (settings.project_root / "reports" / "macro_state_temporal").glob(
+        "model1d_temporal_*.md"
+    ),
+    key=lambda path: path.stat().st_mtime,
+    reverse=True,
+) if (settings.project_root / "reports" / "macro_state_temporal").exists() else []
+if latest_temporal_reports:
+    st.info(f"Latest temporal diagnostic report: {latest_temporal_reports[0]}")

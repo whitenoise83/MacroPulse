@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.3.1
+  version: 0.3.2
   lifecycle_status: development
-  research_status: Rolling-origin specification stability tournament; not production approved.
+  research_status: Regime-target and temporal-decision diagnostics; not production approved.
 
 required_sources:
   GDP:
@@ -379,3 +379,49 @@ stability_tournament:
     recent_reflation_risk:
       start: 2025-01-31
       end: 2026-03-31
+
+temporal_diagnostics:
+  status: research_temporal_diagnostics
+  source_mode: latest_successful_stability_leader
+  source_candidate_status: failed_promotion_gate_research_input
+  score_deadzone: 0.25
+  transition_matching_window_months: 2
+  minimum_regimes_per_fold: 3
+  maximum_regime_share: 0.70
+  random_seed: 13032
+  bootstrap_repetitions: 1000
+  bootstrap_block_months: 3
+  bootstrap_confidence: 0.90
+  policies:
+    raw_monthly:
+      method: raw_monthly
+    hysteresis_thresholds:
+      method: probability_hysteresis
+      minimum_top_probability: 0.35
+      minimum_probability_advantage: 0.08
+    one_month_confirmation:
+      method: consecutive_confirmation
+      consecutive_months_required: 2
+    persistence_prior:
+      method: persistence_prior_probability_filter
+      persistence_weight: 0.35
+  fold_score_weights:
+    exact_regime_accuracy: 0.25
+    family_accuracy: 0.15
+    stable_month_accuracy: 0.10
+    transition_f1: 0.20
+    baseline_margin: 0.25
+    false_transition_rate: 0.05
+  stability_score_weights:
+    mean_fold_score: 0.30
+    median_fold_score: 0.20
+    rank_stability: 0.15
+    baseline_dominance_rate: 0.25
+    mean_transition_f1: 0.10
+  governance:
+    minimum_baseline_dominance_rate: 0.60
+    minimum_family_accuracy: 0.60
+    minimum_transition_recall: 0.50
+    maximum_false_transition_rate: 0.50
+    maximum_regime_collapse_fold_rate: 0.40
+    minimum_bootstrap_margin_lower: 0.00

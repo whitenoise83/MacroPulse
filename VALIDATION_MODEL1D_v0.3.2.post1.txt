@@ -1,0 +1,10 @@
+Model 1D v0.3.2.post1 validation
+
+- Both patched test modules compile successfully.
+- The stale v0.3.1 identity test names are absent.
+- Both modules assert Model 1D v0.3.2.
+- No model or production implementation file is included in this hotfix.
+
+Local validation command:
+
+python -m pytest -q tests\test_macro_state_tournament.py tests\test_macro_state_tournament_pipeline.py tests\test_macro_state_tournament_integration.py tests\test_macro_state_stability_tournament.py tests\test_macro_state_stability_pipeline.py tests\test_macro_state_stability_integration.py tests\test_macro_state_temporal_diagnostics.py tests\test_macro_state_temporal_diagnostics_pipeline.py

@@ -1,0 +1,27 @@
+MacroPulse Model 1D v0.3.4 upgrade
+
+1. Remain on branch:
+   model1d-development
+
+2. Extract this release into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+
+3. Replace files in the destination when prompted.
+
+4. Run:
+   pip install -e .
+
+5. Run:
+   python scripts\initialise_database.py
+
+6. Run the complete Model 1D v0.3 research test suite shown in
+   VALIDATION_MODEL1D_v0.3.4.txt.
+
+7. Run:
+   python scripts\run_macro_state_target_validity_audit.py
+
+8. Review the validity flags, label robustness, benchmark summary, target
+   occupancy, economic separation, and consumed-audit evidence before commit.
+
+Do not merge Model 1D into master and do not promote a candidate from this
+research audit.

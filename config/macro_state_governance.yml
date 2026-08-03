@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.3.3
+  version: 0.3.4
   lifecycle_status: development
-  research_status: Causal dimension calibration and hierarchical regime diagnostics; not production approved.
+  research_status: Target-definition, label-stability, benchmark-validity, and economic-separation audit; not production approved.
 
 required_sources:
   GDP:
@@ -494,3 +494,28 @@ hierarchical_diagnostics:
     maximum_regime_collapse_fold_rate: 0.40
     minimum_bootstrap_margin_lower: 0.00
 
+target_validity_audit:
+  status: research_target_validity_audit
+  source_mode: latest_successful_stability_leader
+  source_candidate_status: failed_promotion_gate_research_input
+  perturbation_epsilons: [0.05, 0.10, 0.25]
+  threshold_ids:
+    - sensitive
+    - baseline
+    - conservative
+  boundary_search_step: 0.025
+  boundary_search_maximum: 0.75
+  rolling_mode_months: 12
+  forecast_sign_deadzone: 0.10
+  economic_horizons_months: [1, 3, 6]
+  validity_thresholds:
+    reference_perturbation_epsilon: 0.10
+    minimum_regime_robust_share: 0.70
+    minimum_family_robust_share: 0.80
+    minimum_threshold_consensus_share: 0.75
+    minimum_regime_support: 5
+    maximum_regime_share: 0.40
+    minimum_source_baseline_win_rate: 0.60
+    reference_economic_horizon_months: 3
+    minimum_family_eta_squared: 0.05
+    minimum_incremental_eight_state_eta_squared: 0.02

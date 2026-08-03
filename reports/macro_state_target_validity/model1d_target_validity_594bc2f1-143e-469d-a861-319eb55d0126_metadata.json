@@ -1,0 +1,17 @@
+{
+  "audit_end": "2026-03-31",
+  "audit_id": "594bc2f1-143e-469d-a861-319eb55d0126",
+  "audit_months": 19,
+  "audit_start": "2024-08-31",
+  "model_id": "US_MACRO_STATE_1D",
+  "model_version": "0.3.4",
+  "rolling_folds": 7,
+  "selection_end": "2024-07-31",
+  "selection_months": 54,
+  "selection_start": "2020-02-29",
+  "source_candidate_governance_pass": false,
+  "source_candidate_id": "expanding_robust_z__policy__equal__sensitive__independent_normal",
+  "source_stability_id": "4d97b730-7dcb-4ee6-9f89-bf5fff542a9d",
+  "status": "diagnostic_research_evidence_only",
+  "target_validity_pass": false
+}

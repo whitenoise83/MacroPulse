@@ -781,3 +781,91 @@ if latest_hierarchical_reports:
         "Latest hierarchical diagnostic report: "
         f"{latest_hierarchical_reports[0]}"
     )
+
+st.divider()
+st.header("Model 1D target-definition and benchmark-validity audit")
+st.caption(
+    "Audits real-time target lineage, realised-label stability, threshold "
+    "sensitivity, naive benchmarks, and forward economic separation. The "
+    "v0.3.1 source specification stays fixed and the consumed audit remains "
+    "report-only."
+)
+
+if st.button("Run Model 1D target-validity audit"):
+    from macropulse.macro_state.target_validity_service import (
+        run_macro_state_target_validity_audit,
+    )
+
+    with st.spinner(
+        "Auditing target construction, label stability, benchmarks, and "
+        "economic separation..."
+    ):
+        try:
+            target_result = run_macro_state_target_validity_audit(repository)
+            st.success(
+                "Target-validity audit complete: "
+                f"{target_result['audit_id']}"
+            )
+            target_cols = st.columns(4)
+            target_cols[0].metric(
+                "Target-validity audit",
+                "Pass" if target_result["target_validity_pass"] else "Fail",
+            )
+            failed_checks = int(
+                (~target_result["validity_flags"]["passed"]).sum()
+            )
+            target_cols[1].metric("Failed checks", failed_checks)
+            source_row = target_result["benchmark_summary"].loc[
+                target_result["benchmark_summary"]["benchmark_id"]
+                == "source_direct"
+            ].iloc[0]
+            target_cols[2].metric(
+                "Source macro-F1",
+                f"{source_row['mean_macro_f1']:.3f}",
+            )
+            target_cols[3].metric(
+                "Baseline win rate",
+                f"{source_row['baseline_win_rate']:.1%}",
+            )
+            st.subheader("Target-validity checks")
+            st.dataframe(
+                target_result["validity_flags"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Rolling benchmark summary")
+            st.dataframe(
+                target_result["benchmark_summary"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Realised target occupancy")
+            st.dataframe(
+                target_result["occupancy"].loc[
+                    target_result["occupancy"]["target_level"]
+                    == "eight_state"
+                ],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.caption(f"Report: {target_result['report_path']}")
+        except Exception as exc:
+            st.error(str(exc))
+
+target_report_dir = (
+    settings.project_root / "reports" / "macro_state_target_validity"
+)
+latest_target_reports = (
+    sorted(
+        target_report_dir.glob("model1d_target_validity_*.md"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    if target_report_dir.exists()
+    else []
+)
+if latest_target_reports:
+    st.info(
+        "Latest target-validity report: "
+        f"{latest_target_reports[0]}"
+    )

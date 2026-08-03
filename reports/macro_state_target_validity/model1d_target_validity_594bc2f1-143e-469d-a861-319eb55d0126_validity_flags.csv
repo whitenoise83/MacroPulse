@@ -1,0 +1,11 @@
+check_id,passed,observed,threshold,interpretation
+forecast_lineage_no_lookahead,True,1.0,1.0,Forecast inputs must respect historical information cutoffs.
+actual_revision_vintage_recorded,False,0.0,1.0,Evaluation actuals require an explicit real-time revision vintage for a real-time target claim.
+regime_perturbation_robustness,False,0.6575342465753424,0.7,Eight-state labels should remain unchanged under ±0.10 score perturbations.
+family_perturbation_robustness,False,0.7534246575342466,0.8,Family labels should remain unchanged under ±0.10 score perturbations.
+threshold_consensus,False,0.4520547945205479,0.75,Realised labels should be stable across the pre-specified threshold sets.
+minimum_regime_support,True,5.0,5.0,Every eight-state label should have enough observations for meaningful validation.
+maximum_regime_share,True,0.273972602739726,0.4,No single regime should dominate the realised target.
+source_beats_naive_baseline,False,0.0,0.6,The source classifier should beat the strongest naive benchmark in most rolling folds.
+family_forward_separation,True,0.12725218236512842,0.05,Regime families should separate subsequent macro outcomes.
+eight_state_incremental_separation,True,0.09939003645922787,0.02,Eight-state subtyping should add economic separation beyond the five-family target.

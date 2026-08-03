@@ -1,0 +1,9 @@
+source_target,rows,states,information_cutoff_after_state,data_as_of_after_state,max_observation_after_cutoff,target_leakage_rows,future_target_period_rows,missing_actual_release_date_rows,actual_revision_vintage_recorded,evaluation_target_mode
+CES0500000003,73,73,0,0,0,0,0,0,False,ex_post_backtest_actual
+CPIAUCSL,73,73,0,0,0,0,0,0,False,ex_post_backtest_actual
+CPILFESL,73,73,0,0,0,0,0,0,False,ex_post_backtest_actual
+GDPC1,73,73,0,0,0,0,48,0,False,ex_post_backtest_actual
+PAYEMS,73,73,0,0,0,0,0,0,False,ex_post_backtest_actual
+PCEPI,73,73,0,0,0,0,0,0,False,ex_post_backtest_actual
+PCEPILFE,73,73,0,0,0,0,0,0,False,ex_post_backtest_actual
+UNRATE,73,73,0,0,0,0,0,0,False,ex_post_backtest_actual

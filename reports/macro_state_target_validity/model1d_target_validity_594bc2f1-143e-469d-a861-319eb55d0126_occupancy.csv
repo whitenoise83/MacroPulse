@@ -1,0 +1,14 @@
+target_level,label,count,share,median_run_months,maximum_run_months
+eight_state,hard_landing_risk,5,0.0684931506849315,2.5,3
+eight_state,stagflation_risk,6,0.0821917808219178,2.0,3
+eight_state,overheating,6,0.0821917808219178,1.0,3
+eight_state,disinflationary_expansion,20,0.273972602739726,2.0,4
+eight_state,balanced_expansion,13,0.1780821917808219,2.0,4
+eight_state,reflation,5,0.0684931506849315,1.0,2
+eight_state,demand_slowdown,11,0.1506849315068493,2.0,3
+eight_state,mixed_transition,7,0.0958904109589041,1.0,2
+five_family,adverse_supply,6,0.0821917808219178,2.0,3
+five_family,benign_expansion,33,0.4520547945205479,3.0,6
+five_family,contraction,16,0.2191780821917808,2.5,5
+five_family,inflationary_expansion,11,0.1506849315068493,2.5,4
+five_family,mixed,7,0.0958904109589041,1.0,2

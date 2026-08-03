@@ -1,0 +1,16 @@
+CHANGELOG_MODEL1D_v0.3.4.md
+MANIFEST_MODEL1D_v0.3.4.txt
+README_MODEL1D_v0.3.4.md
+UPGRADE_MODEL1D_v0.3.4.txt
+VALIDATION_MODEL1D_v0.3.4.txt
+config/macro_state_governance.yml
+docs/model1d_target_validity_audit.md
+scripts/run_macro_state_target_validity_audit.py
+src/macropulse/macro_state/target_validity.py
+src/macropulse/macro_state/target_validity_service.py
+tests/test_macro_state_hierarchical_diagnostics.py
+tests/test_macro_state_stability_tournament.py
+tests/test_macro_state_target_validity.py
+tests/test_macro_state_target_validity_pipeline.py
+tests/test_macro_state_tournament.py
+ui/macro_state.py

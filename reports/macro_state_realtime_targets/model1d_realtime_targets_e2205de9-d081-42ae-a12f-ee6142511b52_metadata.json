@@ -1,0 +1,23 @@
+{
+  "audit_id": "e2205de9-d081-42ae-a12f-ee6142511b52",
+  "bootstrap": {
+    "bootstrap_margin_lower": -0.055599647266313945,
+    "bootstrap_margin_mean": -0.019400352733686066,
+    "bootstrap_margin_upper": 0.04144620811287477
+  },
+  "consumed_audit_end": "2026-03-31",
+  "consumed_audit_months": 19,
+  "consumed_audit_start": "2024-08-31",
+  "model_id": "US_MACRO_STATE_1D",
+  "model_version": "0.3.5",
+  "rolling_folds": 7,
+  "selection_end": "2024-07-31",
+  "selection_months": 54,
+  "selection_start": "2020-02-29",
+  "soft_target_governance_pass": false,
+  "source_candidate_governance_pass": false,
+  "source_candidate_id": "expanding_robust_z__policy__equal__sensitive__independent_normal",
+  "source_core_candidate_id": "expanding_robust_z__policy__equal__sensitive",
+  "source_stability_id": "4d97b730-7dcb-4ee6-9f89-bf5fff542a9d",
+  "status": "diagnostic_research_evidence_only"
+}

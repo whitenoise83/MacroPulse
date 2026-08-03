@@ -1,0 +1,4 @@
+target_mode,expected_target_rows,available_target_rows,target_row_completeness,expected_states,complete_states,complete_state_share
+initial_release,584,584,1.0,73,73,1.0
+fixed_horizon_90d,584,581,0.9948630136986302,73,70,0.958904109589041
+latest_revised,584,584,1.0,73,73,1.0

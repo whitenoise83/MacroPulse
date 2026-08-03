@@ -69,6 +69,8 @@ src/macropulse/macro_state/hierarchical_diagnostics_service.py
 src/macropulse/macro_state/history.py
 src/macropulse/macro_state/history_diagnostics.py
 src/macropulse/macro_state/history_service.py
+src/macropulse/macro_state/realtime_soft_targets.py
+src/macropulse/macro_state/realtime_soft_targets_service.py
 src/macropulse/macro_state/rolling_tournament.py
 src/macropulse/macro_state/rolling_tournament_service.py
 src/macropulse/macro_state/service.py
@@ -132,6 +134,8 @@ tests/test_macro_state_history_diagnostics.py
 tests/test_macro_state_history_integration.py
 tests/test_macro_state_identity.py
 tests/test_macro_state_integration.py
+tests/test_macro_state_realtime_soft_targets.py
+tests/test_macro_state_realtime_soft_targets_pipeline.py
 tests/test_macro_state_stability_integration.py
 tests/test_macro_state_stability_pipeline.py
 tests/test_macro_state_stability_tournament.py

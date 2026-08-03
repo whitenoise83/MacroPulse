@@ -869,3 +869,108 @@ if latest_target_reports:
         "Latest target-validity report: "
         f"{latest_target_reports[0]}"
     )
+
+st.divider()
+st.header("Model 1D real-time targets and soft five-family audit")
+st.caption(
+    "Reconstructs initial-release, fixed 90-day, and latest-revised actual "
+    "targets from locally stored vintages. The five-family state is the "
+    "primary soft target; the eight-state regime remains a secondary subtype."
+)
+
+if st.button("Run Model 1D real-time soft-target audit"):
+    from macropulse.macro_state.realtime_soft_targets_service import (
+        run_macro_state_realtime_soft_target_audit,
+    )
+
+    with st.spinner(
+        "Reconstructing actual vintages and evaluating soft family targets..."
+    ):
+        try:
+            realtime_result = run_macro_state_realtime_soft_target_audit(
+                repository
+            )
+            st.success(
+                "Real-time soft-target audit complete: "
+                f"{realtime_result['audit_id']}"
+            )
+            realtime_cols = st.columns(4)
+            realtime_cols[0].metric(
+                "Governance result",
+                (
+                    "Pass"
+                    if realtime_result["soft_target_governance_pass"]
+                    else "Fail"
+                ),
+            )
+            initial = realtime_result["benchmark_summary"].loc[
+                (
+                    realtime_result["benchmark_summary"]["target_mode"]
+                    == "initial_release"
+                )
+                & (
+                    realtime_result["benchmark_summary"]["benchmark_id"]
+                    == "source"
+                )
+            ]
+            realtime_cols[1].metric(
+                "Persistence win rate",
+                (
+                    f"{float(initial.iloc[0]['baseline_win_rate']):.1%}"
+                    if not initial.empty
+                    else "n/a"
+                ),
+            )
+            realtime_cols[2].metric(
+                "Bootstrap lower margin",
+                f"{realtime_result['bootstrap']['bootstrap_margin_lower']:.3f}",
+            )
+            failed_checks = int(
+                (~realtime_result["governance_flags"]["passed"]).sum()
+            )
+            realtime_cols[3].metric("Failed checks", failed_checks)
+            st.subheader("Actual-vintage completeness")
+            st.dataframe(
+                realtime_result["mode_completeness"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Cross-vintage target agreement")
+            st.dataframe(
+                realtime_result["vintage_agreement"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Soft-target rolling benchmarks")
+            st.dataframe(
+                realtime_result["benchmark_summary"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Governance checks")
+            st.dataframe(
+                realtime_result["governance_flags"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.caption(f"Report: {realtime_result['report_path']}")
+        except Exception as exc:
+            st.error(str(exc))
+
+realtime_report_dir = (
+    settings.project_root / "reports" / "macro_state_realtime_targets"
+)
+latest_realtime_reports = (
+    sorted(
+        realtime_report_dir.glob("model1d_realtime_targets_*.md"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    if realtime_report_dir.exists()
+    else []
+)
+if latest_realtime_reports:
+    st.info(
+        "Latest real-time soft-target report: "
+        f"{latest_realtime_reports[0]}"
+    )

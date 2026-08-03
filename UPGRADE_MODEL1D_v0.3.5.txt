@@ -1,0 +1,32 @@
+MacroPulse Model 1D v0.3.5 upgrade
+
+1. Remain on branch:
+   model1d-development
+
+2. Extract this release into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+
+3. Replace files in the destination when prompted.
+
+4. Run:
+   pip install -e .
+
+5. Run:
+   python scripts\initialise_database.py
+
+6. Run the complete Model 1D v0.3 research test suite shown in
+   VALIDATION_MODEL1D_v0.3.5.txt.
+
+7. Run:
+   python scripts\run_macro_state_realtime_soft_targets.py
+
+8. Review actual-vintage completeness, cross-vintage target agreement,
+   ambiguity, soft probability scores, rolling persistence dominance,
+   bootstrap confidence bounds, and prospective-shadow isolation.
+
+The audit uses locally cached data only. It does not download new historical
+snapshots. Missing fixed-horizon snapshots are reported as missing evidence
+rather than silently substituted.
+
+Do not merge Model 1D into master and do not promote a candidate from this
+research audit.

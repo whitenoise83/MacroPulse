@@ -122,6 +122,6 @@ def test_economic_separation_detects_distinct_future_groups() -> None:
     assert subset.iloc[0]["eta_squared"] > 0.70
 
 
-def test_model_identity_is_v034() -> None:
+def test_model_identity_is_v035() -> None:
     config = load_macro_state_governance()
-    assert config["model"]["version"] == "0.3.4"
+    assert config["model"]["version"] == "0.3.5"

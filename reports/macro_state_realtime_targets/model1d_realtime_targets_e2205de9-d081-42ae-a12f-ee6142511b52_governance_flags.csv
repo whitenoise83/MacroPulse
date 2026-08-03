@@ -1,0 +1,10 @@
+check_id,passed,observed,threshold,interpretation
+initial_release_completeness,True,1.0,1.0,Initial-release target states must be complete and explicitly dated.
+fixed_horizon_completeness,True,0.958904109589041,0.8,The fixed 90-day target requires sufficient cached-vintage coverage.
+latest_revised_completeness,True,1.0,0.95,Latest-revised target states must be sufficiently complete.
+initial_latest_family_agreement,False,0.7123287671232876,0.8,Initial-release and latest-revised soft primary families should agree.
+soft_target_confidence,True,0.8094030103162523,0.65,Soft family targets should assign adequate probability to the primary family.
+soft_target_ambiguity,True,0.2465753424657534,0.4,The share of structurally ambiguous family labels should remain limited.
+source_beats_persistence,False,0.2857142857142857,0.6,The five-family source forecast should beat lagged-target persistence in most folds.
+bootstrap_margin_positive,False,-0.055599647266313945,0.0,The block-bootstrap lower confidence bound versus persistence must be positive.
+prospective_shadow_isolation,True,1.0,1.0,Months from the prospective shadow start must remain outside selection and consumed audit.

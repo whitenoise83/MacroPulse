@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.3.4
+  version: 0.3.5
   lifecycle_status: development
-  research_status: Target-definition, label-stability, benchmark-validity, and economic-separation audit; not production approved.
+  research_status: Real-time actual-vintage reconstruction and soft five-family target audit; not production approved.
 
 required_sources:
   GDP:
@@ -519,3 +519,39 @@ target_validity_audit:
     reference_economic_horizon_months: 3
     minimum_family_eta_squared: 0.05
     minimum_incremental_eight_state_eta_squared: 0.02
+
+real_time_soft_targets:
+  status: research_realtime_soft_target_audit
+  source_mode: latest_successful_stability_leader
+  source_candidate_status: failed_promotion_gate_research_input
+  primary_target_level: five_family
+  secondary_target_level: eight_state
+  target_modes:
+    - initial_release
+    - fixed_horizon_90d
+    - latest_revised
+  fixed_horizon_days: 90
+  maximum_snapshot_gap_days: 45
+  perturbation_epsilon: 0.10
+  threshold_ids:
+    - sensitive
+    - baseline
+    - conservative
+  ambiguity:
+    minimum_primary_probability: 0.60
+    minimum_probability_margin: 0.15
+    alternative_probability_floor: 0.10
+  prospective_shadow_start: 2026-04-30
+  bootstrap_repetitions: 1000
+  bootstrap_block_months: 3
+  bootstrap_confidence: 0.90
+  random_seed: 13035
+  governance:
+    minimum_initial_release_completeness: 1.00
+    minimum_fixed_horizon_completeness: 0.80
+    minimum_latest_revised_completeness: 0.95
+    minimum_initial_latest_family_agreement: 0.80
+    minimum_mean_family_top_probability: 0.65
+    maximum_ambiguity_rate: 0.40
+    minimum_source_baseline_win_rate: 0.60
+    minimum_bootstrap_margin_lower: 0.00

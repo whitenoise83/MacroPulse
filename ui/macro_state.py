@@ -684,3 +684,100 @@ latest_temporal_reports = sorted(
 ) if (settings.project_root / "reports" / "macro_state_temporal").exists() else []
 if latest_temporal_reports:
     st.info(f"Latest temporal diagnostic report: {latest_temporal_reports[0]}")
+
+st.divider()
+st.header("Model 1D causal calibration and hierarchical regime diagnostics")
+st.caption(
+    "Tests three causal dimension-calibration methods and three fixed "
+    "decision architectures without reopening the v0.3 parameter search. "
+    "The consumed audit remains report-only."
+)
+
+if st.button("Run Model 1D hierarchical diagnostics"):
+    from macropulse.macro_state.hierarchical_diagnostics_service import (
+        run_macro_state_hierarchical_diagnostics,
+    )
+
+    with st.spinner(
+        "Evaluating causal dimension calibration and hierarchical regimes..."
+    ):
+        try:
+            hierarchical_result = run_macro_state_hierarchical_diagnostics(
+                repository
+            )
+            st.success(
+                "Hierarchical diagnostics complete: "
+                f"{hierarchical_result['diagnostic_id']}"
+            )
+            summary_cols = st.columns(4)
+            summary_cols[0].metric(
+                "Research leader",
+                hierarchical_result["selected_candidate_id"],
+            )
+            summary_cols[1].metric(
+                "Stability score",
+                f"{hierarchical_result['selected_stability_score']:.1f}",
+            )
+            summary_cols[2].metric(
+                "Consumed-audit rank",
+                hierarchical_result["selected_audit_rank"],
+            )
+            summary_cols[3].metric(
+                "Governance gate",
+                (
+                    "Pass"
+                    if hierarchical_result["selected_governance_pass"]
+                    else "Fail"
+                ),
+            )
+            st.subheader("Hierarchical stability leaderboard")
+            leaderboard_columns = [
+                "stability_rank",
+                "candidate_id",
+                "stability_score",
+                "median_fold_rank",
+                "baseline_dominance_rate",
+                "mean_macro_f1",
+                "mean_balanced_accuracy",
+                "mean_family_macro_f1",
+                "mean_transition_recall",
+                "mean_false_transition_rate",
+                "mean_abstention_rate",
+                "bootstrap_margin_lower",
+                "audit_rank",
+                "governance_pass",
+            ]
+            st.dataframe(
+                hierarchical_result["stability"][
+                    leaderboard_columns
+                ].head(12),
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Research leader by fold")
+            st.dataframe(
+                hierarchical_result["selected_fold_metrics"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.caption(f"Report: {hierarchical_result['report_path']}")
+        except Exception as exc:
+            st.error(str(exc))
+
+hierarchical_report_dir = (
+    settings.project_root / "reports" / "macro_state_hierarchical"
+)
+latest_hierarchical_reports = (
+    sorted(
+        hierarchical_report_dir.glob("model1d_hierarchical_*.md"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    if hierarchical_report_dir.exists()
+    else []
+)
+if latest_hierarchical_reports:
+    st.info(
+        "Latest hierarchical diagnostic report: "
+        f"{latest_hierarchical_reports[0]}"
+    )

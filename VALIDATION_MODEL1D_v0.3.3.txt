@@ -1,0 +1,19 @@
+Model 1D v0.3.3 build validation
+
+Research scope
+- 3 causal dimension-calibration methods
+- 3 fixed decision architectures
+- 9 total research candidates
+- v0.3.1 normalization, weights, thresholds, and uncertainty method remain fixed
+- consumed audit remains excluded from selection
+
+Test suite
+- 34 tests collected
+- 32 tests passed
+- 2 hosted DuckDB persistence integrations skipped
+- Python compilation passed
+- YAML validation passed
+
+Local validation command
+
+python -m pytest -q tests\test_macro_state_tournament.py tests\test_macro_state_tournament_pipeline.py tests\test_macro_state_tournament_integration.py tests\test_macro_state_stability_tournament.py tests\test_macro_state_stability_pipeline.py tests\test_macro_state_stability_integration.py tests\test_macro_state_temporal_diagnostics.py tests\test_macro_state_temporal_diagnostics_pipeline.py tests\test_macro_state_hierarchical_diagnostics.py tests\test_macro_state_hierarchical_pipeline.py

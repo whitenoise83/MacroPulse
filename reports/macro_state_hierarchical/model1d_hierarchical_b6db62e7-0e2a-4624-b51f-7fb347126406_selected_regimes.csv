@@ -1,0 +1,9 @@
+regime,support,forecast_count,true_positive,precision,recall,f1
+hard_landing_risk,0,0,0,0.0,0.0,0.0
+stagflation_risk,6,0,0,0.0,0.0,0.0
+overheating,2,2,1,0.5,0.5,0.5
+disinflationary_expansion,14,16,10,0.625,0.7142857142857143,0.6666666666666666
+balanced_expansion,5,5,1,0.2,0.2,0.20000000000000004
+reflation,1,8,0,0.0,0.0,0.0
+demand_slowdown,6,1,0,0.0,0.0,0.0
+mixed_transition,2,4,1,0.25,0.5,0.3333333333333333

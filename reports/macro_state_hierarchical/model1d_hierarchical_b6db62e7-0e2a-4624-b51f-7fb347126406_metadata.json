@@ -1,0 +1,25 @@
+{
+  "diagnostic_id": "b6db62e7-0e2a-4624-b51f-7fb347126406",
+  "gate_failures": [
+    "naive-baseline dominance rate is below the gate",
+    "eight-regime balanced accuracy is below the gate",
+    "regime-family macro-F1 is below the gate",
+    "transition recall is below the gate",
+    "false-transition rate exceeds the gate",
+    "regime-collapse fold rate exceeds the gate",
+    "block-bootstrap margin versus the strongest naive baseline is not strictly positive"
+  ],
+  "model_id": "US_MACRO_STATE_1D",
+  "model_version": "0.3.3",
+  "report_path": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_hierarchical\\model1d_hierarchical_b6db62e7-0e2a-4624-b51f-7fb347126406.md",
+  "selected_architecture_id": "direct_eight_state",
+  "selected_calibration_method": "none",
+  "selected_candidate_id": "none__direct_eight_state",
+  "selected_governance_pass": false,
+  "source_candidate_id": "expanding_robust_z__policy__equal__sensitive__independent_normal",
+  "source_stability_id": "4d97b730-7dcb-4ee6-9f89-bf5fff542a9d",
+  "warnings": [
+    "The v0.3.1 source candidate failed its promotion gates.",
+    "The hierarchical research leader fails one or more candidate gates."
+  ]
+}

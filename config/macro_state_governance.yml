@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.3.2
+  version: 0.3.3
   lifecycle_status: development
-  research_status: Regime-target and temporal-decision diagnostics; not production approved.
+  research_status: Causal dimension calibration and hierarchical regime diagnostics; not production approved.
 
 required_sources:
   GDP:
@@ -425,3 +425,72 @@ temporal_diagnostics:
     maximum_false_transition_rate: 0.50
     maximum_regime_collapse_fold_rate: 0.40
     minimum_bootstrap_margin_lower: 0.00
+
+hierarchical_diagnostics:
+  status: research_hierarchical_diagnostics
+  source_mode: latest_successful_stability_leader
+  source_candidate_status: failed_promotion_gate_research_input
+  calibration_methods:
+    - none
+    - expanding_bias
+    - expanding_affine_shrinkage
+  architectures:
+    - direct_eight_state
+    - family_first
+    - family_first_interval_abstain
+  calibration:
+    minimum_history: 18
+    affine_ridge_strength: 12.0
+    affine_beta_bounds: [0.25, 1.75]
+    affine_alpha_bound: 1.0
+  family_thresholds:
+    contraction_growth_max: -0.10
+    expansion_growth_min: 0.10
+    adverse_supply_inflation_min: 0.50
+    inflationary_expansion_inflation_min: 0.10
+    benign_expansion_inflation_max: 0.40
+    benign_expansion_labour_min: -0.75
+    ambiguous_adverse_inflation_min: 0.75
+    ambiguous_adverse_labour_max: 0.00
+    ambiguous_contraction_labour_max: -0.75
+    ambiguous_inflationary_inflation_min: 0.50
+    ambiguous_inflationary_labour_min: 0.00
+    ambiguous_benign_inflation_max: 0.25
+    ambiguous_benign_labour_min: -0.25
+  transition_matching_window_months: 2
+  minimum_regimes_per_fold: 3
+  maximum_regime_share: 0.70
+  random_seed: 13033
+  bootstrap_repetitions: 1000
+  bootstrap_block_months: 3
+  bootstrap_confidence: 0.90
+  fold_score_weights:
+    macro_f1: 0.22
+    balanced_accuracy: 0.18
+    family_macro_f1: 0.14
+    family_balanced_accuracy: 0.10
+    baseline_margin: 0.18
+    transition_recall: 0.08
+    false_transition_rate: 0.05
+    dimension_rmse: 0.05
+  stability_score_weights:
+    mean_fold_score: 0.25
+    median_fold_score: 0.15
+    median_fold_rank: 0.10
+    rank_std: 0.10
+    leading_third_rate: 0.10
+    baseline_dominance_rate: 0.15
+    mean_macro_f1: 0.05
+    mean_family_macro_f1: 0.04
+    mean_transition_recall: 0.03
+    mean_false_transition_rate: 0.03
+  governance:
+    minimum_baseline_dominance_rate: 0.60
+    minimum_macro_f1: 0.30
+    minimum_balanced_accuracy: 0.35
+    minimum_family_macro_f1: 0.50
+    minimum_transition_recall: 0.50
+    maximum_false_transition_rate: 0.50
+    maximum_regime_collapse_fold_rate: 0.40
+    minimum_bootstrap_margin_lower: 0.00
+

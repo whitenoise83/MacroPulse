@@ -96,8 +96,8 @@ def test_block_bootstrap_margin_is_deterministic() -> None:
     assert first["bootstrap_margin_mean"] <= first["bootstrap_margin_upper"]
 
 
-def test_model_identity_is_v032() -> None:
+def test_model_identity_is_v033() -> None:
     config = load_macro_state_governance()
-    assert config["model"]["version"] == "0.3.2"
+    assert config["model"]["version"] == "0.3.3"
     assert config["stability_tournament"]["minimum_folds"] == 7
     assert config["stability_tournament"]["audit_months"] == 19

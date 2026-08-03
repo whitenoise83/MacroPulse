@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.3.0
+  version: 0.3.1
   lifecycle_status: development
-  research_status: Normalization, weighting, threshold, and uncertainty tournament; not production approved.
+  research_status: Rolling-origin specification stability tournament; not production approved.
 
 required_sources:
   GDP:
@@ -326,3 +326,56 @@ tournament:
       minimum_history: 24
       shrinkage: 0.50
       fallback: fixed_gaussian_copula
+
+
+stability_tournament:
+  status: research_stability_tournament
+  source_mode: latest_production_vintage_reconstruction
+  source_tournament_status: research_tournament_consumed_audit
+  minimum_training_months: 30
+  evaluation_months: 6
+  step_months: 3
+  audit_months: 19
+  minimum_folds: 7
+  top_core_candidates: 12
+  leading_third_fraction: 0.3333333333
+  catastrophic_rank_fraction: 0.8333333333
+  minimum_leading_third_rate: 0.60
+  minimum_baseline_dominance_rate: 0.60
+  minimum_uncertainty_method_win_rate: 0.40
+  minimum_proper_score_dominance_rate: 0.60
+  minimum_bootstrap_margin_lower: 0.00
+  maximum_regime_collapse_fold_rate: 0.40
+  bootstrap_repetitions: 1000
+  bootstrap_block_months: 3
+  bootstrap_confidence: 0.90
+  random_seed: 13031
+  score_deadzone: 0.25
+  core_stability_weights:
+    mean_fold_score: 0.30
+    median_fold_score: 0.20
+    rank_stability: 0.15
+    leading_third_rate: 0.15
+    baseline_dominance_rate: 0.15
+    average_regret: 0.05
+  final_stability_weights:
+    mean_fold_score: 0.25
+    median_fold_score: 0.20
+    rank_stability: 0.15
+    leading_third_rate: 0.15
+    baseline_dominance_rate: 0.15
+    uncertainty_method_win_rate: 0.05
+    average_regret: 0.05
+  subperiods:
+    pandemic_reopening:
+      start: 2020-02-29
+      end: 2021-12-31
+    inflation_acceleration:
+      start: 2022-01-31
+      end: 2023-06-30
+    disinflation_late_cycle:
+      start: 2023-07-31
+      end: 2024-12-31
+    recent_reflation_risk:
+      start: 2025-01-31
+      end: 2026-03-31

@@ -188,7 +188,7 @@ def test_uncertainty_distribution_is_deterministic_and_sums_to_one() -> None:
     }
 
 
-def test_model_identity_is_v030() -> None:
+def test_model_identity_is_v031() -> None:
     config = load_macro_state_governance()
-    assert config["model"]["version"] == "0.3.0"
+    assert config["model"]["version"] == "0.3.1"
     assert config["tournament"]["top_core_candidates"] == 12

@@ -1325,6 +1325,193 @@ CREATE TABLE IF NOT EXISTS macro_state_tournament_monthly (
 CREATE INDEX IF NOT EXISTS idx_macro_state_tournament_monthly
 ON macro_state_tournament_monthly(tournament_id, candidate_id, state_date);
 
+CREATE TABLE IF NOT EXISTS macro_state_stability_runs (
+    stability_id VARCHAR PRIMARY KEY,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    reconstruction_id VARCHAR NOT NULL,
+    source_tournament_id VARCHAR,
+    created_at TIMESTAMP NOT NULL,
+    status VARCHAR NOT NULL,
+    fold_count INTEGER NOT NULL,
+    selection_start DATE NOT NULL,
+    selection_end DATE NOT NULL,
+    selection_months INTEGER NOT NULL,
+    audit_start DATE NOT NULL,
+    audit_end DATE NOT NULL,
+    audit_months INTEGER NOT NULL,
+    core_candidates INTEGER NOT NULL,
+    final_candidates INTEGER NOT NULL,
+    selected_candidate_id VARCHAR NOT NULL,
+    selected_core_candidate_id VARCHAR NOT NULL,
+    selected_uncertainty_id VARCHAR NOT NULL,
+    selected_stability_score DOUBLE NOT NULL,
+    selected_stability_rank INTEGER NOT NULL,
+    selected_governance_pass BOOLEAN NOT NULL,
+    selected_audit_rank INTEGER,
+    config_hash VARCHAR NOT NULL,
+    code_hash VARCHAR NOT NULL,
+    git_commit VARCHAR,
+    warnings_json VARCHAR NOT NULL,
+    report_path VARCHAR,
+    notes VARCHAR
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_stability_runs
+ON macro_state_stability_runs(created_at, status);
+
+CREATE TABLE IF NOT EXISTS macro_state_stability_folds (
+    stability_id VARCHAR NOT NULL,
+    fold_id VARCHAR NOT NULL,
+    training_start DATE NOT NULL,
+    training_end DATE NOT NULL,
+    training_months INTEGER NOT NULL,
+    evaluation_start DATE NOT NULL,
+    evaluation_end DATE NOT NULL,
+    evaluation_months INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_stability_folds
+ON macro_state_stability_folds(stability_id, fold_id);
+
+CREATE TABLE IF NOT EXISTS macro_state_stability_candidates (
+    stability_id VARCHAR NOT NULL,
+    candidate_id VARCHAR NOT NULL,
+    candidate_type VARCHAR NOT NULL,
+    core_candidate_id VARCHAR NOT NULL,
+    uncertainty_id VARCHAR,
+    selected BOOLEAN NOT NULL,
+    governance_pass BOOLEAN NOT NULL,
+    stability_rank INTEGER NOT NULL,
+    stability_score DOUBLE NOT NULL,
+    folds INTEGER NOT NULL,
+    mean_fold_score DOUBLE NOT NULL,
+    median_fold_score DOUBLE NOT NULL,
+    mean_fold_rank DOUBLE NOT NULL,
+    median_fold_rank DOUBLE NOT NULL,
+    rank_std DOUBLE NOT NULL,
+    best_fold_rank INTEGER NOT NULL,
+    worst_fold_rank INTEGER NOT NULL,
+    fold_win_rate DOUBLE NOT NULL,
+    leading_third_rate DOUBLE NOT NULL,
+    catastrophic_fold_count INTEGER NOT NULL,
+    baseline_dominance_rate DOUBLE NOT NULL,
+    mean_baseline_margin DOUBLE NOT NULL,
+    average_regret DOUBLE NOT NULL,
+    regime_collapse_fold_rate DOUBLE NOT NULL,
+    uncertainty_method_win_rate DOUBLE,
+    proper_score_dominance_rate DOUBLE,
+    bootstrap_margin_mean DOUBLE,
+    bootstrap_margin_lower DOUBLE,
+    bootstrap_margin_upper DOUBLE,
+    audit_final_score DOUBLE,
+    audit_final_rank INTEGER,
+    audit_exact_regime_accuracy DOUBLE,
+    audit_brier_score DOUBLE,
+    audit_log_loss DOUBLE,
+    audit_coverage_80 DOUBLE,
+    audit_top1_accuracy DOUBLE,
+    audit_baseline_margin DOUBLE,
+    metrics_json VARCHAR NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_stability_candidates
+ON macro_state_stability_candidates(stability_id, candidate_id);
+
+CREATE TABLE IF NOT EXISTS macro_state_stability_fold_metrics (
+    stability_id VARCHAR NOT NULL,
+    fold_id VARCHAR NOT NULL,
+    candidate_id VARCHAR NOT NULL,
+    candidate_type VARCHAR NOT NULL,
+    core_candidate_id VARCHAR NOT NULL,
+    uncertainty_id VARCHAR,
+    evaluation_start DATE NOT NULL,
+    evaluation_end DATE NOT NULL,
+    evaluation_months INTEGER NOT NULL,
+    score DOUBLE NOT NULL,
+    rank INTEGER NOT NULL,
+    core_score DOUBLE,
+    uncertainty_score DOUBLE,
+    dimension_rmse DOUBLE,
+    exact_regime_accuracy DOUBLE,
+    family_accuracy DOUBLE,
+    sign_accuracy DOUBLE,
+    regime_collapse_penalty DOUBLE,
+    brier_score DOUBLE,
+    log_loss DOUBLE,
+    coverage_80 DOUBLE,
+    top1_accuracy DOUBLE,
+    mode_accuracy DOUBLE,
+    persistence_accuracy DOUBLE,
+    strongest_baseline VARCHAR,
+    strongest_baseline_accuracy DOUBLE,
+    baseline_margin DOUBLE,
+    beats_strongest_baseline BOOLEAN,
+    uncertainty_method_rank INTEGER,
+    proper_score_improvement DOUBLE,
+    proper_score_dominates BOOLEAN,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_stability_fold_metrics
+ON macro_state_stability_fold_metrics(stability_id, fold_id, candidate_id);
+
+CREATE TABLE IF NOT EXISTS macro_state_stability_audit_metrics (
+    stability_id VARCHAR NOT NULL,
+    candidate_id VARCHAR NOT NULL,
+    core_candidate_id VARCHAR NOT NULL,
+    uncertainty_id VARCHAR NOT NULL,
+    audit_final_score DOUBLE NOT NULL,
+    audit_final_rank INTEGER NOT NULL,
+    audit_core_score DOUBLE NOT NULL,
+    audit_core_rank INTEGER NOT NULL,
+    audit_uncertainty_score DOUBLE NOT NULL,
+    audit_uncertainty_rank INTEGER NOT NULL,
+    audit_exact_regime_accuracy DOUBLE NOT NULL,
+    audit_family_accuracy DOUBLE NOT NULL,
+    audit_sign_accuracy DOUBLE NOT NULL,
+    audit_dimension_rmse DOUBLE NOT NULL,
+    audit_regime_collapse_penalty DOUBLE NOT NULL,
+    audit_brier_score DOUBLE NOT NULL,
+    audit_log_loss DOUBLE NOT NULL,
+    audit_coverage_80 DOUBLE NOT NULL,
+    audit_top1_accuracy DOUBLE NOT NULL,
+    audit_mean_effective_regimes DOUBLE NOT NULL,
+    audit_baseline_accuracy DOUBLE NOT NULL,
+    audit_baseline_margin DOUBLE NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_stability_audit
+ON macro_state_stability_audit_metrics(stability_id, audit_final_rank);
+
+CREATE TABLE IF NOT EXISTS macro_state_stability_subperiod_metrics (
+    stability_id VARCHAR NOT NULL,
+    candidate_id VARCHAR NOT NULL,
+    subperiod_id VARCHAR NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    months INTEGER NOT NULL,
+    dimension_rmse DOUBLE NOT NULL,
+    exact_regime_accuracy DOUBLE NOT NULL,
+    family_accuracy DOUBLE NOT NULL,
+    sign_accuracy DOUBLE NOT NULL,
+    regime_collapse_penalty DOUBLE NOT NULL,
+    brier_score DOUBLE NOT NULL,
+    log_loss DOUBLE NOT NULL,
+    coverage_80 DOUBLE NOT NULL,
+    top1_accuracy DOUBLE NOT NULL,
+    mean_effective_regimes DOUBLE NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_stability_subperiod
+ON macro_state_stability_subperiod_metrics(
+    stability_id, candidate_id, subperiod_id
+);
+
 '''
 
 
@@ -2655,4 +2842,93 @@ class MacroRepository:
                 "SELECT * FROM _m1d_tournament_monthly"
             )
             connection.unregister("_m1d_tournament_monthly")
+
+    def save_macro_state_stability_tournament(
+        self,
+        run_record: pd.DataFrame,
+        folds: pd.DataFrame,
+        candidates: pd.DataFrame,
+        fold_metrics: pd.DataFrame,
+        audit_metrics: pd.DataFrame,
+        subperiod_metrics: pd.DataFrame,
+    ) -> None:
+        run_columns = [
+            "stability_id", "model_id", "model_version",
+            "reconstruction_id", "source_tournament_id", "created_at",
+            "status", "fold_count", "selection_start", "selection_end",
+            "selection_months", "audit_start", "audit_end", "audit_months",
+            "core_candidates", "final_candidates", "selected_candidate_id",
+            "selected_core_candidate_id", "selected_uncertainty_id",
+            "selected_stability_score", "selected_stability_rank",
+            "selected_governance_pass", "selected_audit_rank", "config_hash",
+            "code_hash", "git_commit", "warnings_json", "report_path", "notes",
+        ]
+        fold_columns = [
+            "stability_id", "fold_id", "training_start", "training_end",
+            "training_months", "evaluation_start", "evaluation_end",
+            "evaluation_months", "created_at",
+        ]
+        candidate_columns = [
+            "stability_id", "candidate_id", "candidate_type",
+            "core_candidate_id", "uncertainty_id", "selected",
+            "governance_pass", "stability_rank", "stability_score", "folds",
+            "mean_fold_score", "median_fold_score", "mean_fold_rank",
+            "median_fold_rank", "rank_std", "best_fold_rank",
+            "worst_fold_rank", "fold_win_rate", "leading_third_rate",
+            "catastrophic_fold_count", "baseline_dominance_rate",
+            "mean_baseline_margin", "average_regret",
+            "regime_collapse_fold_rate", "uncertainty_method_win_rate",
+            "proper_score_dominance_rate", "bootstrap_margin_mean",
+            "bootstrap_margin_lower", "bootstrap_margin_upper",
+            "audit_final_score", "audit_final_rank",
+            "audit_exact_regime_accuracy", "audit_brier_score",
+            "audit_log_loss", "audit_coverage_80", "audit_top1_accuracy",
+            "audit_baseline_margin", "metrics_json", "created_at",
+        ]
+        metric_columns = [
+            "stability_id", "fold_id", "candidate_id", "candidate_type",
+            "core_candidate_id", "uncertainty_id", "evaluation_start",
+            "evaluation_end", "evaluation_months", "score", "rank",
+            "core_score", "uncertainty_score", "dimension_rmse",
+            "exact_regime_accuracy", "family_accuracy", "sign_accuracy",
+            "regime_collapse_penalty", "brier_score", "log_loss",
+            "coverage_80", "top1_accuracy", "mode_accuracy",
+            "persistence_accuracy", "strongest_baseline",
+            "strongest_baseline_accuracy", "baseline_margin",
+            "beats_strongest_baseline", "uncertainty_method_rank",
+            "proper_score_improvement", "proper_score_dominates", "created_at",
+        ]
+        audit_columns = [
+            "stability_id", "candidate_id", "core_candidate_id",
+            "uncertainty_id", "audit_final_score", "audit_final_rank",
+            "audit_core_score", "audit_core_rank", "audit_uncertainty_score",
+            "audit_uncertainty_rank", "audit_exact_regime_accuracy",
+            "audit_family_accuracy", "audit_sign_accuracy",
+            "audit_dimension_rmse", "audit_regime_collapse_penalty",
+            "audit_brier_score", "audit_log_loss", "audit_coverage_80",
+            "audit_top1_accuracy", "audit_mean_effective_regimes",
+            "audit_baseline_accuracy", "audit_baseline_margin", "created_at",
+        ]
+        subperiod_columns = [
+            "stability_id", "candidate_id", "subperiod_id", "start_date",
+            "end_date", "months", "dimension_rmse",
+            "exact_regime_accuracy", "family_accuracy", "sign_accuracy",
+            "regime_collapse_penalty", "brier_score", "log_loss",
+            "coverage_80", "top1_accuracy", "mean_effective_regimes",
+            "created_at",
+        ]
+        with self.connect() as connection:
+            for name, table, frame, columns in [
+                ("_m1d_stability_run", "macro_state_stability_runs", run_record, run_columns),
+                ("_m1d_stability_folds", "macro_state_stability_folds", folds, fold_columns),
+                ("_m1d_stability_candidates", "macro_state_stability_candidates", candidates, candidate_columns),
+                ("_m1d_stability_fold_metrics", "macro_state_stability_fold_metrics", fold_metrics, metric_columns),
+                ("_m1d_stability_audit", "macro_state_stability_audit_metrics", audit_metrics, audit_columns),
+                ("_m1d_stability_subperiod", "macro_state_stability_subperiod_metrics", subperiod_metrics, subperiod_columns),
+            ]:
+                if frame.empty:
+                    continue
+                connection.register(name, frame[columns])
+                connection.execute(f"INSERT INTO {table} SELECT * FROM {name}")
+                connection.unregister(name)
 

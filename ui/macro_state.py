@@ -410,3 +410,198 @@ else:
             use_container_width=True,
             hide_index=True,
         )
+
+st.divider()
+st.header("Model 1D rolling-origin stability tournament")
+st.caption(
+    "Expanding-window fold stability for normalization, weighting, thresholds, "
+    "and uncertainty. The 2024-08 to 2026-03 audit period is consumed and is "
+    "reported separately from selection."
+)
+
+if st.button("Run Model 1D stability tournament"):
+    from macropulse.macro_state.rolling_tournament_service import (
+        run_macro_state_stability_tournament,
+    )
+
+    with st.spinner("Evaluating rolling-origin folds and stability gates..."):
+        try:
+            stability_result = run_macro_state_stability_tournament(repository)
+            st.success(
+                "Stability tournament complete: "
+                f"{stability_result['stability_id']}"
+            )
+        except Exception as exc:
+            st.error(str(exc))
+
+stability_run = repository.query_df(
+    """
+    SELECT *
+    FROM macro_state_stability_runs
+    WHERE status = 'success'
+    ORDER BY created_at DESC
+    LIMIT 1
+    """
+)
+if stability_run.empty:
+    st.info(
+        "Run `python scripts\\run_macro_state_stability_tournament.py` after "
+        "the v0.3 research tournament has been completed."
+    )
+else:
+    stability_meta = stability_run.iloc[0]
+    stability_id = str(stability_meta["stability_id"])
+    st.subheader("Rolling-origin research leader")
+    stability_cols = st.columns(5)
+    stability_cols[0].metric(
+        "Stability score",
+        f"{float(stability_meta['selected_stability_score']):.1f}",
+    )
+    stability_cols[1].metric(
+        "Rolling folds",
+        int(stability_meta["fold_count"]),
+    )
+    stability_cols[2].metric(
+        "Audit rank",
+        int(stability_meta["selected_audit_rank"]),
+    )
+    stability_cols[3].metric(
+        "Core candidates",
+        int(stability_meta["core_candidates"]),
+    )
+    stability_cols[4].metric(
+        "Final candidates",
+        int(stability_meta["final_candidates"]),
+    )
+    st.code(str(stability_meta["selected_candidate_id"]))
+    if bool(stability_meta["selected_governance_pass"]):
+        st.success(
+            "The research leader passes the configured v0.3.1 stability "
+            "gates. This is not candidate or production approval."
+        )
+    else:
+        st.warning(
+            "The research leader fails one or more stability gates and must "
+            "not be promoted."
+        )
+
+    stability_folds = repository.query_df(
+        """
+        SELECT *
+        FROM macro_state_stability_folds
+        WHERE stability_id = ?
+        ORDER BY fold_id
+        """,
+        [stability_id],
+    )
+    st.subheader("Rolling-origin folds")
+    st.dataframe(
+        stability_folds[
+            [
+                "fold_id",
+                "training_start",
+                "training_end",
+                "training_months",
+                "evaluation_start",
+                "evaluation_end",
+                "evaluation_months",
+            ]
+        ],
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    stability_candidates = repository.query_df(
+        """
+        SELECT *
+        FROM macro_state_stability_candidates
+        WHERE stability_id = ?
+          AND candidate_type = 'final'
+        ORDER BY stability_rank, candidate_id
+        """,
+        [stability_id],
+    )
+    st.subheader("Final stability leaderboard")
+    st.dataframe(
+        stability_candidates[
+            [
+                "stability_rank",
+                "candidate_id",
+                "stability_score",
+                "median_fold_rank",
+                "worst_fold_rank",
+                "leading_third_rate",
+                "baseline_dominance_rate",
+                "uncertainty_method_win_rate",
+                "bootstrap_margin_lower",
+                "audit_final_rank",
+                "governance_pass",
+            ]
+        ].head(15),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    selected_fold_metrics = repository.query_df(
+        """
+        SELECT *
+        FROM macro_state_stability_fold_metrics
+        WHERE stability_id = ?
+          AND candidate_id = ?
+          AND candidate_type = 'final'
+        ORDER BY fold_id
+        """,
+        [stability_id, stability_meta["selected_candidate_id"]],
+    )
+    st.subheader("Selected candidate by fold")
+    st.dataframe(
+        selected_fold_metrics[
+            [
+                "fold_id",
+                "evaluation_start",
+                "evaluation_end",
+                "rank",
+                "score",
+                "exact_regime_accuracy",
+                "strongest_baseline",
+                "strongest_baseline_accuracy",
+                "baseline_margin",
+                "brier_score",
+                "log_loss",
+                "coverage_80",
+                "uncertainty_method_rank",
+            ]
+        ],
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    audit_metrics = repository.query_df(
+        """
+        SELECT *
+        FROM macro_state_stability_audit_metrics
+        WHERE stability_id = ?
+        ORDER BY audit_final_rank, candidate_id
+        """,
+        [stability_id],
+    )
+    st.subheader("Consumed audit leaderboard")
+    st.caption("Reported for external audit only; not used for ranking.")
+    st.dataframe(
+        audit_metrics[
+            [
+                "audit_final_rank",
+                "candidate_id",
+                "audit_final_score",
+                "audit_exact_regime_accuracy",
+                "audit_baseline_accuracy",
+                "audit_baseline_margin",
+                "audit_brier_score",
+                "audit_log_loss",
+                "audit_coverage_80",
+                "audit_top1_accuracy",
+            ]
+        ].head(15),
+        use_container_width=True,
+        hide_index=True,
+    )

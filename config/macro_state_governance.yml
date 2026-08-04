@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.3.5
+  version: 0.3.6
   lifecycle_status: development
-  research_status: Real-time actual-vintage reconstruction and soft five-family target audit; not production approved.
+  research_status: Fixed-horizon five-family target lock and probabilistic benchmark audit; not production approved.
 
 required_sources:
   GDP:
@@ -555,3 +555,30 @@ real_time_soft_targets:
     maximum_ambiguity_rate: 0.40
     minimum_source_baseline_win_rate: 0.60
     minimum_bootstrap_margin_lower: 0.00
+
+fixed_horizon_probabilistic_benchmarks:
+  status: research_fixed_horizon_probabilistic_audit
+  source_mode: latest_successful_stability_leader
+  source_candidate_status: failed_promotion_gate_research_input
+  primary_target_mode: fixed_horizon_90d
+  primary_target_level: five_family
+  secondary_target_level: eight_state_report_only
+  governance_reference: soft_persistence
+  allow_latest_revised_substitution: false
+  dirichlet_alpha: 0.10
+  markov_alpha: 0.50
+  rolling_window_months: 12
+  calibration_bins: 5
+  prospective_shadow_start: 2026-04-30
+  bootstrap_repetitions: 1000
+  bootstrap_block_months: 3
+  bootstrap_confidence: 0.90
+  random_seed: 13036
+  governance:
+    minimum_complete_state_share: 0.95
+    minimum_reference_win_rate: 0.60
+    minimum_bootstrap_margin_lower: 0.00
+    minimum_macro_f1_margin: 0.00
+    minimum_soft_brier_improvement: 0.00
+    maximum_expected_calibration_error: 0.20
+    minimum_top2_coverage: 0.65

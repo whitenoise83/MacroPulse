@@ -1,0 +1,2 @@
+primary_target_mode,primary_target_level,secondary_target_level,governance_reference,latest_revised_substitution_allowed,complete_states,expected_states,missing_states
+fixed_horizon_90d,five_family,eight_state_report_only,soft_persistence,False,70,73,3

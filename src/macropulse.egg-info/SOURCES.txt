@@ -64,6 +64,8 @@ src/macropulse/labour/vintage.py
 src/macropulse/labour/vintage_backtest.py
 src/macropulse/macro_state/__init__.py
 src/macropulse/macro_state/engine.py
+src/macropulse/macro_state/fixed_horizon_probabilistic.py
+src/macropulse/macro_state/fixed_horizon_probabilistic_service.py
 src/macropulse/macro_state/hierarchical_diagnostics.py
 src/macropulse/macro_state/hierarchical_diagnostics_service.py
 src/macropulse/macro_state/history.py
@@ -127,6 +129,8 @@ tests/test_labour_production_metadata.py
 tests/test_labour_production_promotion.py
 tests/test_labour_vintage.py
 tests/test_macro_state_engine.py
+tests/test_macro_state_fixed_horizon_probabilistic.py
+tests/test_macro_state_fixed_horizon_probabilistic_pipeline.py
 tests/test_macro_state_hierarchical_diagnostics.py
 tests/test_macro_state_hierarchical_pipeline.py
 tests/test_macro_state_history.py

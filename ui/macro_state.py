@@ -974,3 +974,104 @@ if latest_realtime_reports:
         "Latest real-time soft-target report: "
         f"{latest_realtime_reports[0]}"
     )
+
+st.divider()
+st.header("Model 1D fixed-horizon probabilistic benchmark audit")
+st.caption(
+    "Locks the fixed 90-day five-family target, documents incomplete target "
+    "evidence without revised-value substitution, and compares the frozen "
+    "source probabilities with causal persistence, Markov, and rolling-frequency "
+    "benchmarks."
+)
+
+if st.button("Run Model 1D fixed-horizon probabilistic audit"):
+    from macropulse.macro_state.fixed_horizon_probabilistic_service import (
+        run_macro_state_fixed_horizon_probabilistic_audit,
+    )
+
+    with st.spinner(
+        "Locking the fixed-horizon target and evaluating probabilistic benchmarks..."
+    ):
+        try:
+            fixed_result = run_macro_state_fixed_horizon_probabilistic_audit(
+                repository
+            )
+            st.success(
+                "Fixed-horizon probabilistic audit complete: "
+                f"{fixed_result['audit_id']}"
+            )
+            fixed_cols = st.columns(4)
+            fixed_cols[0].metric(
+                "Governance result",
+                (
+                    "Pass"
+                    if fixed_result["fixed_horizon_governance_pass"]
+                    else "Fail"
+                ),
+            )
+            source = fixed_result["benchmark_summary"].loc[
+                fixed_result["benchmark_summary"]["benchmark_id"] == "source"
+            ]
+            fixed_cols[1].metric(
+                "Soft-persistence win rate",
+                (
+                    f"{float(source.iloc[0]['reference_win_rate']):.1%}"
+                    if not source.empty
+                    else "n/a"
+                ),
+            )
+            fixed_cols[2].metric(
+                "Bootstrap lower margin",
+                f"{fixed_result['bootstrap']['bootstrap_margin_lower']:.3f}",
+            )
+            fixed_cols[3].metric(
+                "Missing target states",
+                int(fixed_result["target_lock"].iloc[0]["missing_states"]),
+            )
+            st.subheader("Target lock")
+            st.dataframe(
+                fixed_result["target_lock"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Missing fixed-horizon evidence")
+            st.dataframe(
+                fixed_result["missing_evidence"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Probabilistic benchmark summary")
+            st.dataframe(
+                fixed_result["benchmark_summary"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.subheader("Governance checks")
+            st.dataframe(
+                fixed_result["governance_flags"],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.caption(f"Report: {fixed_result['report_path']}")
+        except Exception as exc:
+            st.error(str(exc))
+
+fixed_report_dir = (
+    settings.project_root
+    / "reports"
+    / "macro_state_fixed_horizon_probabilistic"
+)
+latest_fixed_reports = (
+    sorted(
+        fixed_report_dir.glob("model1d_fixed_horizon_*.md"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    if fixed_report_dir.exists()
+    else []
+)
+if latest_fixed_reports:
+    st.info(
+        "Latest fixed-horizon probabilistic report: "
+        f"{latest_fixed_reports[0]}"
+    )

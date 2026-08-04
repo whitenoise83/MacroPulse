@@ -1,0 +1,13 @@
+check_id,passed,observed,threshold,interpretation
+fixed_horizon_target_locked,True,1.0,1.0,The five-family fixed-90-day target is the locked primary research target.
+fixed_horizon_state_completeness,True,0.958904109589041,0.95,The locked target requires sufficient complete states without revised-value substitution.
+missing_evidence_documented,True,1.0,1.0,Every incomplete fixed-horizon state must have explicit missing-target evidence.
+latest_revised_substitution_prohibited,True,1.0,1.0,Missing fixed-horizon observations cannot be replaced with latest-revised values.
+benchmark_availability_no_lookahead,True,1.0,1.0,Probabilistic benchmarks may only use target states available by the forecast month.
+source_reference_fold_win_rate,True,1.0,0.6,The source must beat the pre-specified soft-persistence reference in most folds.
+bootstrap_margin_positive,True,0.16137566137566137,0.0,The block-bootstrap lower confidence bound versus the reference must be positive.
+macro_f1_not_reduced,True,0.11744520030234316,0.0,The source cannot improve common-family accuracy by reducing macro-F1.
+soft_brier_improves_reference,True,0.5917959351551759,0.0,The source must improve soft Brier score over probabilistic persistence.
+source_calibration_error,True,0.1841982886904762,0.2,Expected calibration error must remain below the research ceiling.
+source_top2_coverage,False,0.5714285714285714,0.65,The realised primary family should be contained in the top two source probabilities often enough.
+prospective_shadow_isolation,True,1.0,1.0,Months beginning April 2026 remain outside selection and consumed audit.

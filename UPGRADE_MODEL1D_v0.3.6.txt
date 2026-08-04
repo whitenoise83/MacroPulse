@@ -1,0 +1,24 @@
+MacroPulse Model 1D v0.3.6 upgrade
+
+1. Confirm branch:
+   model1d-development
+
+2. Confirm the working tree is clean:
+   git status
+
+3. Extract the release ZIP into the MacroPulse project root and replace files.
+
+4. Install editable package metadata:
+   pip install -e .
+
+5. Initialise model metadata:
+   python scripts\initialise_database.py
+
+6. Run the complete Model 1D research suite listed in VALIDATION_MODEL1D_v0.3.6.txt.
+
+7. Run:
+   python scripts\run_macro_state_fixed_horizon_probabilistic.py
+
+8. Review the report before committing or tagging.
+
+No database tables are added. No production model is modified.

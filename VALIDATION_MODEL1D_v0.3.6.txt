@@ -1,0 +1,32 @@
+Model 1D v0.3.6 validation
+
+Research scope
+- fixed_horizon_90d five-family target locked
+- latest-revised substitution prohibited
+- 1 frozen source plus 5 causal probabilistic benchmarks
+- availability no-look-ahead enforced
+- consumed audit remains report-only
+
+Hosted validation
+- 54 non-integration tests passed
+- 2 existing DuckDB persistence integration tests skipped because the hosted runtime has no populated local MacroPulse database
+- Python compilation passed
+- YAML validation passed
+- ZIP integrity passed
+
+Expected local result
+- 56 passed
+
+Validation command
+
+python -m pytest -q tests\test_macro_state_tournament.py tests\test_macro_state_tournament_pipeline.py tests\test_macro_state_tournament_integration.py tests\test_macro_state_stability_tournament.py tests\test_macro_state_stability_pipeline.py tests\test_macro_state_stability_integration.py tests\test_macro_state_temporal_diagnostics.py tests\test_macro_state_temporal_diagnostics_pipeline.py tests\test_macro_state_hierarchical_diagnostics.py tests\test_macro_state_hierarchical_pipeline.py tests\test_macro_state_target_validity.py tests\test_macro_state_target_validity_pipeline.py tests\test_macro_state_realtime_soft_targets.py tests\test_macro_state_realtime_soft_targets_pipeline.py tests\test_macro_state_fixed_horizon_probabilistic.py tests\test_macro_state_fixed_horizon_probabilistic_pipeline.py
+
+## Realised audit result
+
+Governance result: FAIL
+
+The frozen Model 1D source passed all fixed-horizon probabilistic audit gates except source top-two coverage. Observed top-two coverage was 0.5714285714 against the required threshold of 0.65.
+
+The source ranked first by mean soft Brier score, beat the pre-specified soft-persistence reference in all seven folds, and achieved a strictly positive bootstrap lower margin. Failure of the predeclared top-two coverage gate prevents promotion.
+
+Status: fixed-horizon probabilistic research evidence only. Model 1D remains development-stage and is not candidate or production approved.

@@ -1,0 +1,33 @@
+Model 1D v0.3.7 overlay installation
+
+1. Confirm the v0.3.6 checkpoint is clean:
+   git status --short
+   git --no-pager log --oneline --decorate -n 3
+   git tag --points-at HEAD
+
+2. Extract this ZIP into:
+   C:\Users\Cenk\OneDrive\MacroPulse
+
+3. Apply the repository patch:
+   python scripts\apply_model1d_v0_3_7_overlay.py
+
+4. Review changes:
+   git diff --check
+   git diff --stat
+   git diff -- config\macro_state_governance.yml
+   git diff -- ui\macro_state.py
+   git status --short
+
+5. Install and initialise:
+   pip install -e .
+   python scripts\initialise_database.py
+
+6. Test:
+   python -m pytest -q tests\test_macro_state_top2_robustness.py tests\test_macro_state_top2_robustness_pipeline.py
+
+7. Run:
+   python scripts\run_macro_state_top2_robustness.py
+
+8. Do not commit or tag until the report, governance flags, reconciliation, and git diff are reviewed.
+
+The patcher creates .v036.bak files. Do not commit them.

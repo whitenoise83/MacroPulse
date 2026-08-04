@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.3.6
+  version: 0.3.7
   lifecycle_status: development
-  research_status: Fixed-horizon five-family target lock and probabilistic benchmark audit; not production approved.
+  research_status: Top-two miss attribution and rolling-frequency robustness audit; retrospective research only; not production approved.
 
 required_sources:
   GDP:
@@ -582,3 +582,24 @@ fixed_horizon_probabilistic_benchmarks:
     minimum_soft_brier_improvement: 0.00
     maximum_expected_calibration_error: 0.20
     minimum_top2_coverage: 0.65
+
+top2_robustness_audit:
+  status: retrospective_diagnostic_only
+  source_version: 0.3.6
+  source_specification: frozen
+  primary_target_mode: fixed_horizon_90d
+  primary_target_level: five_family
+  secondary_target_level: eight_state_report_only
+  primary_comparator: rolling_frequency
+  allow_latest_revised_substitution: false
+  consumed_audit_report_only: true
+  promotion_authority: none
+  prospective_shadow_start: 2026-04-30
+  near_miss_gap: 0.05
+  low_confidence_max_probability: 0.40
+  confidently_wrong_probability: 0.60
+  bootstrap_repetitions: 2000
+  bootstrap_block_months: 3
+  bootstrap_confidence: 0.90
+  random_seed: 13037
+  reconciliation_tolerance: 0.000001

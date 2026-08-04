@@ -1,0 +1,42 @@
+Model 1D v0.3.7 validation contract
+
+Identity
+- Model: US_MACRO_STATE_1D
+- Version: 0.3.7
+- Lifecycle: development
+- Status: retrospective diagnostic research only
+- Promotion authority: none
+
+Required invariants
+- v0.3.6 source probabilities are read, not rewritten.
+- fixed_horizon_90d remains the primary target.
+- five_family remains the primary level.
+- rolling_frequency is the primary comparator.
+- no latest-revised substitution is permitted.
+- every top-two miss is classified.
+- every fold-month is represented once.
+- computed source and rolling metrics reconcile with v0.3.6 when aggregate fields are available.
+- prospective shadow isolation is preserved.
+
+Required tests
+python -m pytest -q tests\test_macro_state_top2_robustness.py tests\test_macro_state_top2_robustness_pipeline.py
+
+Required run
+python scripts\run_macro_state_top2_robustness.py
+
+The audit may pass architecture checks but cannot approve candidate or production status.
+Required v0.3.6 reconciliation values
+- source soft Brier: 0.5759485288855845
+- rolling-frequency soft Brier: 0.5998922202625906
+- source top-two coverage: 0.5714285714285714
+- rolling-frequency top-two coverage: 0.5952380952380952
+
+Any material difference invalidates the v0.3.7 audit.
+
+Additional final checks
+- source_log_loss_reconciles_v036 must pass
+- rolling_log_loss_reconciles_v036 must pass
+- dimension_attribution_unavailable_documented must pass when the frozen
+  evidence has no monthly dimension-score fields
+- dimension evidence must not be reconstructed from the undated aggregate
+  vintage-agreement table

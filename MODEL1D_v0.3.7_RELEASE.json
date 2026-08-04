@@ -1,0 +1,15 @@
+{
+  "architecture_governance": "pass",
+  "audit_id": "19059a69-2a7d-4f52-87dd-651bca584a2b",
+  "diagnostic_conclusion": "source advantage is statistically inconclusive",
+  "model_id": "US_MACRO_STATE_1D",
+  "primary_comparator": "rolling_frequency",
+  "promotion_approved": false,
+  "promotion_authority": "none",
+  "promotion_decision": "no_promotion",
+  "release_type": "repository_overlay",
+  "source_evidence_stem": "model1d_fixed_horizon_c99ac096-a9cb-4e39-b976-b0d4cfe018a1",
+  "source_version": "0.3.6",
+  "status": "retrospective_diagnostic_research_only",
+  "version": "0.3.7"
+}

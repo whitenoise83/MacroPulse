@@ -85,4 +85,4 @@ def test_prospective_shadow_is_not_inside_historical_plan() -> None:
 
 def test_model_identity_is_v036() -> None:
     config = load_macro_state_governance()
-    assert config["model"]["version"] == "0.3.6"
+    assert config["model"]["version"] == "0.3.7"

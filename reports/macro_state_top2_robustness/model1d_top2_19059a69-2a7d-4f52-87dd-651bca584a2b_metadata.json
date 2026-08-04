@@ -1,0 +1,55 @@
+{
+  "architecture_pass": true,
+  "audit_id": "19059a69-2a7d-4f52-87dd-651bca584a2b",
+  "conclusion": "source advantage is statistically inconclusive",
+  "created_at_utc": "2026-08-04T16:00:44.967964+00:00",
+  "families": [
+    "adverse_supply",
+    "benign_expansion",
+    "contraction",
+    "inflationary_expansion",
+    "mixed"
+  ],
+  "family_signatures": {
+    "benign_expansion": {},
+    "contraction": {},
+    "inflationary_expansion": {},
+    "mixed": {}
+  },
+  "lifecycle_status": "development",
+  "model_id": "US_MACRO_STATE_1D",
+  "model_version": "0.3.7",
+  "output_paths": {
+    "bootstrap": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_bootstrap.csv",
+    "dimension_attribution": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_dimension_attribution.csv",
+    "fold_metrics": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_fold_metrics.csv",
+    "governance_flags": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_governance_flags.csv",
+    "miss_taxonomy": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_miss_taxonomy.csv",
+    "monthly_attribution": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_monthly_attribution.csv",
+    "paired_monthly_scores": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_paired_monthly_scores.csv",
+    "prospective_shadow": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_prospective_shadow.csv",
+    "rank_diagnostics": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_rank_diagnostics.csv",
+    "rolling_frequency_comparison": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_rolling_frequency_comparison.csv",
+    "transition_diagnostics": "C:\\Users\\Cenk\\OneDrive\\MacroPulse\\reports\\macro_state_top2_robustness\\model1d_top2_19059a69-2a7d-4f52-87dd-651bca584a2b_transition_diagnostics.csv"
+  },
+  "promotion_approved": false,
+  "research_status": "retrospective_diagnostic_only",
+  "settings": {
+    "bootstrap_block_months": 3,
+    "bootstrap_confidence": 0.9,
+    "bootstrap_repetitions": 2000,
+    "confidently_wrong_probability": 0.6,
+    "low_confidence_max_probability": 0.4,
+    "near_miss_gap": 0.05,
+    "primary_comparator": "rolling_frequency",
+    "prospective_shadow_start": "2026-04-30",
+    "random_seed": 13037,
+    "reconciliation_tolerance": 1e-06
+  },
+  "source_evidence_sha256": {
+    "benchmark_fold_metrics": "0e43a087e10aa59902eaf96b3467bf49547fc36bea5bdfe2aaf2d9b9e6738867",
+    "benchmark_predictions": "9d2ddc90c293f4bcdde9216112b8ac99402329a2481cf272e007a3ff8350f9ca",
+    "benchmark_summary": "1fa44d7cce0024e4914731c29ed993080a82fc0b7935e282227316bc6c3d0571"
+  },
+  "source_evidence_stem": "model1d_fixed_horizon_c99ac096-a9cb-4e39-b976-b0d4cfe018a1"
+}

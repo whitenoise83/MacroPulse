@@ -175,6 +175,7 @@ def test_history_reconstruction_persists_and_passes_no_look_ahead(tmp_path) -> N
         repository=repository,
         start_date=date(2026, 1, 1),
         end_date=date(2026, 1, 31),
+        source_mode="live_runs",
     )
 
     assert result["months_reconstructed"] == 1

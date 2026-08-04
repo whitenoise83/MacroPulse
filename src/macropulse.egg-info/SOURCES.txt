@@ -80,6 +80,8 @@ src/macropulse/macro_state/target_validity.py
 src/macropulse/macro_state/target_validity_service.py
 src/macropulse/macro_state/temporal_diagnostics.py
 src/macropulse/macro_state/temporal_diagnostics_service.py
+src/macropulse/macro_state/top2_robustness.py
+src/macropulse/macro_state/top2_robustness_service.py
 src/macropulse/macro_state/tournament.py
 src/macropulse/macro_state/tournament_service.py
 src/macropulse/macro_state/versioning.py
@@ -147,6 +149,9 @@ tests/test_macro_state_target_validity.py
 tests/test_macro_state_target_validity_pipeline.py
 tests/test_macro_state_temporal_diagnostics.py
 tests/test_macro_state_temporal_diagnostics_pipeline.py
+tests/test_macro_state_top2_robustness.py
+tests/test_macro_state_top2_robustness_pipeline.py
+tests/test_macro_state_top2_v036_schema.py
 tests/test_macro_state_tournament.py
 tests/test_macro_state_tournament_integration.py
 tests/test_macro_state_tournament_pipeline.py

@@ -6,11 +6,11 @@ from macropulse.macro_state.versioning import (
 )
 
 
-def test_model1d_foundation_identity() -> None:
+def test_model1d_current_development_identity() -> None:
     identity = current_macro_state_identity()
     config = load_macro_state_governance()
     assert identity.model_id == "US_MACRO_STATE_1D"
-    assert identity.model_version == "0.1.0"
+    assert identity.model_version == "0.3.7"
     assert identity.lifecycle_status == "development"
     assert len(identity.config_hash) == 64
     assert len(identity.code_hash) == 64

@@ -134,4 +134,4 @@ def test_interval_architecture_abstains_when_families_disagree() -> None:
 
 def test_model_identity_is_v036() -> None:
     config = load_macro_state_governance()
-    assert config["model"]["version"] == "0.3.6"
+    assert config["model"]["version"] == "0.3.7"

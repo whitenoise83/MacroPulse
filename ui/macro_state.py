@@ -1075,3 +1075,47 @@ if latest_fixed_reports:
         "Latest fixed-horizon probabilistic report: "
         f"{latest_fixed_reports[0]}"
     )
+
+
+st.divider()
+st.header("Model 1D top-two miss and robustness audit")
+st.caption(
+    "Consumes the frozen v0.3.6 fixed-horizon evidence, attributes top-two "
+    "misses, and compares the source directly with rolling frequency. "
+    "This retrospective diagnostic has no promotion authority."
+)
+
+if st.button("Run Model 1D top-two robustness audit"):
+    from macropulse.macro_state.top2_robustness_service import (
+        run_macro_state_top2_robustness_audit,
+    )
+    with st.spinner("Attributing top-two misses and running paired robustness checks..."):
+        try:
+            top2_result = run_macro_state_top2_robustness_audit(settings.project_root)
+            st.success(f"Top-two robustness audit complete: {top2_result['audit_id']}")
+            comparison = top2_result["rolling_frequency_comparison"].iloc[0]
+            cols = st.columns(4)
+            cols[0].metric("Architecture result", "Pass" if top2_result["architecture_pass"] else "Fail")
+            cols[1].metric("Source top-two coverage", f"{float(comparison['source_top2_coverage']):.1%}")
+            cols[2].metric("Rolling top-two coverage", f"{float(comparison['rolling_frequency_top2_coverage']):.1%}")
+            cols[3].metric("Brier bootstrap lower", f"{float(comparison['brier_bootstrap_lower']):.3f}")
+            st.warning("Retrospective research evidence only. This audit cannot approve promotion.")
+            st.subheader("Diagnostic conclusion")
+            st.write(top2_result["conclusion"])
+            for title, key in (
+                ("Rolling-frequency comparison", "rolling_frequency_comparison"),
+                ("Top-two miss taxonomy", "miss_taxonomy"),
+                ("Transition diagnostics", "transition_diagnostics"),
+                ("Dimension attribution", "dimension_attribution"),
+                ("Architecture governance", "governance_flags"),
+            ):
+                st.subheader(title)
+                st.dataframe(top2_result[key], use_container_width=True, hide_index=True)
+            st.caption(f"Report: {top2_result['report_path']}")
+        except Exception as exc:
+            st.error(str(exc))
+
+top2_report_dir = settings.project_root / "reports" / "macro_state_top2_robustness"
+latest_top2_reports = sorted(top2_report_dir.glob("model1d_top2_*.md"), key=lambda path: path.stat().st_mtime, reverse=True) if top2_report_dir.exists() else []
+if latest_top2_reports:
+    st.info(f"Latest top-two robustness report: {latest_top2_reports[0]}")

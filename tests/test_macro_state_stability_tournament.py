@@ -98,6 +98,6 @@ def test_block_bootstrap_margin_is_deterministic() -> None:
 
 def test_model_identity_is_v036() -> None:
     config = load_macro_state_governance()
-    assert config["model"]["version"] == "0.3.6"
+    assert config["model"]["version"] == "0.3.7"
     assert config["stability_tournament"]["minimum_folds"] == 7
     assert config["stability_tournament"]["audit_months"] == 19

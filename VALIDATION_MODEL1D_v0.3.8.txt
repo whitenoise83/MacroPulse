@@ -1,0 +1,64 @@
+Model 1D v0.3.8 final validation record
+Model ID: US_MACRO_STATE_1D
+Version: 0.3.8
+Lifecycle: development
+Evidence type: prospective_shadow
+Promotion authority: none
+
+Specification
+- Frozen specification plan committed: PASS
+- Frozen source version 0.3.6: PASS
+- Frozen source candidate identity: PASS
+- Primary comparator rolling_frequency: PASS
+- Fixed-horizon 90-day target: PASS
+- Minimum evidence gate 12 complete months: PASS
+
+Phase 1 — persistence
+- Append-only schema and repository tests: PASS
+- Duplicate protection: PASS
+- No-look-ahead persistence: PASS
+- Full repository suite after installation: PASS
+
+Phase 2 — prospective prediction
+- Focused prediction-engine tests: 18 passed
+- Full repository suite after installation: PASS
+- First genuine August 2026 prediction: PASS
+- Exactly one run, two predictions, three dimensions, zero outcomes: PASS
+
+Phase 3 — outcome resolution
+- Focused persistence and outcome-resolution tests: 22 passed
+- Full repository suite after installation: PASS
+- Pre-availability resolution on 2026-08-05: 0 eligible, 0 resolved, 0 appended
+- Outcome table after pre-availability check: 0 rows
+- Premature-resolution protection: PASS
+
+Phase 4 — operations and monitoring
+- Focused operations-and-monitoring tests after fixture correction: 29 passed
+- Full repository suite after installation: PASS
+- Read-only monitoring integrity: PASS
+- Complete target months at freeze: 0/12
+- Comparison permitted at freeze: no
+- Idempotent repeated August operation: skipped_existing_month
+- Repeated operation shadow run ID unchanged: PASS
+- Repeated operation outcome rows appended: 0
+- Operational tag published at commit 6e1ff2a: PASS
+- Local DuckDB backup created: PASS
+- Local backups and monitoring outputs ignored by Git: PASS
+- Working tree clean after repository-hygiene commit 252caaf: PASS
+
+First prospective run
+- Shadow run ID: 73ea26fd-a731-4d87-a735-ae1107a9c06c
+- State date: 2026-08-31
+- Information cutoff: 2026-08-05
+- Expected target availability: 2026-11-29
+- Information-set hash: 3c0ca752574ca5a4b7d9e8713a29a4a274b1b06ff50d3fceed77aa30af8cec74
+- Source-bundle hash: d8344c4ed94cc6502da81c04dfd7dc1e73c35499b9405af0ad22f2cf787735ba
+
+Governed conclusion
+insufficient_prospective_evidence
+
+Explicit non-approval
+- Production approval: no
+- Adaptive switching approval: no
+- Blending approval: no
+- Source replacement approval: no

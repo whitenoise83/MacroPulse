@@ -4,20 +4,24 @@
 
 - **Model 1A — US GDP Nowcast:** production v1.0.0, frozen and validated.
 - **Model 1B — US Inflation Nowcast:** production v1.0.0, frozen and validated.
-- **Model 1C — US Labour Nowcast:** development v0.4.0 stable-policy tournament.
+- **Model 1C — US Labour Nowcast:** production v1.0.0, frozen and validated.
+- **Model 1D — Unified US Macro State:** development v0.3.8 prospective shadow;
+  research monitoring only, with no promotion authority.
+
+## Production models
+
+Models 1A, 1B, and 1C are separate governed production models. Their approved
+policies, versions, hashes, validation histories, and approval records are
+independent.
 
 Model 1B provides governed monthly forecasts for headline/core CPI and
 headline/core PCE. Forecasts are monthly log changes annualised by multiplying
 by 1,200.
 
-## Model 1B production policy
-
-- Headline CPI: Ridge-AR Ensemble at all four forecast stages.
-- Core CPI: 12-Month Mean at month open; Ridge-AR Ensemble thereafter.
-- Headline PCE: Bridge Ridge at all four forecast stages.
-- Core PCE: Bridge Ridge at month open; Ridge-AR Ensemble thereafter.
-- Production interval method: `exp_weighted_q80` using strictly prior errors.
-- Adaptive model selection: shadow challenger only.
+Model 1C provides governed monthly forecasts for nonfarm payroll change, the
+unemployment rate, and average-hourly-earnings growth. Its stable 15-decision
+target-stage policy and strictly prior `exp_weighted_q80` intervals are frozen
+for production. Adaptive selection remains shadow-only.
 
 ## Production workflow
 
@@ -29,16 +33,10 @@ cd /d C:\Users\Cenk\OneDrive\MacroPulse
 pip install -r requirements.txt
 pip install -e .
 python scripts\initialise_database.py
-python scripts\promote_model1b_v1.py
 ```
 
-Refresh data and run the governed production forecast:
-
-```cmd
-python scripts\download_inflation_data.py
-python scripts\run_inflation_nowcast.py
-python scripts\run_inflation_operational_validation.py
-```
+Refresh and run the relevant governed source models before running downstream
+macro-state operations.
 
 Open the application:
 
@@ -46,29 +44,43 @@ Open the application:
 streamlit run app.py
 ```
 
-The production promotion script verifies the complete approved evidence chain:
+## Model 1D v0.3.8 prospective shadow
 
-- candidate validation `5f0cd6ea-c41f-44da-a21a-43490d8e75ce` — 28/28 passed;
-- governed-live operational validation `58c89931-0f6b-43ed-8815-abbc99fa4ac8` — 20/20 passed;
-- freeze assessment `2b7fe987-384a-451b-971f-03d5bf5106c7` — 14/14 passed;
-- governed live run `905deade-2bbf-4c89-801e-ce296bb00d97`.
+Model 1D v0.3.8 compares the frozen v0.3.6 source candidate with the causal
+`rolling_frequency` benchmark using immutable monthly predictions and
+fixed-horizon 90-day outcomes.
 
+It is a development research release. It cannot promote a candidate, switch
+between models, blend probabilities, replace the source, or enter production.
 
-## Model 1C vintage-aware development
-
-Model 1C forecasts monthly nonfarm payroll change, the unemployment rate, and
-average-hourly-earnings growth. Version 0.4.0 contains a completed vintage
-backtest, prior-only `exp_weighted_q80` intervals, a stable 15-decision policy
-candidate, and a prior-only adaptive shadow challenger. It is not production
-approved.
+Monthly operation:
 
 ```cmd
-python scripts\evaluate_labour_policy.py --backtest-id 834e0655-ba81-4b96-b42c-e1cdda73b847
+python scripts\run_macro_state_shadow_operations.py
 ```
+
+Read-only status:
+
+```cmd
+python scripts\report_macro_state_shadow_status.py --no-write
+```
+
+Formal comparison is locked until at least 12 complete prospective target
+months exist and all integrity checks pass. Before then, the only permitted
+overall conclusion is `insufficient_prospective_evidence`.
+
+See:
+
+- `README_MODEL1D_v0.3.8.md`
+- `MODEL1D_v0.3.8_PLAN.md`
+- `docs/MODEL1D_v0.3.8_OPERATIONS.md`
+- `MODEL1D_v0.3.8_RELEASE.json`
 
 ## Governance
 
-Model 1A and Model 1B are separate production models. Changes to one model must
-not alter the other model's approved policy, version, hashes, validation history,
-or approval record. Material changes require challenger evidence, a new version,
-revalidation, and explicit model-owner approval.
+Material changes to a production model require challenger evidence, a new
+version, revalidation, and explicit model-owner approval.
+
+Model 1D v0.3.8 must remain isolated from production promotion while the
+prospective experiment is running. Local DuckDB files, backups, and generated
+monitoring reports must not be committed.

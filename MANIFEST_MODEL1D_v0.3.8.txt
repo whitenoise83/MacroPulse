@@ -1,0 +1,16 @@
+Model 1D v0.3.8 prospective-shadow research release manifest
+The manifest itself, local databases, backups, generated monitoring reports, and installer artifacts are excluded.
+Operational commit: 6e1ff2a
+Operational tag: model1d-v0.3.8-prospective-shadow-operational
+Repository-hygiene commit: 252caaf
+First shadow run ID: 73ea26fd-a731-4d87-a735-ae1107a9c06c
+debf42d1016807940309d35ac00442cb259830df7c474a6e61847ad2be5e52a5  CHANGELOG.md
+a005552e2f6ab1b60c71c1ac8b7c040c63d4fe3a1f3538b41f631aceff913aeb  CHANGELOG_MODEL1D_v0.3.8.md
+2127bb0770623b52347e40f740957a80257b7ae6ca049e8e07b8eb18cfe56992  MODEL1D_v0.3.8_RELEASE.json
+823b9d189f166e2edc0fa369384d87ae7e00bc2e82994f3bffcce7b66c4028bd  README.md
+00cf632e576e1651196890368aa13dfd087ea933724ebf8679c08e66f2d1d096  README_MODEL1D_v0.3.8.md
+9497e9dbdb2fff753fbb58cf8ac2c8e1abad1989d4e38c8dbb0ff10ed0d4ba2b  VALIDATION_MODEL1D_v0.3.8.txt
+61e85a5e7ca7c6e0601a0eff8c0e5ef07c20013f0c50714d7a65fe72ff2aa08d  tests/test_model1d_v038_release_metadata.py
+7eebb22bcedc70b09cfc059a4b39833d6bef39830ee2d8f4dd66714eb83f9159  MODEL1D_v0.3.8_PLAN.md
+40527ed775e80b78d11109ee291d86bc4522717f6b32fc06735d2fa81fac7a8b  config/macro_state_governance.yml
+3a51ff5e5e7bf6dc6348a27953019aed7ae62031ed3194cef68b938fad537f2d  docs/MODEL1D_v0.3.8_OPERATIONS.md

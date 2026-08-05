@@ -1,5 +1,25 @@
 # Changelog
 
+## Model 1D v0.3.8
+
+- Added an append-only prospective source-versus-rolling-frequency experiment.
+- Added deterministic monthly prediction, fixed-horizon outcome resolution, and
+  read-only monitoring.
+- Added duplicate, no-look-ahead, target-availability, and 12-month evidence
+  gates.
+- Persisted the first genuine August 2026 prospective prediction.
+- Froze the operational implementation at tag
+  `model1d-v0.3.8-prospective-shadow-operational`.
+- Retained lifecycle `development` and promotion authority `none`.
+
+## Model 1C v1.0.0
+
+- Promoted the governed labour nowcast to owner-approved production.
+- Froze the stable 15-decision target-stage policy.
+- Froze strictly prior `exp_weighted_q80` production intervals.
+- Retained adaptive selection as shadow-only.
+- Added guarded, evidence-verifying production promotion and monitoring.
+
 ## Model 1C v0.1.0
 
 - Added the US labour-market nowcast foundation.

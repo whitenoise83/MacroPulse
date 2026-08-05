@@ -1,0 +1,61 @@
+name: Model 1D v0.3.8 Release Guard
+
+on:
+  push:
+    branches:
+      - model1d-v0.3.8-prospective-transition-shadow
+    tags:
+      - model1d-v0.3.8-*
+  pull_request:
+    branches:
+      - model1d-v0.3.8-prospective-transition-shadow
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: model1d-v038-release-guard-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate frozen research release
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out complete history and tags
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            pyproject.toml
+
+      - name: Install project and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install -e .
+          python -m pip install "pytest>=8,<9"
+
+      - name: Verify Model 1D release boundary
+        run: python scripts/verify_model1d_v038_release.py --require-tags
+
+      - name: Run complete repository test suite
+        run: python -m pytest -q --disable-warnings
+
+      - name: Confirm tests did not modify tracked files
+        shell: bash
+        run: |
+          if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
+            git status --short
+            exit 1
+          fi

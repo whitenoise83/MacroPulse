@@ -14,3 +14,5 @@ data/model_outputs/*
 !data/model_outputs/.gitkeep
 reports/validation/*.md
 !reports/validation/.gitkeep
+data/backups/
+reports/macro_state_shadow_monitoring/

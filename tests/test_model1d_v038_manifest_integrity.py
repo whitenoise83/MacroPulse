@@ -55,8 +55,14 @@ def test_workflow_uses_complete_history_and_explicit_python() -> None:
     assert "fetch-depth: 0" in workflow
     assert "actions/setup-python@v7" in workflow
     assert 'python-version: "3.11"' in workflow
-    assert "verify_model1d_v038_release.py --require-tags" in workflow
+    assert (
+        workflow.count(
+            "python scripts/verify_model1d_v038_release.py --require-tags"
+        )
+        == 2
+    )
     assert "python -m pytest -q --disable-warnings" in workflow
+    assert "git status --porcelain --untracked-files=no" not in workflow
 
 
 def test_no_prohibited_database_artifacts_are_tracked() -> None:

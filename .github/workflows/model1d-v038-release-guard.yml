@@ -52,10 +52,5 @@ jobs:
       - name: Run complete repository test suite
         run: python -m pytest -q --disable-warnings
 
-      - name: Confirm tests did not modify tracked files
-        shell: bash
-        run: |
-          if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
-            git status --short
-            exit 1
-          fi
+      - name: Re-verify frozen Model 1D boundary after tests
+        run: python scripts/verify_model1d_v038_release.py --require-tags

@@ -11,6 +11,7 @@ pages = {
     "MacroPulse": [
         st.Page("ui/home.py", title="Home", icon="🏠", default=True),
         st.Page("ui/macro_state.py", title="Unified Macro State", icon="🧭"),
+        st.Page("ui/macro_state_shadow.py", title="Model 1D Shadow", icon="🛰️"),
         st.Page("ui/nowcast.py", title="US GDP Nowcast", icon="📈"),
         st.Page("ui/inflation_nowcast.py", title="US Inflation Nowcast", icon="🌡️"),
         st.Page("ui/inflation_news.py", title="Inflation News", icon="🧾"),

@@ -1512,6 +1512,147 @@ ON macro_state_stability_subperiod_metrics(
     stability_id, candidate_id, subperiod_id
 );
 
+CREATE TABLE IF NOT EXISTS macro_state_shadow_runs (
+    shadow_run_id VARCHAR PRIMARY KEY,
+    model_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    run_timestamp TIMESTAMP NOT NULL,
+    state_date DATE NOT NULL,
+    information_cutoff DATE NOT NULL,
+    target_mode VARCHAR NOT NULL,
+    target_horizon_days INTEGER NOT NULL,
+    target_expected_available_date DATE NOT NULL,
+    source_candidate_id VARCHAR NOT NULL,
+    source_evidence_version VARCHAR NOT NULL,
+    primary_comparator VARCHAR NOT NULL,
+    source_macro_state_run_id VARCHAR NOT NULL,
+    gdp_run_id VARCHAR NOT NULL,
+    inflation_run_id VARCHAR NOT NULL,
+    labour_run_id VARCHAR NOT NULL,
+    config_hash VARCHAR NOT NULL,
+    code_hash VARCHAR NOT NULL,
+    git_commit VARCHAR,
+    information_set_hash VARCHAR NOT NULL,
+    source_bundle_hash VARCHAR NOT NULL,
+    no_look_ahead_pass BOOLEAN NOT NULL,
+    status VARCHAR NOT NULL,
+    governance_json VARCHAR NOT NULL,
+    notes VARCHAR,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_shadow_run_month
+ON macro_state_shadow_runs(model_version, state_date);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_shadow_run_resolution
+ON macro_state_shadow_runs(
+    target_expected_available_date,
+    state_date,
+    status
+);
+
+CREATE TABLE IF NOT EXISTS macro_state_shadow_predictions (
+    shadow_run_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    state_date DATE NOT NULL,
+    information_cutoff DATE NOT NULL,
+    prediction_timestamp TIMESTAMP NOT NULL,
+    benchmark_id VARCHAR NOT NULL,
+    predicted_family VARCHAR NOT NULL,
+    predicted_probabilities_json VARCHAR NOT NULL,
+    top1_family VARCHAR NOT NULL,
+    top2_family VARCHAR NOT NULL,
+    top3_family VARCHAR NOT NULL,
+    top1_probability DOUBLE NOT NULL,
+    top2_probability DOUBLE NOT NULL,
+    top3_probability DOUBLE NOT NULL,
+    top1_top2_gap DOUBLE NOT NULL,
+    entropy DOUBLE NOT NULL,
+    probability_sum DOUBLE NOT NULL,
+    probability_vector_hash VARCHAR NOT NULL,
+    no_look_ahead_pass BOOLEAN NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_shadow_prediction_unique
+ON macro_state_shadow_predictions(shadow_run_id, benchmark_id);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_shadow_prediction_month
+ON macro_state_shadow_predictions(
+    model_version,
+    state_date,
+    benchmark_id
+);
+
+CREATE TABLE IF NOT EXISTS macro_state_shadow_dimensions (
+    shadow_run_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    state_date DATE NOT NULL,
+    information_cutoff DATE NOT NULL,
+    dimension VARCHAR NOT NULL,
+    score DOUBLE NOT NULL,
+    lower_score DOUBLE NOT NULL,
+    upper_score DOUBLE NOT NULL,
+    label VARCHAR NOT NULL,
+    confidence DOUBLE NOT NULL,
+    source_model_id VARCHAR NOT NULL,
+    source_model_version VARCHAR NOT NULL,
+    source_run_id VARCHAR NOT NULL,
+    source_information_cutoff DATE NOT NULL,
+    source_data_as_of DATE,
+    source_hash VARCHAR NOT NULL,
+    no_look_ahead_pass BOOLEAN NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_shadow_dimension_unique
+ON macro_state_shadow_dimensions(shadow_run_id, dimension);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_shadow_dimension_month
+ON macro_state_shadow_dimensions(
+    model_version,
+    state_date,
+    dimension
+);
+
+CREATE TABLE IF NOT EXISTS macro_state_shadow_outcomes (
+    outcome_id VARCHAR PRIMARY KEY,
+    shadow_run_id VARCHAR NOT NULL,
+    model_version VARCHAR NOT NULL,
+    state_date DATE NOT NULL,
+    benchmark_id VARCHAR NOT NULL,
+    resolved_at TIMESTAMP NOT NULL,
+    target_mode VARCHAR NOT NULL,
+    target_horizon_days INTEGER NOT NULL,
+    target_available_date DATE NOT NULL,
+    target_vintage_id VARCHAR NOT NULL,
+    actual_family VARCHAR NOT NULL,
+    actual_probabilities_json VARCHAR NOT NULL,
+    actual_confidence DOUBLE NOT NULL,
+    actual_probability DOUBLE NOT NULL,
+    brier_score DOUBLE NOT NULL,
+    log_loss DOUBLE NOT NULL,
+    top1_hit BOOLEAN NOT NULL,
+    top2_hit BOOLEAN NOT NULL,
+    top3_hit BOOLEAN NOT NULL,
+    previous_actual_family VARCHAR,
+    transition_flag BOOLEAN NOT NULL,
+    target_hash VARCHAR NOT NULL,
+    evaluation_hash VARCHAR NOT NULL,
+    no_look_ahead_pass BOOLEAN NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_macro_state_shadow_outcome_unique
+ON macro_state_shadow_outcomes(shadow_run_id, benchmark_id);
+
+CREATE INDEX IF NOT EXISTS idx_macro_state_shadow_outcome_month
+ON macro_state_shadow_outcomes(
+    model_version,
+    state_date,
+    benchmark_id
+);
+
 '''
 
 
@@ -2931,4 +3072,518 @@ class MacroRepository:
                 connection.register(name, frame[columns])
                 connection.execute(f"INSERT INTO {table} SELECT * FROM {name}")
                 connection.unregister(name)
+
+    @staticmethod
+    def _require_shadow_columns(
+        frame: pd.DataFrame,
+        required: list[str],
+        frame_name: str,
+    ) -> None:
+        missing = [column for column in required if column not in frame.columns]
+        if missing:
+            raise ValueError(
+                f"{frame_name} is missing required columns: {missing}"
+            )
+
+    @staticmethod
+    def _shadow_timestamp(value: object, field_name: str) -> pd.Timestamp:
+        try:
+            timestamp = pd.Timestamp(value)
+        except Exception as exc:
+            raise ValueError(
+                f"{field_name} is not a valid timestamp: {value!r}"
+            ) from exc
+        if pd.isna(timestamp):
+            raise ValueError(f"{field_name} must not be null")
+        if timestamp.tzinfo is not None:
+            timestamp = timestamp.tz_convert("UTC").tz_localize(None)
+        return timestamp
+
+    @staticmethod
+    def _shadow_true(series: pd.Series, field_name: str) -> None:
+        if series.isna().any() or not series.map(bool).all():
+            raise ValueError(f"{field_name} must be true for every row")
+
+    @staticmethod
+    def _shadow_match(
+        frame: pd.DataFrame,
+        column: str,
+        expected: object,
+        frame_name: str,
+    ) -> None:
+        if column in {"state_date", "information_cutoff"}:
+            expected_value = pd.Timestamp(expected).normalize()
+            observed = (
+                pd.to_datetime(frame[column], errors="coerce")
+                .map(lambda value: value.normalize() if not pd.isna(value) else value)
+                .drop_duplicates()
+                .tolist()
+            )
+        else:
+            expected_value = expected
+            observed = frame[column].drop_duplicates().tolist()
+        if len(observed) != 1 or observed[0] != expected_value:
+            raise ValueError(
+                f"{frame_name}.{column} must equal {expected_value!r}; "
+                f"observed {observed!r}"
+            )
+
+    def save_macro_state_shadow_predictions(
+        self,
+        run_record: pd.DataFrame,
+        predictions: pd.DataFrame,
+        dimensions: pd.DataFrame,
+    ) -> None:
+        run_columns = [
+            "shadow_run_id", "model_id", "model_version", "run_timestamp",
+            "state_date", "information_cutoff", "target_mode",
+            "target_horizon_days", "target_expected_available_date",
+            "source_candidate_id", "source_evidence_version",
+            "primary_comparator", "source_macro_state_run_id", "gdp_run_id",
+            "inflation_run_id", "labour_run_id", "config_hash", "code_hash",
+            "git_commit", "information_set_hash", "source_bundle_hash",
+            "no_look_ahead_pass", "status", "governance_json", "notes",
+            "created_at",
+        ]
+        prediction_columns = [
+            "shadow_run_id", "model_version", "state_date",
+            "information_cutoff", "prediction_timestamp", "benchmark_id",
+            "predicted_family", "predicted_probabilities_json",
+            "top1_family", "top2_family", "top3_family", "top1_probability",
+            "top2_probability", "top3_probability", "top1_top2_gap",
+            "entropy", "probability_sum", "probability_vector_hash",
+            "no_look_ahead_pass", "created_at",
+        ]
+        dimension_columns = [
+            "shadow_run_id", "model_version", "state_date",
+            "information_cutoff", "dimension", "score", "lower_score",
+            "upper_score", "label", "confidence", "source_model_id",
+            "source_model_version", "source_run_id",
+            "source_information_cutoff", "source_data_as_of", "source_hash",
+            "no_look_ahead_pass", "created_at",
+        ]
+
+        self._require_shadow_columns(run_record, run_columns, "run_record")
+        self._require_shadow_columns(
+            predictions, prediction_columns, "predictions"
+        )
+        self._require_shadow_columns(
+            dimensions, dimension_columns, "dimensions"
+        )
+
+        if len(run_record) != 1:
+            raise ValueError("run_record must contain exactly one row")
+        if len(predictions) != 2:
+            raise ValueError("predictions must contain exactly two rows")
+        if len(dimensions) != 3:
+            raise ValueError("dimensions must contain exactly three rows")
+
+        expected_benchmarks = {"source", "rolling_frequency"}
+        observed_benchmarks = set(
+            predictions["benchmark_id"].dropna().astype(str)
+        )
+        if observed_benchmarks != expected_benchmarks:
+            raise ValueError(
+                "predictions must contain exactly the source and "
+                "rolling_frequency benchmarks"
+            )
+        if predictions["benchmark_id"].duplicated().any():
+            raise ValueError("prediction benchmark IDs must be unique")
+
+        expected_dimensions = {"growth", "inflation", "labour"}
+        observed_dimensions = set(
+            dimensions["dimension"].dropna().astype(str)
+        )
+        if observed_dimensions != expected_dimensions:
+            raise ValueError(
+                "dimensions must contain exactly growth, inflation, and labour"
+            )
+        if dimensions["dimension"].duplicated().any():
+            raise ValueError("dimension names must be unique")
+
+        run = run_record.iloc[0]
+        shadow_run_id = str(run["shadow_run_id"])
+        model_version = str(run["model_version"])
+        state_date = run["state_date"]
+        information_cutoff = run["information_cutoff"]
+
+        if not shadow_run_id:
+            raise ValueError("shadow_run_id must not be empty")
+
+        for frame, name in (
+            (predictions, "predictions"),
+            (dimensions, "dimensions"),
+        ):
+            self._shadow_match(
+                frame, "shadow_run_id", shadow_run_id, name
+            )
+            self._shadow_match(
+                frame, "model_version", model_version, name
+            )
+            self._shadow_match(frame, "state_date", state_date, name)
+            self._shadow_match(
+                frame, "information_cutoff", information_cutoff, name
+            )
+
+        self._shadow_true(
+            run_record["no_look_ahead_pass"],
+            "run_record.no_look_ahead_pass",
+        )
+        self._shadow_true(
+            predictions["no_look_ahead_pass"],
+            "predictions.no_look_ahead_pass",
+        )
+        self._shadow_true(
+            dimensions["no_look_ahead_pass"],
+            "dimensions.no_look_ahead_pass",
+        )
+
+        cutoff_timestamp = self._shadow_timestamp(
+            information_cutoff, "information_cutoff"
+        ).normalize()
+        run_timestamp = self._shadow_timestamp(
+            run["run_timestamp"], "run_timestamp"
+        )
+        target_expected = self._shadow_timestamp(
+            run["target_expected_available_date"],
+            "target_expected_available_date",
+        ).normalize()
+
+        if run_timestamp < cutoff_timestamp:
+            raise ValueError(
+                "run_timestamp must not precede information_cutoff"
+            )
+        if target_expected <= run_timestamp:
+            raise ValueError(
+                "target_expected_available_date must be later than "
+                "run_timestamp"
+            )
+
+        for value in predictions["prediction_timestamp"]:
+            prediction_timestamp = self._shadow_timestamp(
+                value, "prediction_timestamp"
+            )
+            if prediction_timestamp < cutoff_timestamp:
+                raise ValueError(
+                    "prediction_timestamp must not precede "
+                    "information_cutoff"
+                )
+            if prediction_timestamp >= target_expected:
+                raise ValueError(
+                    "prediction_timestamp must precede expected target "
+                    "availability"
+                )
+
+        source_cutoffs = dimensions["source_information_cutoff"].map(
+            lambda value: self._shadow_timestamp(
+                value, "source_information_cutoff"
+            ).normalize()
+        )
+        if (source_cutoffs > cutoff_timestamp).any():
+            raise ValueError(
+                "dimension source information cutoffs must not exceed the "
+                "shadow information cutoff"
+            )
+
+        probability_sums = pd.to_numeric(
+            predictions["probability_sum"], errors="coerce"
+        )
+        if probability_sums.isna().any():
+            raise ValueError("probability_sum must be finite")
+        if ((probability_sums - 1.0).abs() > 1.0e-10).any():
+            raise ValueError(
+                "probability_sum must equal 1.0 within tolerance 1e-10"
+            )
+
+        run_frame = run_record[run_columns].copy()
+        prediction_frame = predictions[prediction_columns].copy()
+        dimension_frame = dimensions[dimension_columns].copy()
+
+        with self.connect() as connection:
+            connection.execute("BEGIN TRANSACTION")
+            try:
+                duplicate_run = connection.execute(
+                    """
+                    SELECT shadow_run_id
+                    FROM macro_state_shadow_runs
+                    WHERE shadow_run_id = ?
+                       OR (model_version = ? AND state_date = ?)
+                    LIMIT 1
+                    """,
+                    [shadow_run_id, model_version, state_date],
+                ).fetchone()
+                if duplicate_run is not None:
+                    raise ValueError(
+                        "append-only violation: a shadow run already exists "
+                        "for this run ID or model-version/state-date"
+                    )
+
+                for benchmark_id in sorted(expected_benchmarks):
+                    duplicate_prediction = connection.execute(
+                        """
+                        SELECT shadow_run_id
+                        FROM macro_state_shadow_predictions
+                        WHERE (
+                            shadow_run_id = ? AND benchmark_id = ?
+                        ) OR (
+                            model_version = ?
+                            AND state_date = ?
+                            AND benchmark_id = ?
+                        )
+                        LIMIT 1
+                        """,
+                        [
+                            shadow_run_id, benchmark_id, model_version,
+                            state_date, benchmark_id,
+                        ],
+                    ).fetchone()
+                    if duplicate_prediction is not None:
+                        raise ValueError(
+                            "append-only violation: a shadow prediction "
+                            f"already exists for benchmark {benchmark_id}"
+                        )
+
+                connection.register("_m1d_shadow_run", run_frame)
+                connection.execute(
+                    """
+                    INSERT INTO macro_state_shadow_runs (
+                        shadow_run_id, model_id, model_version, run_timestamp,
+                        state_date, information_cutoff, target_mode,
+                        target_horizon_days, target_expected_available_date,
+                        source_candidate_id, source_evidence_version,
+                        primary_comparator, source_macro_state_run_id,
+                        gdp_run_id, inflation_run_id, labour_run_id,
+                        config_hash, code_hash, git_commit,
+                        information_set_hash, source_bundle_hash,
+                        no_look_ahead_pass, status, governance_json, notes,
+                        created_at
+                    )
+                    SELECT * FROM _m1d_shadow_run
+                    """
+                )
+                connection.unregister("_m1d_shadow_run")
+
+                connection.register(
+                    "_m1d_shadow_predictions", prediction_frame
+                )
+                connection.execute(
+                    """
+                    INSERT INTO macro_state_shadow_predictions (
+                        shadow_run_id, model_version, state_date,
+                        information_cutoff, prediction_timestamp,
+                        benchmark_id, predicted_family,
+                        predicted_probabilities_json, top1_family,
+                        top2_family, top3_family, top1_probability,
+                        top2_probability, top3_probability, top1_top2_gap,
+                        entropy, probability_sum, probability_vector_hash,
+                        no_look_ahead_pass, created_at
+                    )
+                    SELECT * FROM _m1d_shadow_predictions
+                    """
+                )
+                connection.unregister("_m1d_shadow_predictions")
+
+                connection.register(
+                    "_m1d_shadow_dimensions", dimension_frame
+                )
+                connection.execute(
+                    """
+                    INSERT INTO macro_state_shadow_dimensions (
+                        shadow_run_id, model_version, state_date,
+                        information_cutoff, dimension, score, lower_score,
+                        upper_score, label, confidence, source_model_id,
+                        source_model_version, source_run_id,
+                        source_information_cutoff, source_data_as_of,
+                        source_hash, no_look_ahead_pass, created_at
+                    )
+                    SELECT * FROM _m1d_shadow_dimensions
+                    """
+                )
+                connection.unregister("_m1d_shadow_dimensions")
+                connection.execute("COMMIT")
+            except Exception:
+                connection.execute("ROLLBACK")
+                raise
+
+    def save_macro_state_shadow_outcomes(
+        self,
+        outcomes: pd.DataFrame,
+    ) -> None:
+        outcome_columns = [
+            "outcome_id", "shadow_run_id", "model_version", "state_date",
+            "benchmark_id", "resolved_at", "target_mode",
+            "target_horizon_days", "target_available_date",
+            "target_vintage_id", "actual_family",
+            "actual_probabilities_json", "actual_confidence",
+            "actual_probability", "brier_score", "log_loss", "top1_hit",
+            "top2_hit", "top3_hit", "previous_actual_family",
+            "transition_flag", "target_hash", "evaluation_hash",
+            "no_look_ahead_pass", "created_at",
+        ]
+        self._require_shadow_columns(outcomes, outcome_columns, "outcomes")
+
+        if len(outcomes) != 2:
+            raise ValueError("outcomes must contain exactly two rows")
+        expected_benchmarks = {"source", "rolling_frequency"}
+        observed_benchmarks = set(
+            outcomes["benchmark_id"].dropna().astype(str)
+        )
+        if observed_benchmarks != expected_benchmarks:
+            raise ValueError(
+                "outcomes must contain exactly the source and "
+                "rolling_frequency benchmarks"
+            )
+        if outcomes["benchmark_id"].duplicated().any():
+            raise ValueError("outcome benchmark IDs must be unique")
+        if outcomes["outcome_id"].isna().any():
+            raise ValueError("outcome_id must not be null")
+        if outcomes["outcome_id"].astype(str).duplicated().any():
+            raise ValueError("outcome IDs must be unique")
+
+        invariant_columns = [
+            "shadow_run_id", "model_version", "state_date", "target_mode",
+            "target_horizon_days", "target_available_date",
+            "target_vintage_id", "actual_family",
+            "actual_probabilities_json", "actual_confidence",
+            "previous_actual_family", "transition_flag", "target_hash",
+        ]
+        for column in invariant_columns:
+            if outcomes[column].nunique(dropna=False) != 1:
+                raise ValueError(
+                    f"outcomes.{column} must be identical across benchmarks"
+                )
+
+        self._shadow_true(
+            outcomes["no_look_ahead_pass"],
+            "outcomes.no_look_ahead_pass",
+        )
+
+        actual_probabilities = pd.to_numeric(
+            outcomes["actual_probability"], errors="coerce"
+        )
+        if actual_probabilities.isna().any() or (
+            (actual_probabilities < 0.0) | (actual_probabilities > 1.0)
+        ).any():
+            raise ValueError("actual_probability must be between 0 and 1")
+
+        for metric in ("brier_score", "log_loss"):
+            values = pd.to_numeric(outcomes[metric], errors="coerce")
+            if values.isna().any() or (values < 0.0).any():
+                raise ValueError(f"{metric} must be finite and non-negative")
+
+        for row in outcomes.itertuples(index=False):
+            resolved_at = self._shadow_timestamp(
+                row.resolved_at, "resolved_at"
+            )
+            target_available = self._shadow_timestamp(
+                row.target_available_date, "target_available_date"
+            ).normalize()
+            if resolved_at < target_available:
+                raise ValueError(
+                    "resolved_at must not precede target_available_date"
+                )
+
+        first = outcomes.iloc[0]
+        previous_family = first["previous_actual_family"]
+        expected_transition = (
+            False
+            if pd.isna(previous_family) or previous_family is None
+            else str(first["actual_family"]) != str(previous_family)
+        )
+        if bool(first["transition_flag"]) != expected_transition:
+            raise ValueError(
+                "transition_flag must equal actual_family != "
+                "previous_actual_family"
+            )
+
+        shadow_run_id = str(first["shadow_run_id"])
+        model_version = str(first["model_version"])
+        state_date = first["state_date"]
+        outcome_frame = outcomes[outcome_columns].copy()
+
+        with self.connect() as connection:
+            connection.execute("BEGIN TRANSACTION")
+            try:
+                run = connection.execute(
+                    """
+                    SELECT model_version, state_date, target_mode,
+                           target_horizon_days
+                    FROM macro_state_shadow_runs
+                    WHERE shadow_run_id = ?
+                    """,
+                    [shadow_run_id],
+                ).fetchone()
+                if run is None:
+                    raise ValueError(
+                        "cannot resolve outcomes before the shadow run exists"
+                    )
+                if (
+                    str(run[0]) != model_version
+                    or pd.Timestamp(run[1]).normalize()
+                    != pd.Timestamp(state_date).normalize()
+                    or str(run[2]) != str(first["target_mode"])
+                    or int(run[3]) != int(first["target_horizon_days"])
+                ):
+                    raise ValueError(
+                        "outcome lineage does not match the persisted "
+                        "shadow run"
+                    )
+
+                predictions = connection.execute(
+                    """
+                    SELECT benchmark_id
+                    FROM macro_state_shadow_predictions
+                    WHERE shadow_run_id = ?
+                    """,
+                    [shadow_run_id],
+                ).fetchall()
+                prediction_benchmarks = {str(row[0]) for row in predictions}
+                if prediction_benchmarks != expected_benchmarks:
+                    raise ValueError(
+                        "both persisted benchmark predictions must exist "
+                        "before outcome resolution"
+                    )
+
+                duplicate_outcome = connection.execute(
+                    """
+                    SELECT outcome_id
+                    FROM macro_state_shadow_outcomes
+                    WHERE shadow_run_id = ?
+                       OR outcome_id IN (?, ?)
+                    LIMIT 1
+                    """,
+                    [
+                        shadow_run_id,
+                        str(outcomes.iloc[0]["outcome_id"]),
+                        str(outcomes.iloc[1]["outcome_id"]),
+                    ],
+                ).fetchone()
+                if duplicate_outcome is not None:
+                    raise ValueError(
+                        "append-only violation: outcomes already exist for "
+                        "this shadow run or outcome ID"
+                    )
+
+                connection.register("_m1d_shadow_outcomes", outcome_frame)
+                connection.execute(
+                    """
+                    INSERT INTO macro_state_shadow_outcomes (
+                        outcome_id, shadow_run_id, model_version, state_date,
+                        benchmark_id, resolved_at, target_mode,
+                        target_horizon_days, target_available_date,
+                        target_vintage_id, actual_family,
+                        actual_probabilities_json, actual_confidence,
+                        actual_probability, brier_score, log_loss, top1_hit,
+                        top2_hit, top3_hit, previous_actual_family,
+                        transition_flag, target_hash, evaluation_hash,
+                        no_look_ahead_pass, created_at
+                    )
+                    SELECT * FROM _m1d_shadow_outcomes
+                    """
+                )
+                connection.unregister("_m1d_shadow_outcomes")
+                connection.execute("COMMIT")
+            except Exception:
+                connection.execute("ROLLBACK")
+                raise
 

@@ -1,9 +1,9 @@
 model:
   model_id: US_MACRO_STATE_1D
   display_name: US Unified Macro State Engine
-  version: 0.3.7
+  version: 0.3.8
   lifecycle_status: development
-  research_status: Top-two miss attribution and rolling-frequency robustness audit; retrospective research only; not production approved.
+  research_status: Prospective transition shadow persistence; research monitoring only; no promotion authority.
 
 required_sources:
   GDP:
@@ -603,3 +603,67 @@ top2_robustness_audit:
   bootstrap_confidence: 0.90
   random_seed: 13037
   reconciliation_tolerance: 0.000001
+
+prospective_transition_shadow:
+  model_version: "0.3.8"
+  lifecycle_status: development
+  evidence_type: prospective_shadow
+  promotion_authority: none
+  parent_release: "0.3.7"
+
+  frozen_source:
+    model_version: "0.3.6"
+    candidate_id: expanding_robust_z__policy__equal__sensitive__independent_normal
+    specification_changes_prohibited: true
+
+  comparator:
+    benchmark_id: rolling_frequency
+    primary: true
+    adaptive_switching_prohibited: true
+    blending_prohibited: true
+
+  target:
+    mode: fixed_horizon_90d
+    horizon_days: 90
+    latest_revised_substitution_prohibited: true
+    target_must_be_available_before_resolution: true
+
+  probability_contract:
+    family_order:
+      - adverse_supply
+      - benign_expansion
+      - contraction
+      - inflationary_expansion
+      - mixed
+    required_sum: 1.0
+    sum_tolerance: 1.0e-10
+    log_loss_floor: 1.0e-12
+
+  persistence:
+    append_only: true
+    updates_prohibited: true
+    deletes_prohibited: true
+    prediction_overwrite_prohibited: true
+    duplicate_month_benchmark_prohibited: true
+    outcome_before_target_availability_prohibited: true
+
+  required_dimensions:
+    - growth
+    - inflation
+    - labour
+
+  minimum_evidence:
+    complete_target_months: 12
+
+  allowed_conclusions:
+    - source_advantage_appears_prospectively_robust
+    - source_advantage_remains_statistically_inconclusive
+    - rolling_frequency_not_materially_inferior
+    - insufficient_prospective_evidence
+
+  prohibited_conclusions:
+    - candidate_approved
+    - production_approved
+    - adaptive_switching_approved
+    - source_replaced
+    - comparator_replaced

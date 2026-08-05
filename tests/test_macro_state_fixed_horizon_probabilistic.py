@@ -137,6 +137,6 @@ def test_calibration_and_brier_decomposition_are_finite() -> None:
     assert decomposition["hard_brier"] >= 0
 
 
-def test_model_identity_is_v036() -> None:
+def test_model_identity_is_v038() -> None:
     config = load_macro_state_governance()
-    assert config["model"]["version"] == "0.3.7"
+    assert config["model"]["version"] == "0.3.8"

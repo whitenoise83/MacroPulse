@@ -611,6 +611,20 @@ prospective_transition_shadow:
   promotion_authority: none
   parent_release: "0.3.7"
 
+  source_evidence:
+    stem: model1d_fixed_horizon_c99ac096-a9cb-4e39-b976-b0d4cfe018a1
+    stability_id: 4d97b730-7dcb-4ee6-9f89-bf5fff542a9d
+    core_candidate_id: expanding_robust_z__policy__equal__sensitive
+
+  engine:
+    rolling_window_months: 12
+    uncertainty_draws: 1024
+    random_seed: 13030
+    normal_interval_z: 1.2815515655446004
+    robust_mad_constant: 1.4826
+    robust_minimum_history: 18
+    robust_clip: 2.0
+
   frozen_source:
     model_version: "0.3.6"
     candidate_id: expanding_robust_z__policy__equal__sensitive__independent_normal

@@ -1,0 +1,38 @@
+{
+  "phase": "II",
+  "name": "Platform Integration & Decision Support",
+  "status": "bootstrap",
+  "branch": "phase2-platform-development",
+  "base_commit": "048c1a6",
+  "model_suite": {
+    "1A": {
+      "status": "production",
+      "version": "1.0.0"
+    },
+    "1B": {
+      "status": "production",
+      "version": "1.0.0"
+    },
+    "1C": {
+      "status": "production",
+      "version": "1.0.0"
+    },
+    "1D": {
+      "status": "development",
+      "version": "0.3.8",
+      "mode": "prospective_shadow",
+      "promotion_authority": "none"
+    }
+  },
+  "phase2_may_change_model_specifications": false,
+  "phase2_may_tune_model1d_on_prospective_outcomes": false,
+  "phase2_may_move_model1d_release_tags": false,
+  "phase2_initial_model_logic_changes": false,
+  "primary_workstreams": [
+    "read_only_system_health_and_freshness",
+    "unified_governed_orchestration",
+    "deterministic_macro_snapshot",
+    "integrated_dashboard",
+    "operational_hardening"
+  ]
+}

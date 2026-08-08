@@ -70,4 +70,3 @@ def test_fred_descriptive_frequency_labels_are_normalised() -> None:
     assert weekly["threshold_days"] == 21
     assert weekly["freshness_state"] == "fresh"
     assert weekly["stale"] is False
-

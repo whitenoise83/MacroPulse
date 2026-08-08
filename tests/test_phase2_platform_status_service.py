@@ -254,4 +254,3 @@ def test_newer_source_runs_do_not_invalidate_frozen_shadow(tmp_path: Path) -> No
     assert bool(component["ready"]) is True
     assert bool(detail["source_runs_match_latest"]) is False
     assert bool(detail["source_run_advance_detected"]) is True
-

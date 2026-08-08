@@ -36,4 +36,3 @@ def test_live_run_queries_match_governed_schema() -> None:
     assert "run_timestamp" in live_block
     assert "ORDER BY information_cutoff DESC, run_timestamp DESC" in live_block
     assert "status, created_at" not in live_block
-

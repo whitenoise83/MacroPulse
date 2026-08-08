@@ -36,3 +36,12 @@ def test_live_run_queries_match_governed_schema() -> None:
     assert "run_timestamp" in live_block
     assert "ORDER BY information_cutoff DESC, run_timestamp DESC" in live_block
     assert "status, created_at" not in live_block
+
+def test_model1d_status_uses_valid_not_current_semantics() -> None:
+    status_text = STATUS.read_text(encoding="utf-8")
+    script_text = SCRIPT.read_text(encoding="utf-8")
+
+    assert '"model1d_shadow_valid"' in status_text
+    assert '"model1d_shadow_current"' not in status_text
+    assert 'readiness["model1d_shadow_valid"]' in script_text
+    assert 'readiness["model1d_shadow_current"]' not in script_text

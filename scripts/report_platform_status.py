@@ -57,7 +57,7 @@ def main() -> int:
     )
     print(
         "Model 1D shadow valid: "
-        + ("yes" if readiness["model1d_shadow_current"] else "no")
+        + ("yes" if readiness["model1d_shadow_valid"] else "no")
     )
     print(
         "Platform ready for downstream: "

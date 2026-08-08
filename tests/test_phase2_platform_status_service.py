@@ -181,7 +181,7 @@ def test_collect_status_is_read_only_and_ready(tmp_path: Path) -> None:
 
     readiness = result["readiness"].iloc[0]
     assert bool(readiness["production_sources_ready"]) is True
-    assert bool(readiness["model1d_shadow_current"]) is True
+    assert bool(readiness["model1d_shadow_valid"]) is True
     assert bool(readiness["platform_ready_for_downstream"]) is True
     assert readiness["next_action"] == "no_model_action_required"
 
@@ -254,3 +254,39 @@ def test_newer_source_runs_do_not_invalidate_frozen_shadow(tmp_path: Path) -> No
     assert bool(component["ready"]) is True
     assert bool(detail["source_runs_match_latest"]) is False
     assert bool(detail["source_run_advance_detected"]) is True
+
+def test_source_run_advance_is_lineage_not_model1d_staleness(tmp_path: Path) -> None:
+    write_boundary(tmp_path)
+
+    class AdvancedSourceRepository(FakeRepository):
+        def query_df(self, query: str, parameters: list | None = None) -> pd.DataFrame:
+            frame = super().query_df(query, parameters)
+            compact = " ".join(query.split()).lower()
+            replacements = {
+                "from forecast_registry": "gdp-new",
+                "from inflation_live_runs": "inflation-new",
+                "from labour_live_runs": "labour-new",
+            }
+            for marker, run_id in replacements.items():
+                if marker in compact and not frame.empty:
+                    frame = frame.copy()
+                    frame.loc[:, "run_id"] = run_id
+            return frame
+
+    result = collect_platform_status(
+        AdvancedSourceRepository(),
+        as_of=date(2026, 8, 7),
+        project_root=tmp_path,
+    )
+
+    model1d = result["components"].set_index("component").loc["1D"]
+    detail = result["model1d"].iloc[0]
+    readiness = result["readiness"].iloc[0]
+
+    assert model1d["freshness_state"] == "frozen_prospective_observation"
+    assert int(model1d["stale_source_count"]) == 0
+    assert bool(model1d["ready"]) is True
+    assert bool(detail["source_run_advance_detected"]) is True
+    assert bool(detail["source_runs_match_latest"]) is False
+    assert bool(readiness["model1d_shadow_valid"]) is True
+    assert "model1d_shadow_current" not in readiness.index

@@ -530,7 +530,7 @@ def _model1d_summary(
         "forecast_stage": "prospective_shadow",
         "target_count": 2,
         "source_series_count": 3,
-        "stale_source_count": 0 if matches else 3,
+        "stale_source_count": 0,
         "due_release_count": 0,
         "freshness_state": shadow_state,
         "ready": bool(
@@ -624,7 +624,7 @@ def _readiness(
         [
             {
                 "production_sources_ready": source_ready,
-                "model1d_shadow_current": model1d_ready,
+                "model1d_shadow_valid": model1d_ready,
                 "platform_ready_for_downstream": source_ready,
                 "blocking_components": ",".join(blocking),
                 "next_action": next_action,

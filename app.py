@@ -10,6 +10,7 @@ st.set_page_config(
 pages = {
     "MacroPulse": [
         st.Page("ui/home.py", title="Home", icon="🏠", default=True),
+        st.Page("ui/platform_dashboard.py", title="Platform Overview", icon="📊"),
         st.Page("ui/macro_state.py", title="Unified Macro State", icon="🧭"),
         st.Page("ui/macro_state_shadow.py", title="Model 1D Shadow", icon="🛰️"),
         st.Page("ui/nowcast.py", title="US GDP Nowcast", icon="📈"),

@@ -10,7 +10,7 @@
     "reports/inflation_operational_validation/*.md",
     "reports/labour_operational_validation/*.md"
   ],
-  "lifecycle": "release_candidate",
+  "lifecycle": "released",
   "model_suite": {
     "1A": {
       "lifecycle": "production",
@@ -46,6 +46,15 @@
   },
   "platform_version": "1.0.0",
   "protected_base_commit": "048c1a6",
+  "release_closure_source_commit": "bd98dde68b32b9b71e54c8cc797205fa5627641b",
+  "release_gate": {
+    "commit": "bd98dde68b32b9b71e54c8cc797205fa5627641b",
+    "run_id": 31307316856,
+    "run_number": 2,
+    "status": "success",
+    "workflow": "Phase II Platform Guard"
+  },
+  "release_tag": "phase2-platform-v1.0.0",
   "required_platform_files": [
     "PHASE2_BOUNDARY.json",
     "MACROPULSE_PHASE2_PLAN.md",

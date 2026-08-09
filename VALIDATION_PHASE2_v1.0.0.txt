@@ -1,0 +1,55 @@
+MacroPulse Phase II Platform v1.0.0 — Release Validation Record
+
+Release gate status: PASS
+Closure source commit: bd98dde68b32b9b71e54c8cc797205fa5627641b
+Protected Phase II base: 048c1a6
+Target release tag: phase2-platform-v1.0.0
+
+EXTERNAL CI EVIDENCE
+--------------------
+Workflow: Phase II Platform Guard
+Run number: 2
+Run ID: 31307316856
+Commit: bd98dde68b32b9b71e54c8cc797205fa5627641b
+Status: SUCCESS
+Duration: 3m 12s
+Triggered: 2026-08-09T10:01:00+01:00
+
+The successful workflow executes:
+- frozen Model 1D release verification;
+- Phase II platform boundary verification;
+- focused Phase II contract tests;
+- complete repository test suite;
+- post-test Phase II and Model 1D re-verification;
+- tracked governed/source clean-tree assertion.
+
+LOCAL RELEASE-GATE EVIDENCE BEFORE CLOSURE
+------------------------------------------
+- Phase II platform verifier: PASS
+- Model 1D v0.3.8 release verifier: PASS
+- focused Phase 2F release-guard tests: PASS
+- repository working tree at closure source commit: clean
+
+RELEASE BOUNDARIES
+------------------
+- Models 1A–1C remain production v1.0.0.
+- Model 1D remains development v0.3.8 prospective shadow.
+- Model 1D promotion authority remains none.
+- No model specification was changed by Phase II release closure.
+- No Model 1D release tag is moved or recreated.
+- No database/backfill is included in the release.
+- Operational snapshots/reports remain non-release artifacts.
+
+FINAL CLOSURE PROCEDURE
+-----------------------
+1. Apply the release-closure overlay.
+2. Run focused release tests and complete repository tests.
+3. Run Phase II and Model 1D verifiers.
+4. Commit and push the closure.
+5. Require Phase II Platform Guard to pass on the closure commit.
+6. Create annotated tag phase2-platform-v1.0.0 on that closure commit.
+7. Push the tag.
+8. Run scripts/verify_phase2_release.py --require-tag.
+
+This record intentionally does not claim that the final closure commit or tag
+passed before those events occur.

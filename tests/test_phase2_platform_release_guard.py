@@ -24,7 +24,7 @@ def test_platform_release_contract_identity() -> None:
     payload = json.loads(CONTRACT.read_text(encoding="utf-8"))
     assert payload["contract_id"] == "MACROPULSE_PHASE2_PLATFORM"
     assert payload["platform_version"] == "1.0.0"
-    assert payload["lifecycle"] == "release_candidate"
+    assert payload["lifecycle"] == "released"
     assert payload["protected_base_commit"] == "048c1a6"
 
     suite = payload["model_suite"]

@@ -76,6 +76,13 @@ jobs:
           python scripts/verify_phase2_platform.py --require-model1d-tags
           python scripts/verify_model1d_v038_release.py --require-tags
 
+      - name: Verify Phase II release closure
+        run: python scripts/verify_phase2_release.py
+
+      - name: Run Phase II release closure tests
+        run: |
+          python -m pytest -q --disable-warnings             tests/test_phase2_release_metadata.py             tests/test_phase2_release_manifest_integrity.py
+
       - name: Require clean tracked source tree after tests
         shell: bash
         run: |

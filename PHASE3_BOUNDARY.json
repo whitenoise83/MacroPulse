@@ -1,0 +1,57 @@
+{
+  "base_release_commit": "43395d889a76453706259a5095bd718337b55851",
+  "base_release_tag": "phase2-platform-v1.0.0",
+  "branch": "phase3-evaluation-development",
+  "evaluation_rules": {
+    "first_release_default_where_defined": true,
+    "monitoring_is_not_adaptation": true,
+    "no_look_ahead_required": true,
+    "outcome_vintage_must_be_explicit": true,
+    "release_impact_is_descriptive_unless_causal_design_is_governed": true,
+    "revised_outcomes_separately_labelled": true
+  },
+  "model_suite": {
+    "1A": {
+      "status": "production",
+      "version": "1.0.0"
+    },
+    "1B": {
+      "status": "production",
+      "version": "1.0.0"
+    },
+    "1C": {
+      "status": "production",
+      "version": "1.0.0"
+    },
+    "1D": {
+      "mode": "prospective_shadow",
+      "promotion_authority": "none",
+      "status": "development",
+      "version": "0.3.8"
+    }
+  },
+  "name": "Forecast Evaluation & Decision Intelligence",
+  "phase": "III",
+  "phase3_core_may_use_generative_ai": false,
+  "phase3_may_automatically_promote_or_demote_models": false,
+  "phase3_may_backfill_model1d": false,
+  "phase3_may_change_model_specifications": false,
+  "phase3_may_move_model1d_release_tags": false,
+  "phase3_may_move_phase2_release_tag": false,
+  "phase3_may_mutate_governed_forecasts": false,
+  "phase3_may_tune_model1d_on_prospective_outcomes": false,
+  "platform_release": {
+    "lifecycle": "released",
+    "tag": "phase2-platform-v1.0.0",
+    "version": "1.0.0"
+  },
+  "status": "specification_bootstrap",
+  "workstreams": [
+    "3A_bootstrap_evidence_contract",
+    "3B_production_forecast_evaluation_ledger",
+    "3C_accuracy_calibration_drift",
+    "3D_revision_release_impact",
+    "3E_decision_intelligence_presentation",
+    "3F_operational_hardening_release"
+  ]
+}

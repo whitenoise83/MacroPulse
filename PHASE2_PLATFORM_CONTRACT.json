@@ -1,0 +1,94 @@
+{
+  "branch": "phase2-platform-development",
+  "contract_id": "MACROPULSE_PHASE2_PLATFORM",
+  "forbidden_new_tracked_artifacts": [
+    "data/*.duckdb",
+    "data/*.wal",
+    "data/backups/",
+    "reports/macro_state_shadow_monitoring/",
+    "reports/macro_snapshots/",
+    "reports/inflation_operational_validation/*.md",
+    "reports/labour_operational_validation/*.md"
+  ],
+  "lifecycle": "release_candidate",
+  "model_suite": {
+    "1A": {
+      "lifecycle": "production",
+      "model_id": "US_GDP_NOWCAST_1A",
+      "version": "1.0.0"
+    },
+    "1B": {
+      "lifecycle": "production",
+      "model_id": "US_INFLATION_NOWCAST_1B",
+      "version": "1.0.0"
+    },
+    "1C": {
+      "lifecycle": "production",
+      "model_id": "US_LABOUR_NOWCAST_1C",
+      "version": "1.0.0"
+    },
+    "1D": {
+      "lifecycle": "development",
+      "mode": "prospective_shadow",
+      "model_id": "US_MACRO_STATE_1D",
+      "promotion_authority": "none",
+      "version": "0.3.8"
+    }
+  },
+  "operational_contract": {
+    "automatic_production_promotion": false,
+    "dashboard_read_only": true,
+    "historical_mutation_fails_closed": true,
+    "legacy_tracked_operational_evidence_grandfathered_at_protected_base": true,
+    "model1d_requires_explicit_opt_in": true,
+    "orchestration_dry_run_default": true,
+    "snapshot_semantically_deterministic": true
+  },
+  "platform_version": "1.0.0",
+  "protected_base_commit": "048c1a6",
+  "required_platform_files": [
+    "PHASE2_BOUNDARY.json",
+    "MACROPULSE_PHASE2_PLAN.md",
+    "docs/PHASE2_ARCHITECTURE.md",
+    "docs/PHASE2B_STATUS_CONTRACT.md",
+    "docs/PHASE2C_ORCHESTRATION_CONTRACT.md",
+    "docs/PHASE2D_SNAPSHOT_CONTRACT.md",
+    "docs/PHASE2E_DASHBOARD_CONTRACT.md",
+    "src/macropulse/platform/status.py",
+    "src/macropulse/platform/orchestration.py",
+    "src/macropulse/platform/snapshot.py",
+    "src/macropulse/platform/dashboard.py",
+    "scripts/report_platform_status.py",
+    "scripts/run_platform_operations.py",
+    "scripts/export_macro_snapshot.py",
+    "ui/platform_dashboard.py"
+  ],
+  "snapshot_schema": {
+    "required_production_components": [
+      "1A",
+      "1B",
+      "1C"
+    ],
+    "required_readiness_keys": [
+      "production_sources_ready",
+      "model1d_shadow_valid",
+      "platform_ready_for_downstream",
+      "blocking_components",
+      "next_action"
+    ],
+    "required_top_level_keys": [
+      "snapshot_schema_version",
+      "as_of",
+      "contract",
+      "readiness",
+      "production",
+      "changes_since_previous_governed_run",
+      "model1d",
+      "freshness",
+      "calendar",
+      "provenance",
+      "snapshot_hash"
+    ],
+    "version": "1.0.0"
+  }
+}

@@ -99,3 +99,11 @@ def test_ci_runs_pre_and_post_boundary_verification() -> None:
     assert text.count("verify_phase2_platform.py --require-model1d-tags") >= 2
     assert text.count("verify_model1d_v038_release.py --require-tags") >= 2
     assert "python -m pytest -q --disable-warnings" in text
+
+
+def test_ci_clean_tree_guard_ignores_only_generated_runtime_metadata() -> None:
+    text = WORKFLOW.read_text(encoding="utf-8")
+    assert ":(exclude)reports/**" in text
+    assert ":(exclude)data/**" in text
+    assert ":(exclude)src/macropulse.egg-info/**" in text
+    assert "git diff --quiet -- ." in text

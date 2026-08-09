@@ -76,11 +76,22 @@ jobs:
           python scripts/verify_phase2_platform.py --require-model1d-tags
           python scripts/verify_model1d_v038_release.py --require-tags
 
-      - name: Require clean tracked working tree after tests
+      - name: Require clean tracked source tree after tests
         shell: bash
         run: |
-          if ! git diff --quiet -- . ':(exclude)reports/**' ':(exclude)data/**'; then
-            echo "Tracked source files changed during tests."
-            git --no-pager diff --stat
+          # `pip install -e .` regenerates tracked setuptools metadata under
+          # src/macropulse.egg-info/. That is environment/setup output, not a
+          # test mutation of governed source. Keep reports/data/egg-info out of
+          # this source-mutation assertion while protecting all real source,
+          # tests, workflows, docs, contracts, and configuration.
+          if ! git diff --quiet -- . \
+            ':(exclude)reports/**' \
+            ':(exclude)data/**' \
+            ':(exclude)src/macropulse.egg-info/**'; then
+            echo "Tracked governed/source files changed during tests."
+            git --no-pager diff --stat -- . \
+              ':(exclude)reports/**' \
+              ':(exclude)data/**' \
+              ':(exclude)src/macropulse.egg-info/**'
             exit 1
           fi

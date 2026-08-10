@@ -1,0 +1,96 @@
+MacroPulse Internal Phase III Evaluation Release v1.0.0
+Validation Record
+===============================================================
+
+ROADMAP CONTEXT
+---------------
+Internal Phase III = Forecast Evaluation & Decision Intelligence supporting
+the overall MacroPulse roadmap Phase I / Model 1.
+This is not overall-roadmap Phase III (Models 5-7).
+
+BASE RELEASE
+------------
+Tag: phase2-platform-v1.0.0
+Commit: 43395d889a76453706259a5095bd718337b55851
+Status: immutable / verifier PASS
+
+MODEL 1D FROZEN RESEARCH BOUNDARY
+--------------------------------
+Operational tag: model1d-v0.3.8-prospective-shadow-operational -> 6e1ff2a
+Research tag: model1d-v0.3.8-research-release -> f3ae8f1
+Promotion authority: none
+Prospective backfill/tuning: prohibited
+Verifier: PASS
+
+PHASE 3F.1 SOURCE GATE
+----------------------
+Commit: ac8af6425cdb79e1516614328b52ab761be1ffe4
+Subject: Add Phase 3F evaluation hardening and CI guard
+
+GitHub Actions workflow: Phase III Evaluation Guard
+Run number: 1
+Run ID: 31425130485
+Job ID: 93574903444
+Event: push
+Branch: phase3-evaluation-development
+Head SHA: ac8af6425cdb79e1516614328b52ab761be1ffe4
+Status: completed
+Conclusion: success
+Started: 2026-08-10T19:39:00Z
+Completed: 2026-08-10T19:42:09Z
+
+Successful source-gate checks included:
+- complete-history/tag checkout
+- Python/test dependency setup
+- immutable Phase II verifier
+- frozen Model 1D v0.3.8 verifier
+- Phase III hardening verifier
+- focused Phase III tests
+- complete repository test suite
+- post-test boundary reverification
+- clean governed/source tree check
+- rejection of tracked runtime artifacts
+
+LOCAL PRE-SOURCE-GATE VALIDATION
+--------------------------------
+Phase 3F.1 focused hardening suite: 21/21 PASS
+All tests matching tests/test_phase3*.py: PASS
+Complete repository pytest suite: PASS
+Phase II release verifier: PASS
+Model 1D v0.3.8 release verifier: PASS
+Phase III hardening verifier: PASS
+git diff --check: PASS
+
+DETERMINISTIC PRESENTATION EVIDENCE
+-----------------------------------
+As-of date: 2026-08-10
+Decision-intelligence snapshot hash:
+8a8dca1095109d9ea3d2540ee264cae407598847117bd5dd1a4f6ef9dfd5ce11
+
+Current targets: 8
+Evaluation rows: 16
+Resolved: 4
+Unresolved: 12
+Invalid: 0
+Comparable revisions: 4
+Evidence flags: 10
+
+RELEASE-CLOSURE REQUIREMENTS
+----------------------------
+The release-closure commit must:
+- be exactly one commit after the Phase 3F.1 source-gate commit;
+- preserve the Phase II and Model 1D immutable tags;
+- pass the complete repository test suite;
+- pass the Phase III evaluation verifier;
+- pass scripts/verify_phase3_release.py;
+- pass Phase III Evaluation Guard on the closure commit.
+
+Only after the closure-commit guard is green may the immutable tag
+phase3-evaluation-v1.0.0 be created.
+
+The tag-triggered guard must then pass:
+python scripts/verify_phase3_release.py --require-tag
+
+AUTOMATIC MODEL ACTION: none
+GOVERNED FORECAST MUTATION: none
+MODEL EXECUTION BY EVALUATION LAYER: none

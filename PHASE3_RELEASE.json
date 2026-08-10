@@ -1,0 +1,113 @@
+{
+  "base_release": {
+    "commit": "43395d889a76453706259a5095bd718337b55851",
+    "status": "immutable",
+    "tag": "phase2-platform-v1.0.0"
+  },
+  "ci_evidence": {
+    "phase3_evaluation_guard": {
+      "branch": "phase3-evaluation-development",
+      "completed_at": "2026-08-10T19:42:09Z",
+      "conclusion": "success",
+      "duration_seconds": 189,
+      "event": "push",
+      "head_sha": "ac8af6425cdb79e1516614328b52ab761be1ffe4",
+      "job_id": 93574903444,
+      "job_name": "Validate Phase III evaluation contracts",
+      "run_id": 31425130485,
+      "run_number": 1,
+      "started_at": "2026-08-10T19:39:00Z",
+      "status": "completed",
+      "workflow": "Phase III Evaluation Guard"
+    }
+  },
+  "closure_commit_policy": {
+    "exactly_one_commit_after_source_gate": true,
+    "tag_points_to_closure_commit": true
+  },
+  "closure_source_commit": {
+    "sha": "ac8af6425cdb79e1516614328b52ab761be1ffe4",
+    "short_sha": "ac8af64",
+    "subject": "Add Phase 3F evaluation hardening and CI guard"
+  },
+  "deterministic_snapshot_evidence": {
+    "as_of": "2026-08-10",
+    "snapshot_hash": "8a8dca1095109d9ea3d2540ee264cae407598847117bd5dd1a4f6ef9dfd5ce11"
+  },
+  "evaluation_contract": {
+    "first_release_default_where_defined": true,
+    "monitoring_is_not_adaptation": true,
+    "no_look_ahead": true,
+    "outcome_vintage": "explicit",
+    "release_impact_is_descriptive_unless_causal_design_is_governed": true,
+    "revised_outcomes_separately_labelled": true
+  },
+  "execution_authority": {
+    "automatic_model_action": "none",
+    "governed_forecast_mutation": "none",
+    "model1d_promotion_authority": "none",
+    "model_execution": "none"
+  },
+  "governed_model_context": {
+    "1A": {
+      "status": "production",
+      "version": "1.0.0"
+    },
+    "1B": {
+      "status": "production",
+      "version": "1.0.0"
+    },
+    "1C": {
+      "status": "production",
+      "version": "1.0.0"
+    },
+    "1D": {
+      "mode": "prospective_shadow",
+      "promotion_authority": "none",
+      "status": "development",
+      "version": "0.3.8"
+    }
+  },
+  "internal_phase": "III",
+  "manifest_file": "MANIFEST_PHASE3_v1.0.0.txt",
+  "manifest_file_count": 52,
+  "name": "Forecast Evaluation & Decision Intelligence",
+  "platform_version": "1.0.0",
+  "release_artifacts": [
+    "PHASE3_RELEASE.json",
+    "MANIFEST_PHASE3_v1.0.0.txt",
+    "README_PHASE3_v1.0.0.md",
+    "VALIDATION_PHASE3_v1.0.0.txt",
+    "scripts/verify_phase3_release.py",
+    "tests/test_phase3_release_metadata.py",
+    "tests/test_phase3_release_manifest_integrity.py"
+  ],
+  "release_branch": "phase3-evaluation-development",
+  "release_tag": "phase3-evaluation-v1.0.0",
+  "release_tag_policy": {
+    "create_only_after_closure_commit_ci_success": true,
+    "immutable": true,
+    "move_or_recreate": false
+  },
+  "roadmap_note": "This internal Phase III evaluation layer supports the overall MacroPulse roadmap Phase I (Model 1); it is not roadmap Phase III (Models 5-7).",
+  "roadmap_phase": "I",
+  "source_quality_gates": {
+    "complete_repository_test_suite": "PASS",
+    "git_diff_check": "PASS",
+    "github_source_gate": "PASS",
+    "model1d_v038_release_verifier": "PASS",
+    "phase2_release_verifier": "PASS",
+    "phase3_evaluation_verifier": "PASS",
+    "phase3_test_suite": "PASS",
+    "phase3f1_focused_hardening_tests": "21/21 PASS"
+  },
+  "status": "released",
+  "workstreams": [
+    "3A_bootstrap_evidence_contract",
+    "3B_production_forecast_evaluation_ledger",
+    "3C_accuracy_calibration_drift",
+    "3D_revision_release_impact",
+    "3E_decision_intelligence_presentation",
+    "3F_operational_hardening_release"
+  ]
+}

@@ -45,7 +45,7 @@
     "tag": "phase2-platform-v1.0.0",
     "version": "1.0.0"
   },
-  "status": "specification_bootstrap",
+  "status": "released",
   "workstreams": [
     "3A_bootstrap_evidence_contract",
     "3B_production_forecast_evaluation_ledger",

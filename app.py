@@ -6,11 +6,11 @@ st.set_page_config(
     page_icon="📈",
     layout="wide",
 )
-
 pages = {
     "MacroPulse": [
         st.Page("ui/home.py", title="Home", icon="🏠", default=True),
         st.Page("ui/platform_dashboard.py", title="Platform Overview", icon="📊"),
+        st.Page("ui/evaluation_dashboard.py", title="Forecast Intelligence", icon="🎯"),
         st.Page("ui/macro_state.py", title="Unified Macro State", icon="🧭"),
         st.Page("ui/macro_state_shadow.py", title="Model 1D Shadow", icon="🛰️"),
         st.Page("ui/nowcast.py", title="US GDP Nowcast", icon="📈"),
@@ -28,6 +28,5 @@ pages = {
         st.Page("ui/validation.py", title="Validation & Governance", icon="🛡️"),
     ]
 }
-
 navigation = st.navigation(pages)
 navigation.run()

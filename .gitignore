@@ -17,3 +17,4 @@ reports/validation/*.md
 data/backups/
 reports/macro_state_shadow_monitoring/
 reports/macro_snapshots/
+reports/decision_intelligence_snapshots/

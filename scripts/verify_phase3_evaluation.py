@@ -13,6 +13,8 @@ ALLOWED_EXACT_PHASE3_PATHS = {
     ".gitignore", "app.py", "MACROPULSE_PHASE3_PLAN.md", "PHASE3_BOUNDARY.json",
     "PHASE3_RELEASE.json", "MANIFEST_PHASE3_v1.0.0.txt",
     "README_PHASE3_v1.0.0.md", "VALIDATION_PHASE3_v1.0.0.txt",
+    "MANIFEST_PHASE3_v1.0.1.txt", "README_PHASE3_v1.0.1.md",
+    "VALIDATION_PHASE3_v1.0.1.txt",
     "ui/evaluation_dashboard.py",
 }
 ALLOWED_PHASE3_PREFIXES = (

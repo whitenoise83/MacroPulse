@@ -1,0 +1,33 @@
+MacroPulse Internal Phase III Evaluation Release v1.0.1
+Release-Engineering Patch Validation Record
+===============================================================
+
+Scope: tag-CI compatibility only
+Semantic changes: none
+Model changes: none
+Database changes: none
+Governed forecast changes: none
+Model 1D changes: none
+
+Previous immutable release:
+phase3-evaluation-v1.0.0 -> 20c3682a96061d9e740aaf001bf2f72a98377928
+
+Green source gate:
+Phase III Evaluation Guard #2
+Run ID: 31428781570
+Job ID: 93586783076
+Conclusion: success
+
+v1.0.0 tag-CI failure:
+Run #3
+Run ID: 31470015299
+Job ID: 93711061207
+Failed test:
+tests/test_phase3_bootstrap_contract.py::test_current_branch_is_phase3_development
+
+Cause:
+GitHub Actions tag checkout is detached HEAD, so
+`git branch --show-current` returned an empty string.
+
+Classification:
+release-test contract / checkout compatibility only.

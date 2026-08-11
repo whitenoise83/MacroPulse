@@ -7,28 +7,24 @@
   "ci_evidence": {
     "phase3_evaluation_guard": {
       "branch": "phase3-evaluation-development",
-      "completed_at": "2026-08-10T19:42:09Z",
+      "completed_at": "2026-08-10T20:26:58Z",
       "conclusion": "success",
-      "duration_seconds": 189,
+      "duration_seconds": 211,
       "event": "push",
-      "head_sha": "ac8af6425cdb79e1516614328b52ab761be1ffe4",
-      "job_id": 93574903444,
+      "head_sha": "20c3682a96061d9e740aaf001bf2f72a98377928",
+      "job_id": 93586783076,
       "job_name": "Validate Phase III evaluation contracts",
-      "run_id": 31425130485,
-      "run_number": 1,
-      "started_at": "2026-08-10T19:39:00Z",
+      "run_id": 31428781570,
+      "run_number": 2,
+      "started_at": "2026-08-10T20:23:27Z",
       "status": "completed",
       "workflow": "Phase III Evaluation Guard"
     }
   },
-  "closure_commit_policy": {
-    "exactly_one_commit_after_source_gate": true,
-    "tag_points_to_closure_commit": true
-  },
   "closure_source_commit": {
-    "sha": "ac8af6425cdb79e1516614328b52ab761be1ffe4",
-    "short_sha": "ac8af64",
-    "subject": "Add Phase 3F evaluation hardening and CI guard"
+    "sha": "20c3682a96061d9e740aaf001bf2f72a98377928",
+    "short_sha": "20c3682",
+    "subject": "Close Phase III evaluation v1.0.0 release"
   },
   "deterministic_snapshot_evidence": {
     "as_of": "2026-08-10",
@@ -69,45 +65,47 @@
     }
   },
   "internal_phase": "III",
-  "manifest_file": "MANIFEST_PHASE3_v1.0.0.txt",
-  "manifest_file_count": 52,
+  "manifest_file": "MANIFEST_PHASE3_v1.0.1.txt",
+  "manifest_file_count": 55,
   "name": "Forecast Evaluation & Decision Intelligence",
-  "platform_version": "1.0.0",
-  "release_artifacts": [
-    "PHASE3_RELEASE.json",
-    "MANIFEST_PHASE3_v1.0.0.txt",
-    "README_PHASE3_v1.0.0.md",
-    "VALIDATION_PHASE3_v1.0.0.txt",
-    "scripts/verify_phase3_release.py",
-    "tests/test_phase3_release_metadata.py",
-    "tests/test_phase3_release_manifest_integrity.py"
-  ],
-  "release_branch": "phase3-evaluation-development",
-  "release_tag": "phase3-evaluation-v1.0.0",
-  "release_tag_policy": {
-    "create_only_after_closure_commit_ci_success": true,
-    "immutable": true,
-    "move_or_recreate": false
+  "patch_scope": {
+    "database": "unchanged",
+    "evaluation_semantics": "unchanged",
+    "governed_forecasts": "unchanged",
+    "model1d": "unchanged",
+    "model_logic": "unchanged",
+    "tag_checkout_contract": "detached_head_compatible"
   },
+  "platform_version": "1.0.1",
+  "previous_release": {
+    "commit": "20c3682a96061d9e740aaf001bf2f72a98377928",
+    "failure_classification": "detached_head_test_contract",
+    "immutable": true,
+    "move_or_recreate": false,
+    "tag": "phase3-evaluation-v1.0.0",
+    "tag_ci_conclusion": "failure",
+    "tag_ci_run": 3,
+    "tag_ci_run_id": 31470015299
+  },
+  "prior_tag_ci_failure": {
+    "cause": "GitHub Actions tag checkout uses detached HEAD; git branch --show-current returned an empty string.",
+    "conclusion": "failure",
+    "failed_step": "Run focused Phase III tests",
+    "failed_test": "tests/test_phase3_bootstrap_contract.py::test_current_branch_is_phase3_development",
+    "failure_scope": "release_test_contract_only",
+    "head_sha": "20c3682a96061d9e740aaf001bf2f72a98377928",
+    "job_id": 93711061207,
+    "model_or_evaluation_semantics_affected": false,
+    "release_tag": "phase3-evaluation-v1.0.0",
+    "run_id": 31470015299,
+    "run_number": 3,
+    "status": "completed"
+  },
+  "release_branch": "phase3-evaluation-development",
+  "release_tag": "phase3-evaluation-v1.0.1",
+  "release_type": "release_engineering_patch",
   "roadmap_note": "This internal Phase III evaluation layer supports the overall MacroPulse roadmap Phase I (Model 1); it is not roadmap Phase III (Models 5-7).",
   "roadmap_phase": "I",
-  "source_quality_gates": {
-    "complete_repository_test_suite": "PASS",
-    "git_diff_check": "PASS",
-    "github_source_gate": "PASS",
-    "model1d_v038_release_verifier": "PASS",
-    "phase2_release_verifier": "PASS",
-    "phase3_evaluation_verifier": "PASS",
-    "phase3_test_suite": "PASS",
-    "phase3f1_focused_hardening_tests": "21/21 PASS"
-  },
-  "status": "released",
-  "workstreams": [
-    "3A_bootstrap_evidence_contract",
-    "3B_production_forecast_evaluation_ledger",
-    "3C_accuracy_calibration_drift",
-    "3D_revision_release_impact",
-    "3E_decision_intelligence_presentation",
-    "3F_operational_hardening_release"
-  ]
+  "semantic_change": false,
+  "status": "released"
 }

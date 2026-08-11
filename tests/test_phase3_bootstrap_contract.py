@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 from pathlib import Path
 
@@ -13,6 +14,7 @@ ARCHITECTURE = ROOT / "docs" / "PHASE3_ARCHITECTURE.md"
 EXPECTED_BRANCH = "phase3-evaluation-development"
 EXPECTED_BASE_TAG = "phase2-platform-v1.0.0"
 EXPECTED_BASE_COMMIT = "43395d889a76453706259a5095bd718337b55851"
+RELEASE_TAG_PATTERN = re.compile(r"^phase3-evaluation-v\d+\.\d+\.\d+$")
 
 
 def git(*args: str) -> str:
@@ -39,8 +41,14 @@ def test_phase2_release_tag_still_points_to_frozen_base() -> None:
     assert tag_commit == EXPECTED_BASE_COMMIT
 
 
-def test_current_branch_is_phase3_development() -> None:
-    assert git("branch", "--show-current") == EXPECTED_BRANCH
+def test_current_checkout_is_phase3_development_or_release_tag() -> None:
+    branch = git("branch", "--show-current")
+    if branch:
+        assert branch == EXPECTED_BRANCH
+        return
+
+    tags = [tag for tag in git("tag", "--points-at", "HEAD").splitlines() if tag]
+    assert any(RELEASE_TAG_PATTERN.fullmatch(tag) for tag in tags)
 
 
 def test_phase3_descends_from_phase2_release() -> None:

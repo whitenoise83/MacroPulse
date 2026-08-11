@@ -14,6 +14,7 @@ TAG = "phase3-evaluation-v1.0.1"
 PREVIOUS_TAG = "phase3-evaluation-v1.0.0"
 PHASE2_COMMIT = "43395d889a76453706259a5095bd718337b55851"
 PREVIOUS_RELEASE_COMMIT = "20c3682a96061d9e740aaf001bf2f72a98377928"
+RELEASE_COMMIT = "edfc37b8f5f016710fb96402d205dcd35f2e09ca"
 SOURCE_GATE_COMMIT = PREVIOUS_RELEASE_COMMIT
 SOURCE_GATE_RUN_ID = 31428781570
 SOURCE_GATE_RUN_NUMBER = 2
@@ -43,15 +44,18 @@ def git_text(*args: str) -> str:
 def head() -> str:
     return git_text("rev-parse", "HEAD")
 
-def tracked_blob(path: str) -> bytes:
-    return bytes(git("show", f"HEAD:{path}", binary=True))
+def tracked_blob(path: str, ref: str = "HEAD") -> bytes:
+    return bytes(git("show", ref + ":" + path, binary=True))
+
+def _tagged_text(path: str) -> str:
+    return str(git("show", RELEASE_COMMIT + ":" + path)).strip()
 
 def load_release() -> dict:
-    return json.loads(RELEASE_FILE.read_text(encoding="utf-8"))
+    return json.loads(_tagged_text(RELEASE_FILE.name))
 
 def load_manifest() -> dict[str, str]:
     entries = {}
-    for raw in MANIFEST_FILE.read_text(encoding="utf-8").splitlines():
+    for raw in _tagged_text(MANIFEST_FILE.name).splitlines():
         line = raw.strip()
         if not line or line.startswith("#"):
             continue
@@ -138,9 +142,7 @@ def verify_boundary() -> list[str]:
     return errors
 
 def bytes_for_manifest(path: str, current_head: str) -> bytes:
-    if current_head == SOURCE_GATE_COMMIT and path in PATCH_WORKING_PATHS:
-        return (PROJECT_ROOT / path).read_bytes()
-    return tracked_blob(path)
+    return tracked_blob(path, RELEASE_COMMIT)
 
 def verify_manifest(manifest: dict[str, str]) -> list[str]:
     errors = []
@@ -154,22 +156,48 @@ def verify_manifest(manifest: dict[str, str]) -> list[str]:
     return errors
 
 def verify_source_identity(manifest: dict[str, str]) -> list[str]:
-    current_head = head()
-    if current_head == SOURCE_GATE_COMMIT:
-        return []
-    c = subprocess.run(["git","merge-base","--is-ancestor",SOURCE_GATE_COMMIT,current_head], cwd=PROJECT_ROOT)
-    if c.returncode != 0:
-        return ["v1.0.1 HEAD does not descend from v1.0.0."]
-    count = int(git_text("rev-list","--count",f"{SOURCE_GATE_COMMIT}..{current_head}"))
+    errors: list[str] = []
+    tag_target = git_text("rev-parse", TAG + "^{commit}")
+    if tag_target != RELEASE_COMMIT:
+        errors.append("Immutable Phase III v1.0.1 release tag moved.")
+    previous_target = git_text("rev-parse", PREVIOUS_TAG + "^{commit}")
+    if previous_target != PREVIOUS_RELEASE_COMMIT:
+        errors.append("Immutable Phase III v1.0.0 release tag moved.")
+    count = int(
+        git_text(
+            "rev-list",
+            "--count",
+            PREVIOUS_RELEASE_COMMIT + ".." + RELEASE_COMMIT,
+        )
+    )
     if count != 1:
-        return [f"v1.0.1 must be exactly one patch commit after v1.0.0; found {count}."]
+        errors.append(
+            "Frozen v1.0.1 release must be exactly one patch commit after "
+            f"v1.0.0; found {count}."
+        )
     changed = {
-        x.strip().replace("\\","/")
-        for x in git_text("diff","--name-only",f"{PHASE2_COMMIT}..{current_head}").splitlines()
+        x.strip().replace("\\", "/")
+        for x in git_text(
+            "diff", "--name-only", PHASE2_COMMIT + ".." + RELEASE_COMMIT
+        ).splitlines()
         if x.strip()
     }
     expected = set(manifest) | {MANIFEST_FILE.name}
-    return [] if changed == expected else ["Phase III v1.0.1 source identity mismatch."]
+    if changed != expected:
+        errors.append("Frozen Phase III v1.0.1 source identity mismatch.")
+    current_head = head()
+    if current_head != RELEASE_COMMIT:
+        c = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", RELEASE_COMMIT, current_head],
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+        )
+        if c.returncode != 0:
+            errors.append(
+                "Current checkout does not descend from immutable Phase III v1.0.1."
+            )
+    return errors
 
 def verify_previous_tag() -> list[str]:
     if not git_text("tag","--list",PREVIOUS_TAG):
@@ -201,15 +229,12 @@ def verify_no_tracked_runtime_artifacts() -> list[str]:
     return verify_no_runtime_artifacts()
 
 def verify_tag(require_tag: bool) -> list[str]:
-    matching = git_text("tag","--list",TAG)
+    matching = git_text("tag", "--list", TAG)
     if not matching:
         return [f"Required release tag is missing: {TAG}"] if require_tag else []
-    target = git_text("rev-list","-n","1",TAG)
-    current_head = head()
-    if target != current_head:
-        return [f"{TAG} does not point at HEAD."]
-    if current_head == SOURCE_GATE_COMMIT:
-        return ["v1.0.1 tag may not point at v1.0.0 commit."]
+    target = git_text("rev-parse", TAG + "^{commit}")
+    if target != RELEASE_COMMIT:
+        return [f"{TAG} moved from its immutable release commit."]
     return []
 
 def main() -> int:

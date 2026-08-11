@@ -8,6 +8,8 @@ from pathlib import Path
 EXPECTED_BRANCH = "phase3-evaluation-development"
 EXPECTED_PHASE2_TAG = "phase2-platform-v1.0.0"
 EXPECTED_PHASE2_COMMIT = "43395d889a76453706259a5095bd718337b55851"
+EXPECTED_PHASE3_RELEASE_TAG = "phase3-evaluation-v1.0.1"
+EXPECTED_PHASE3_RELEASE_COMMIT = "edfc37b8f5f016710fb96402d205dcd35f2e09ca"
 
 ALLOWED_EXACT_PHASE3_PATHS = {
     ".gitignore", "app.py", "MACROPULSE_PHASE3_PLAN.md", "PHASE3_BOUNDARY.json",
@@ -145,13 +147,24 @@ def _path_allowed(relative: str) -> bool:
 
 def verify_phase3_change_isolation(root: Path) -> list[str]:
     try:
-        output = _git(root, "diff", "--name-only", f"{EXPECTED_PHASE2_COMMIT}..HEAD")
+        tag_commit = _git(
+            root, "rev-parse", EXPECTED_PHASE3_RELEASE_TAG + "^{commit}"
+        )
+        if tag_commit != EXPECTED_PHASE3_RELEASE_COMMIT:
+            return ["Immutable Phase III release tag moved."]
+        output = _git(
+            root,
+            "diff",
+            "--name-only",
+            EXPECTED_PHASE2_COMMIT + ".." + EXPECTED_PHASE3_RELEASE_COMMIT,
+        )
     except Phase3VerificationError as exc:
         return [str(exc)]
     changed = [x.strip().replace("\\", "/") for x in output.splitlines()]
     bad = [x for x in changed if x and not _path_allowed(x)]
     return [] if not bad else [
-        "Phase III changed paths outside the evaluation/presentation allowlist: "
+        "Frozen Phase III release changed paths outside the "
+        "evaluation/presentation allowlist: "
         + ", ".join(sorted(bad))
     ]
 
@@ -195,10 +208,29 @@ def verify_no_tracked_runtime_artifacts(root: Path) -> list[str]:
 def verify_branch(root: Path) -> list[str]:
     try:
         branch = _git(root, "branch", "--show-current")
+        if branch == EXPECTED_BRANCH:
+            return []
+        tag_commit = _git(
+            root, "rev-parse", EXPECTED_PHASE3_RELEASE_TAG + "^{commit}"
+        )
+        if tag_commit != EXPECTED_PHASE3_RELEASE_COMMIT:
+            return ["Immutable Phase III release tag moved."]
+        completed = subprocess.run(
+            [
+                "git", "merge-base", "--is-ancestor",
+                EXPECTED_PHASE3_RELEASE_COMMIT, "HEAD",
+            ],
+            cwd=root,
+            capture_output=True,
+            text=True,
+        )
+        if completed.returncode == 0:
+            return []
     except Phase3VerificationError as exc:
         return [str(exc)]
-    return [] if branch == EXPECTED_BRANCH else [
-        f"Phase III hardening must run on {EXPECTED_BRANCH}; found {branch!r}."
+    return [
+        "Checkout is neither the historical Phase III development branch nor "
+        "a descendant of the immutable Phase III v1.0.1 release."
     ]
 
 def main() -> int:
@@ -221,7 +253,7 @@ def main() -> int:
             print(f"- {error}")
         return 1
     print("Phase III evaluation hardening verification: PASS")
-    print(f"Branch: {EXPECTED_BRANCH}")
+    print("Phase III release lineage: PASS")
     print(f"Phase II base: {EXPECTED_PHASE2_TAG} -> {EXPECTED_PHASE2_COMMIT[:7]}")
     print("Phase III change isolation: PASS")
     print("Evaluation/no-look-ahead/vintage boundaries: PASS")

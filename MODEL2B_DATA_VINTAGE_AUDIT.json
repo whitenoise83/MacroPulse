@@ -1,0 +1,72 @@
+{
+  "2b1_exit_evidence": [
+    "synthetic transformation tests pass",
+    "read_only audit runs against local DuckDB",
+    "common cached cutoff coverage reported",
+    "joint complete-quarter panel coverage reported",
+    "feasible historical vintage sample reviewed before 2B.2"
+  ],
+  "base_model2a_commit": "4033a8f88fa5ffc0bb749ab17621ab6e82074ec6",
+  "branch": "model2-bvar-development",
+  "name": "Data & Vintage Architecture \u2014 read-only audit scaffold",
+  "production_authority": "none",
+  "release_guard_maintenance": {
+    "model_semantics_changed": false,
+    "paths": [
+      "scripts/verify_phase3_evaluation.py",
+      "scripts/verify_phase3_release.py"
+    ],
+    "phase3_evaluation_semantics_changed": false,
+    "phase3_manifest_may_change": false,
+    "phase3_release_tag_may_move": false,
+    "purpose": "verify the immutable Phase III release from its frozen tag/commit rather than treating later roadmap descendant HEADs as the release"
+  },
+  "rules": {
+    "audit_does_not_select_estimation_start": true,
+    "audit_does_not_select_model_candidate": true,
+    "current_quarter_model1_anchor_deferred": true,
+    "exact_as_of_date_identity_required": true,
+    "historical_snapshots_only": true,
+    "incomplete_quarters_excluded": true,
+    "joint_panel_requires_all_four_transformed_series": true,
+    "model1d_prospective_outcomes_excluded": true,
+    "no_future_observation_date": true,
+    "no_latest_vintage_fallback": true,
+    "read_only_database_access": true,
+    "unrate_is_quarter_end_not_quarter_average": true,
+    "unrate_missing_intermediate_month_may_not_be_imputed": true
+  },
+  "series": [
+    {
+      "name": "real_gdp_growth",
+      "quarterly_rule": "native_quarter",
+      "series_id": "GDPC1",
+      "source_frequency": "quarterly",
+      "transformation": "annualised_qoq_log"
+    },
+    {
+      "name": "core_pce_inflation",
+      "quarterly_rule": "quarter_end_month_required",
+      "series_id": "PCEPILFE",
+      "source_frequency": "monthly",
+      "transformation": "annualised_qoq_log"
+    },
+    {
+      "name": "unemployment_rate",
+      "quarterly_rule": "quarter_end_month_required",
+      "rationale": "UNRATE is treated as a quarter-end stock measure. This avoids fabricating a quarterly average when a constituent CPS month is structurally unavailable, as occurred in October 2025.",
+      "series_id": "UNRATE",
+      "source_frequency": "monthly",
+      "transformation": "level"
+    },
+    {
+      "name": "policy_rate",
+      "quarterly_rule": "three_month_mean_required",
+      "series_id": "FEDFUNDS",
+      "source_frequency": "monthly",
+      "transformation": "level"
+    }
+  ],
+  "status": "audit_scaffold",
+  "workstream": "2B.1"
+}

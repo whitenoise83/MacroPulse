@@ -8,6 +8,17 @@
   ],
   "base_model2a_commit": "4033a8f88fa5ffc0bb749ab17621ab6e82074ec6",
   "branch": "model2-bvar-development",
+  "ci_guard": {
+    "frozen_model1d_verifier_required": true,
+    "frozen_phase2_verifier_required": true,
+    "full_repository_suite_required": true,
+    "model2b_verifier_required": true,
+    "phase3_release_verifier_required": true,
+    "production_authority": "none",
+    "pull_request_branch": "model2-bvar-development",
+    "push_branch": "model2-bvar-development",
+    "workflow": ".github/workflows/model2-bvar-guard.yml"
+  },
   "name": "Data & Vintage Architecture \u2014 read-only audit scaffold",
   "production_authority": "none",
   "release_guard_maintenance": {

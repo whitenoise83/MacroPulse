@@ -22,6 +22,7 @@ EXPECTED_DELTA = {
     "tests/test_model2b_data_vintage.py",
     "scripts/verify_phase3_evaluation.py",
     "scripts/verify_phase3_release.py",
+    ".github/workflows/model2-bvar-guard.yml",
 }
 
 def git(*args: str) -> str:
@@ -89,6 +90,25 @@ def main() -> int:
             if maintenance.get(key) is not False:
                 errors.append("Release-guard maintenance boundary changed: " + key)
 
+        ci = payload.get("ci_guard", {})
+        if ci.get("workflow") != ".github/workflows/model2-bvar-guard.yml":
+            errors.append("Model 2 CI workflow identity changed.")
+        if ci.get("push_branch") != EXPECTED_BRANCH:
+            errors.append("Model 2 CI push branch changed.")
+        if ci.get("pull_request_branch") != EXPECTED_BRANCH:
+            errors.append("Model 2 CI pull-request branch changed.")
+        for key in (
+            "full_repository_suite_required",
+            "frozen_phase2_verifier_required",
+            "frozen_model1d_verifier_required",
+            "phase3_release_verifier_required",
+            "model2b_verifier_required",
+        ):
+            if ci.get(key) is not True:
+                errors.append("Model 2 CI requirement changed: " + key)
+        if ci.get("production_authority") != "none":
+            errors.append("Model 2 CI production authority must remain none.")
+
         rules = payload.get("rules", {})
         required_true = (
             "read_only_database_access",
@@ -120,14 +140,15 @@ def main() -> int:
     print("Model 2B.1 data/vintage audit scaffold verification: PASS")
     print("Branch: " + EXPECTED_BRANCH)
     print("Model 2A base: " + EXPECTED_MODEL2A_COMMIT[:7])
-    print("Expected delta paths: 9")
+    print("Expected delta paths: 10")
     print("Historical snapshots only: PASS")
     print("No latest-vintage fallback: PASS")
     print("UNRATE quarterly rule: quarter-end level")
     print("Phase III frozen-release guard maintenance: PASS")
+    print("Model 2 CI guard contract: PASS")
     print("Model 1 current-quarter anchor: deferred")
     print("Production authority: none")
-    print("Next: close 2B.1 after full regression suite")
+    print("Next: close 2B.1 after green Model 2 CI")
     return 0
 
 if __name__ == "__main__":

@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 from datetime import date
+from pathlib import Path
 
 import pandas as pd
 import pytest
 
 from macropulse.bvar.data import audit_snapshot, build_complete_quarter_panel
+
+
+ROOT = Path(__file__).parents[1]
 
 
 def row(series_id: str, observation_date: str, value: float) -> dict:
@@ -132,3 +136,23 @@ def test_missing_series_is_explicit() -> None:
     audit = audit_snapshot(snapshot, date(2024, 7, 31))
     assert "missing_series:FEDFUNDS" in audit.notices
     assert audit.complete_joint_quarters == 0
+
+
+def test_model2_ci_guard_contract() -> None:
+    workflow = (
+        ROOT / ".github" / "workflows" / "model2-bvar-guard.yml"
+    ).read_text(encoding="utf-8")
+
+    required = (
+        "name: Model 2 Bayesian VAR Guard",
+        "- model2-bvar-development",
+        "python scripts/verify_phase2_release.py --require-tag",
+        "python scripts/verify_model1d_v038_release.py --require-tags",
+        "python scripts/verify_phase3_evaluation.py",
+        "python scripts/verify_phase3_release.py --require-tag",
+        "python scripts/verify_model2b_data_vintage_scaffold.py",
+        "python -m pytest -q --disable-warnings tests/test_model2b_data_vintage.py",
+        "python -m pytest -q --disable-warnings",
+    )
+    for token in required:
+        assert token in workflow

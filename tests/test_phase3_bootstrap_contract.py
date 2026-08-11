@@ -14,6 +14,8 @@ ARCHITECTURE = ROOT / "docs" / "PHASE3_ARCHITECTURE.md"
 EXPECTED_BRANCH = "phase3-evaluation-development"
 EXPECTED_BASE_TAG = "phase2-platform-v1.0.0"
 EXPECTED_BASE_COMMIT = "43395d889a76453706259a5095bd718337b55851"
+EXPECTED_FINAL_RELEASE_TAG = "phase3-evaluation-v1.0.1"
+EXPECTED_FINAL_RELEASE_COMMIT = "edfc37b8f5f016710fb96402d205dcd35f2e09ca"
 RELEASE_TAG_PATTERN = re.compile(r"^phase3-evaluation-v\d+\.\d+\.\d+$")
 
 
@@ -37,18 +39,38 @@ def test_phase3_boundary_identity() -> None:
 
 
 def test_phase2_release_tag_still_points_to_frozen_base() -> None:
-    tag_commit = git("rev-parse", f"{EXPECTED_BASE_TAG}^{{commit}}")
+    tag_commit = git("rev-parse", EXPECTED_BASE_TAG + "^{commit}")
     assert tag_commit == EXPECTED_BASE_COMMIT
 
 
-def test_current_checkout_is_phase3_development_or_release_tag() -> None:
+def test_current_checkout_preserves_phase3_release_lineage() -> None:
     branch = git("branch", "--show-current")
-    if branch:
-        assert branch == EXPECTED_BRANCH
+
+    if branch == EXPECTED_BRANCH:
         return
 
     tags = [tag for tag in git("tag", "--points-at", "HEAD").splitlines() if tag]
-    assert any(RELEASE_TAG_PATTERN.fullmatch(tag) for tag in tags)
+    if not branch:
+        assert any(RELEASE_TAG_PATTERN.fullmatch(tag) for tag in tags)
+        return
+
+    assert (
+        git("rev-parse", EXPECTED_FINAL_RELEASE_TAG + "^{commit}")
+        == EXPECTED_FINAL_RELEASE_COMMIT
+    )
+    completed = subprocess.run(
+        [
+            "git",
+            "merge-base",
+            "--is-ancestor",
+            EXPECTED_FINAL_RELEASE_COMMIT,
+            "HEAD",
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode == 0
 
 
 def test_phase3_descends_from_phase2_release() -> None:

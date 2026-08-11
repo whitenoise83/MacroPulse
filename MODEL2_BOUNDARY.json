@@ -1,0 +1,150 @@
+{
+  "base_release_commit": "edfc37b8f5f016710fb96402d205dcd35f2e09ca",
+  "base_release_tag": "phase3-evaluation-v1.0.1",
+  "bootstrap_release_guard_maintenance": {
+    "allowed_paths": [
+      "tests/test_phase3_bootstrap_contract.py"
+    ],
+    "model_semantics_changed": false,
+    "phase3_evaluation_semantics_changed": false,
+    "phase3_release_tag_may_move": false,
+    "purpose": "permit later roadmap branches only when they descend from immutable phase3-evaluation-v1.0.1"
+  },
+  "branch": "model2-bvar-development",
+  "evaluation_contract": {
+    "benchmark_families": [
+      "univariate_ar",
+      "classical_var",
+      "historical_mean_or_random_walk_where_economically_applicable"
+    ],
+    "minimum_sample_rules_required_before_inference": true,
+    "monitoring_is_not_adaptation": true,
+    "point_metrics": [
+      "rmse",
+      "mae",
+      "bias"
+    ],
+    "probabilistic_metrics": [
+      "log_predictive_density",
+      "crps",
+      "interval_coverage_50",
+      "interval_coverage_80",
+      "interval_coverage_95",
+      "interval_score"
+    ],
+    "relative_performance_by_variable_and_horizon": true
+  },
+  "forecast_contract": {
+    "first_release_default_where_defined": true,
+    "forecast_horizons_quarters": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "frequency": "quarterly",
+    "model1_current_state_anchor": "governed_integration_contract_to_be_frozen_in_2B",
+    "no_look_ahead_required": true,
+    "outcome_vintage_must_be_explicit": true,
+    "primary_horizons_quarters": [
+      1,
+      2,
+      4
+    ],
+    "pseudo_real_time_required": true,
+    "revised_outcomes_must_be_separately_labelled": true,
+    "uncertainty_required": true
+  },
+  "governance": {
+    "model2_core_may_use_generative_ai": false,
+    "model2_may_auto_promote_or_switch_specifications": false,
+    "model2_may_backfill_model1d": false,
+    "model2_may_modify_frozen_model1_releases": false,
+    "model2_may_move_or_recreate_frozen_release_tags": false,
+    "model2_may_tune_model1d_from_prospective_outcomes": false,
+    "model2_may_use_future_information_in_pseudo_real_time": false,
+    "model2_may_use_latest_revised_data_as_if_real_time": false,
+    "scenario_outputs_may_claim_causality_without_identification": false
+  },
+  "initial_bvar_specification": {
+    "candidate_selection": "predeclared_pseudo_real_time_development_evidence_then_freeze",
+    "deterministic_terms": [
+      "intercept"
+    ],
+    "lag_candidates": [
+      2,
+      4
+    ],
+    "overall_shrinkage_candidates": [
+      0.1,
+      0.2,
+      0.4
+    ],
+    "posterior_simulation_seed_required": true,
+    "prior_family": "normal_inverse_wishart_with_minnesota_style_shrinkage",
+    "prospective_adaptation": false
+  },
+  "initial_endogenous_system": [
+    {
+      "frequency": "quarterly",
+      "name": "real_gdp_growth",
+      "quarterly_aggregation": "native",
+      "series_id": "GDPC1",
+      "transformation": "annualised_qoq_log"
+    },
+    {
+      "frequency": "monthly_to_quarterly",
+      "name": "core_pce_inflation",
+      "quarterly_aggregation": "quarter_end_index",
+      "series_id": "PCEPILFE",
+      "transformation": "annualised_qoq_log"
+    },
+    {
+      "frequency": "monthly_to_quarterly",
+      "name": "unemployment_rate",
+      "quarterly_aggregation": "quarter_average",
+      "series_id": "UNRATE",
+      "transformation": "level"
+    },
+    {
+      "frequency": "monthly_to_quarterly",
+      "name": "policy_rate",
+      "quarterly_aggregation": "quarter_average",
+      "series_id": "FEDFUNDS",
+      "transformation": "level"
+    }
+  ],
+  "model": "2",
+  "model_name": "Bayesian VAR Forecasting & Scenarios",
+  "promotion_authority": "none",
+  "roadmap_phase": "II",
+  "scenario_contract": {
+    "baseline_forecast_is_unconditional": true,
+    "conditional_paths_must_be_labelled_scenarios": true,
+    "scenario_is_not_baseline_probability_statement": true,
+    "scenario_is_not_causal_without_identification": true
+  },
+  "status": "specification_bootstrap",
+  "structural_analysis": {
+    "baseline_identification": "recursive_cholesky",
+    "causal_language_requires_identification_assumptions": true,
+    "fevd_horizons_quarters": [
+      1,
+      4,
+      8,
+      12
+    ],
+    "irf_horizons_quarters": [
+      1,
+      4,
+      8,
+      12
+    ],
+    "recursive_order": [
+      "real_gdp_growth",
+      "core_pce_inflation",
+      "unemployment_rate",
+      "policy_rate"
+    ]
+  }
+}

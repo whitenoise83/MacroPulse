@@ -25,6 +25,10 @@ EXPECTED_DELTA = {
     ".github/workflows/model2-bvar-guard.yml",
 }
 
+IGNORED_GENERATED_PREFIXES = (
+    "src/macropulse.egg-info/",
+)
+
 def git(*args: str) -> str:
     completed = subprocess.run(
         ["git", *args], cwd=ROOT, capture_output=True, text=True, check=True
@@ -37,6 +41,10 @@ def names(output: str) -> set[str]:
         for line in output.splitlines()
         if line.strip()
     }
+
+def is_ignorable_generated_path(path: str) -> bool:
+    normalized = path.replace("\\", "/")
+    return any(normalized.startswith(prefix) for prefix in IGNORED_GENERATED_PREFIXES)
 
 def main() -> int:
     errors: list[str] = []
@@ -57,7 +65,8 @@ def main() -> int:
         committed = names(git("diff", "--name-only", EXPECTED_MODEL2A_COMMIT + "..HEAD"))
         working = names(git("diff", "--name-only"))
         staged = names(git("diff", "--cached", "--name-only"))
-        untracked = names(git("ls-files", "--others", "--exclude-standard"))
+        untracked_raw = names(git("ls-files", "--others", "--exclude-standard"))
+        untracked = {path for path in untracked_raw if not is_ignorable_generated_path(path)}
         observed = committed | working | staged | untracked
 
         bad = sorted(observed - EXPECTED_DELTA)
@@ -108,6 +117,10 @@ def main() -> int:
                 errors.append("Model 2 CI requirement changed: " + key)
         if ci.get("production_authority") != "none":
             errors.append("Model 2 CI production authority must remain none.")
+        if ci.get("generated_untracked_allowlist_prefixes") != ["src/macropulse.egg-info/"]:
+            errors.append("Generated-untracked allowlist changed.")
+        if ci.get("generated_untracked_allowlist_scope") != "packaging_metadata_only":
+            errors.append("Generated-untracked allowlist scope changed.")
 
         rules = payload.get("rules", {})
         required_true = (
@@ -146,6 +159,7 @@ def main() -> int:
     print("UNRATE quarterly rule: quarter-end level")
     print("Phase III frozen-release guard maintenance: PASS")
     print("Model 2 CI guard contract: PASS")
+    print("Generated packaging metadata ignored: src/macropulse.egg-info/")
     print("Model 1 current-quarter anchor: deferred")
     print("Production authority: none")
     print("Next: close 2B.1 after green Model 2 CI")

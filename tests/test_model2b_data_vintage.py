@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 from datetime import date
 from pathlib import Path
 
@@ -10,6 +11,15 @@ from macropulse.bvar.data import audit_snapshot, build_complete_quarter_panel
 
 
 ROOT = Path(__file__).parents[1]
+
+
+def load_model2b_verifier():
+    path = ROOT / "scripts" / "verify_model2b_data_vintage_scaffold.py"
+    spec = importlib.util.spec_from_file_location("model2b_verifier", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
 
 
 def row(series_id: str, observation_date: str, value: float) -> dict:
@@ -156,3 +166,11 @@ def test_model2_ci_guard_contract() -> None:
     )
     for token in required:
         assert token in workflow
+
+
+def test_model2b_verifier_ignores_only_packaging_metadata_prefix() -> None:
+    verifier = load_model2b_verifier()
+    assert verifier.is_ignorable_generated_path("src/macropulse.egg-info/SOURCES.txt")
+    assert verifier.is_ignorable_generated_path(r"src\macropulse.egg-info\PKG-INFO")
+    assert not verifier.is_ignorable_generated_path("src/macropulse/bvar/unexpected.py")
+    assert not verifier.is_ignorable_generated_path("reports/unexpected.txt")

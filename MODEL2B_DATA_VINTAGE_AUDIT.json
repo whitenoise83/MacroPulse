@@ -12,6 +12,10 @@
     "frozen_model1d_verifier_required": true,
     "frozen_phase2_verifier_required": true,
     "full_repository_suite_required": true,
+    "generated_untracked_allowlist_prefixes": [
+      "src/macropulse.egg-info/"
+    ],
+    "generated_untracked_allowlist_scope": "packaging_metadata_only",
     "model2b_verifier_required": true,
     "phase3_release_verifier_required": true,
     "production_authority": "none",

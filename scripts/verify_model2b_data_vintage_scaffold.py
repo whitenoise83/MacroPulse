@@ -46,6 +46,16 @@ def is_ignorable_generated_path(path: str) -> bool:
     normalized = path.replace("\\", "/")
     return any(normalized.startswith(prefix) for prefix in IGNORED_GENERATED_PREFIXES)
 
+def compose_observed_paths(
+    committed: set[str],
+    working: set[str],
+    staged: set[str],
+    untracked: set[str],
+) -> set[str]:
+    runtime_working = {path for path in working if not is_ignorable_generated_path(path)}
+    runtime_untracked = {path for path in untracked if not is_ignorable_generated_path(path)}
+    return committed | runtime_working | staged | runtime_untracked
+
 def main() -> int:
     errors: list[str] = []
     try:
@@ -65,9 +75,8 @@ def main() -> int:
         committed = names(git("diff", "--name-only", EXPECTED_MODEL2A_COMMIT + "..HEAD"))
         working = names(git("diff", "--name-only"))
         staged = names(git("diff", "--cached", "--name-only"))
-        untracked_raw = names(git("ls-files", "--others", "--exclude-standard"))
-        untracked = {path for path in untracked_raw if not is_ignorable_generated_path(path)}
-        observed = committed | working | staged | untracked
+        untracked = names(git("ls-files", "--others", "--exclude-standard"))
+        observed = compose_observed_paths(committed, working, staged, untracked)
 
         bad = sorted(observed - EXPECTED_DELTA)
         missing = sorted(EXPECTED_DELTA - observed)
@@ -121,6 +130,11 @@ def main() -> int:
             errors.append("Generated-untracked allowlist changed.")
         if ci.get("generated_untracked_allowlist_scope") != "packaging_metadata_only":
             errors.append("Generated-untracked allowlist scope changed.")
+        if ci.get("generated_worktree_allowlist_prefixes") != ["src/macropulse.egg-info/"]:
+            errors.append("Generated-worktree allowlist changed.")
+        expected_scope = ("runtime_working_and_untracked_packaging_metadata_only; " "committed_and_staged_changes_remain_governed")
+        if ci.get("generated_worktree_allowlist_scope") != expected_scope:
+            errors.append("Generated-worktree allowlist scope changed.")
 
         rules = payload.get("rules", {})
         required_true = (
@@ -159,7 +173,8 @@ def main() -> int:
     print("UNRATE quarterly rule: quarter-end level")
     print("Phase III frozen-release guard maintenance: PASS")
     print("Model 2 CI guard contract: PASS")
-    print("Generated packaging metadata ignored: src/macropulse.egg-info/")
+    print("Runtime packaging metadata ignored: src/macropulse.egg-info/")
+    print("Committed/staged packaging paths remain governed: PASS")
     print("Model 1 current-quarter anchor: deferred")
     print("Production authority: none")
     print("Next: close 2B.1 after green Model 2 CI")

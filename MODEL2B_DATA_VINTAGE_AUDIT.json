@@ -16,6 +16,10 @@
       "src/macropulse.egg-info/"
     ],
     "generated_untracked_allowlist_scope": "packaging_metadata_only",
+    "generated_worktree_allowlist_prefixes": [
+      "src/macropulse.egg-info/"
+    ],
+    "generated_worktree_allowlist_scope": "runtime_working_and_untracked_packaging_metadata_only; committed_and_staged_changes_remain_governed",
     "model2b_verifier_required": true,
     "phase3_release_verifier_required": true,
     "production_authority": "none",

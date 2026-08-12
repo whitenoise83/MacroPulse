@@ -174,3 +174,31 @@ def test_model2b_verifier_ignores_only_packaging_metadata_prefix() -> None:
     assert verifier.is_ignorable_generated_path(r"src\macropulse.egg-info\PKG-INFO")
     assert not verifier.is_ignorable_generated_path("src/macropulse/bvar/unexpected.py")
     assert not verifier.is_ignorable_generated_path("reports/unexpected.txt")
+
+def test_runtime_working_egg_info_is_ignored_but_source_is_not() -> None:
+    verifier = load_model2b_verifier()
+    egg = "src/macropulse.egg-info/SOURCES.txt"
+    source = "src/macropulse/bvar/unexpected.py"
+    observed = verifier.compose_observed_paths(
+        committed=set(),
+        working={egg, source},
+        staged=set(),
+        untracked={egg},
+    )
+    assert egg not in observed
+    assert source in observed
+
+
+def test_committed_and_staged_egg_info_remain_governed() -> None:
+    verifier = load_model2b_verifier()
+    committed_egg = "src/macropulse.egg-info/PKG-INFO"
+    staged_egg = "src/macropulse.egg-info/SOURCES.txt"
+    observed = verifier.compose_observed_paths(
+        committed={committed_egg},
+        working=set(),
+        staged={staged_egg},
+        untracked=set(),
+    )
+    assert committed_egg in observed
+    assert staged_egg in observed
+

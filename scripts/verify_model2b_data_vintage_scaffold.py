@@ -27,6 +27,8 @@ EXPECTED_DELTA = {
 
 IGNORED_GENERATED_PREFIXES = (
     "src/macropulse.egg-info/",
+    "reports/inflation_operational_validation/",
+    "reports/labour_operational_validation/",
 )
 
 def git(*args: str) -> str:
@@ -130,9 +132,16 @@ def main() -> int:
             errors.append("Generated-untracked allowlist changed.")
         if ci.get("generated_untracked_allowlist_scope") != "packaging_metadata_only":
             errors.append("Generated-untracked allowlist scope changed.")
-        if ci.get("generated_worktree_allowlist_prefixes") != ["src/macropulse.egg-info/"]:
+        if ci.get("generated_worktree_allowlist_prefixes") != [
+            "src/macropulse.egg-info/",
+            "reports/inflation_operational_validation/",
+            "reports/labour_operational_validation/",
+        ]:
             errors.append("Generated-worktree allowlist changed.")
-        expected_scope = ("runtime_working_and_untracked_packaging_metadata_only; " "committed_and_staged_changes_remain_governed")
+        expected_scope = (
+            "runtime_working_and_untracked_packaging_or_operational_validation_artifacts_only; "
+            "committed_and_staged_changes_remain_governed"
+        )
         if ci.get("generated_worktree_allowlist_scope") != expected_scope:
             errors.append("Generated-worktree allowlist scope changed.")
 
@@ -174,7 +183,8 @@ def main() -> int:
     print("Phase III frozen-release guard maintenance: PASS")
     print("Model 2 CI guard contract: PASS")
     print("Runtime packaging metadata ignored: src/macropulse.egg-info/")
-    print("Committed/staged packaging paths remain governed: PASS")
+    print("Runtime operational validation reports ignored: PASS")
+    print("Committed/staged generated paths remain governed: PASS")
     print("Model 1 current-quarter anchor: deferred")
     print("Production authority: none")
     print("Next: close 2B.1 after green Model 2 CI")

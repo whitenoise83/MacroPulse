@@ -202,3 +202,40 @@ def test_committed_and_staged_egg_info_remain_governed() -> None:
     assert committed_egg in observed
     assert staged_egg in observed
 
+def test_runtime_operational_validation_reports_are_ignored() -> None:
+    verifier = load_model2b_verifier()
+    inflation_report = (
+        "reports/inflation_operational_validation/"
+        "model1b_live_validation_example.md"
+    )
+    labour_report = (
+        "reports/labour_operational_validation/"
+        "model1c_live_validation_example.md"
+    )
+    unexpected = "reports/unexpected.txt"
+
+    observed = verifier.compose_observed_paths(
+        committed=set(),
+        working={inflation_report},
+        staged=set(),
+        untracked={labour_report, unexpected},
+    )
+    assert inflation_report not in observed
+    assert labour_report not in observed
+    assert unexpected in observed
+
+
+def test_staged_operational_validation_report_remains_governed() -> None:
+    verifier = load_model2b_verifier()
+    report = (
+        "reports/inflation_operational_validation/"
+        "model1b_live_validation_example.md"
+    )
+    observed = verifier.compose_observed_paths(
+        committed=set(),
+        working=set(),
+        staged={report},
+        untracked=set(),
+    )
+    assert report in observed
+

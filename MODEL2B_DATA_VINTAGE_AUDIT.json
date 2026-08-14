@@ -46,6 +46,7 @@
     "audit_does_not_select_estimation_start": true,
     "audit_does_not_select_model_candidate": true,
     "current_quarter_model1_anchor_deferred": true,
+    "duplicate_exact_snapshot_rows_rejected": true,
     "exact_as_of_date_identity_required": true,
     "historical_snapshots_only": true,
     "incomplete_quarters_excluded": true,

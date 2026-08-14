@@ -61,6 +61,28 @@ def _normalise_snapshot(snapshot: pd.DataFrame, as_of_date: date) -> pd.DataFram
         )
 
     frame = frame[frame["series_id"].isin(REQUIRED_SERIES)].copy()
+
+    duplicate = frame.duplicated(
+        subset=["series_id", "observation_date"],
+        keep=False,
+    )
+    if bool(duplicate.any()):
+        examples = (
+            frame.loc[
+                duplicate,
+                ["series_id", "observation_date", "value"],
+            ]
+            .sort_values(["series_id", "observation_date"])
+            .head(10)
+            .astype(str)
+            .to_dict("records")
+        )
+        raise ValueError(
+            "Snapshot contains duplicate exact-vintage rows for "
+            "(series_id, observation_date): "
+            + repr(examples)
+        )
+
     frame["quarter"] = frame["observation_date"].dt.to_period("Q")
     frame["month"] = frame["observation_date"].dt.month
     frame = frame.sort_values(["series_id", "observation_date"])

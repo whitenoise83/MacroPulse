@@ -1,4 +1,4 @@
-# Model 2B.1 — Data & Vintage Architecture
+# Model 2B.1 â€” Data & Vintage Architecture
 
 ## Purpose
 
@@ -20,8 +20,8 @@ The BVAR estimation panel is a complete-quarter joint panel.
 Transformations:
 
 ```text
-GDP growth       = 400 * Δ log(GDPC1)
-Core PCE infl.   = 400 * Δ log(quarter-end PCEPILFE)
+GDP growth       = 400 * Î” log(GDPC1)
+Core PCE infl.   = 400 * Î” log(quarter-end PCEPILFE)
 Unemployment     = quarter-end UNRATE, level
 Policy rate      = three-month quarterly mean, level
 ```
@@ -49,6 +49,12 @@ and the quarterly average is the intended policy-rate exposure measure.
 The builder rejects any row whose observation date is later than the requested
 as-of date. It never substitutes the latest vintage when an exact historical
 snapshot is absent.
+
+Each exact snapshot must contain at most one row for a given
+`(series_id, observation_date)` key among the four required Model 2 series.
+Duplicate exact-vintage rows are treated as an ambiguous information set and
+fail closed; they are never resolved by arbitrary sorting, `.last()`, averaging,
+or silent deduplication.
 
 For quarter-end series, the quarter is unavailable until that quarter's final
 month observation exists in the exact vintage. For FEDFUNDS, all three months

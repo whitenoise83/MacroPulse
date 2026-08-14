@@ -150,6 +150,7 @@ def main() -> int:
             "read_only_database_access",
             "historical_snapshots_only",
             "exact_as_of_date_identity_required",
+            "duplicate_exact_snapshot_rows_rejected",
             "no_latest_vintage_fallback",
             "no_future_observation_date",
             "incomplete_quarters_excluded",
@@ -178,6 +179,7 @@ def main() -> int:
     print("Model 2A base: " + EXPECTED_MODEL2A_COMMIT[:7])
     print("Expected delta paths: 10")
     print("Historical snapshots only: PASS")
+    print("Duplicate exact snapshot rows rejected: PASS")
     print("No latest-vintage fallback: PASS")
     print("UNRATE quarterly rule: quarter-end level")
     print("Phase III frozen-release guard maintenance: PASS")

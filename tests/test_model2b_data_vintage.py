@@ -239,3 +239,25 @@ def test_staged_operational_validation_report_remains_governed() -> None:
     )
     assert report in observed
 
+@pytest.mark.parametrize("duplicate_value", [100.0, 999.0])
+def test_duplicate_exact_snapshot_rows_fail_closed(
+    duplicate_value: float,
+) -> None:
+    snapshot = complete_snapshot()
+    duplicate = pd.DataFrame(
+        [row("GDPC1", "2023-10-01", duplicate_value)]
+    )
+    snapshot = pd.concat(
+        [snapshot, duplicate],
+        ignore_index=True,
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="duplicate exact-vintage rows",
+    ):
+        build_complete_quarter_panel(
+            snapshot,
+            date(2024, 7, 31),
+        )
+

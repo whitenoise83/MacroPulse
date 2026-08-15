@@ -11,6 +11,18 @@
     "purpose": "permit later roadmap branches only when they descend from immutable phase3-evaluation-v1.0.1"
   },
   "branch": "model2-bvar-development",
+  "data_architecture_amendments": [
+    {
+      "corrected_quarterly_aggregation": "quarter_end",
+      "new_modelling_choice": false,
+      "previous_quarterly_aggregation": "quarter_average",
+      "rationale": "UNRATE is a stock variable; October 2025 CPS data do not exist. The governed 2B.1 architecture therefore uses observed quarter-end UNRATE consistently for every quarter.",
+      "series_id": "UNRATE",
+      "source_closure_commit": "ff1217b3c154b2ae3dd0a6c931ce7200888c70b8",
+      "transformation": "level",
+      "workstream": "2B.1"
+    }
+  ],
   "evaluation_contract": {
     "benchmark_families": [
       "univariate_ar",
@@ -102,7 +114,7 @@
     {
       "frequency": "monthly_to_quarterly",
       "name": "unemployment_rate",
-      "quarterly_aggregation": "quarter_average",
+      "quarterly_aggregation": "quarter_end",
       "series_id": "UNRATE",
       "transformation": "level"
     },

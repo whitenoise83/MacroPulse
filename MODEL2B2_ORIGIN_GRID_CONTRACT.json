@@ -1,0 +1,55 @@
+{
+  "base_model2b1_closure_commit": "ff1217b3c154b2ae3dd0a6c931ce7200888c70b8",
+  "branch": "model2-bvar-development",
+  "empirical_closure_reference": {
+    "cache_range_at_2b1_closure": [
+      "2015-01-15",
+      "2026-06-30"
+    ],
+    "common_cached_cutoffs_at_2b1_closure": 213,
+    "counts_are_evidence_not_future_hard_limits": true,
+    "first_observed_state": "2014Q3",
+    "last_observed_state": "2026Q1",
+    "observable_non_left_censored_origins": 46,
+    "observed_last_complete_quarter_states": 47
+  },
+  "forecast_horizons_quarters": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "model2_boundary_correction": {
+    "field": "quarterly_aggregation",
+    "from": "quarter_average",
+    "rationale": "UNRATE is a stock variable and October 2025 CPS data do not exist; the governed 2B.1 architecture uses observed quarter-end UNRATE for every quarter.",
+    "series_id": "UNRATE",
+    "source_closure_commit": "ff1217b3c154b2ae3dd0a6c931ce7200888c70b8",
+    "source_workstream": "2B.1",
+    "to": "quarter_end"
+  },
+  "name": "Pseudo-real-time origin grid",
+  "production_authority": "none",
+  "rules": {
+    "exact_snapshot_identity_required": true,
+    "first_observed_state_is_left_censored": true,
+    "historical_model1_backfill_prohibited": true,
+    "last_complete_quarter_must_be_nondecreasing": true,
+    "left_censored_state_is_not_admissible_for_pseudo_real_time": true,
+    "model1_anchor_does_not_enter_baseline_parameter_estimation": true,
+    "model1_current_state_anchor_is_separate_prospective_interface": true,
+    "model1d_prospective_outcomes_excluded": true,
+    "no_estimation_start_selected": true,
+    "no_evaluation_start_selected": true,
+    "no_model_candidate_selected": true,
+    "one_origin_per_newly_complete_quarter": true,
+    "origin_cutoff_is_earliest_successful_common_cached_cutoff": true,
+    "origin_id_deterministic": true,
+    "origin_quarter_equals_last_complete_joint_quarter": true,
+    "quarter_transitions_may_not_skip": true,
+    "read_only_database_access": true,
+    "source_snapshot_hash_required": true
+  },
+  "status": "origin_grid_bootstrap",
+  "workstream": "2B.2"
+}

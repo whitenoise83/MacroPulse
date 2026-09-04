@@ -15,6 +15,16 @@
     "ranking_in_2c": false,
     "selection_in_2c": false
   },
+  "dependency_compatibility_maintenance": {
+    "frozen_release_tags_changed": false,
+    "model1_forecast_semantics_changed": false,
+    "model2_bvar_semantics_changed": false,
+    "paths": [
+      "src/macropulse/models/baseline.py"
+    ],
+    "production_authority_changed": false,
+    "reason": "statsmodels 0.15 removes the deprecated AutoReg old_names keyword; omitting old_names preserves the prior effective behavior because old_names defaulted to false in statsmodels 0.14 and the legacy naming mode no longer exists in 0.15."
+  },
   "estimation": {
     "analytical_conjugate_posterior": true,
     "effective_sample_minimum": "max(24, 2 * design_columns)",

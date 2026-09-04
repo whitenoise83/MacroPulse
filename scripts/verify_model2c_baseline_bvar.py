@@ -17,6 +17,7 @@ EXPECTED_DELTA = {
     "scripts/verify_model2c_baseline_bvar.py",
     "scripts/verify_model2b2_origin_grid.py",
     "tests/test_model2c_baseline_bvar.py",
+    "src/macropulse/models/baseline.py",
     ".github/workflows/model2-bvar-guard.yml",
 }
 
@@ -131,6 +132,32 @@ def main() -> int:
             if forecast.get(key) is not True:
                 errors.append("2D boundary changed: " + key)
 
+        maintenance = payload.get(
+            "dependency_compatibility_maintenance", {}
+        )
+        if maintenance.get("paths") != [
+            "src/macropulse/models/baseline.py"
+        ]:
+            errors.append("Dependency compatibility path changed.")
+        for key in (
+            "model1_forecast_semantics_changed",
+            "model2_bvar_semantics_changed",
+            "frozen_release_tags_changed",
+            "production_authority_changed",
+        ):
+            if maintenance.get(key) is not False:
+                errors.append(
+                    "Dependency compatibility boundary changed: " + key
+                )
+
+        baseline_text = (
+            ROOT / "src" / "macropulse" / "models" / "baseline.py"
+        ).read_text(encoding="utf-8")
+        if "old_names=" in baseline_text:
+            errors.append(
+                "Deprecated statsmodels AutoReg old_names keyword remains."
+            )
+
         governance = payload.get("governance", {})
         for key in (
             "no_candidate_selection",
@@ -166,7 +193,8 @@ def main() -> int:
 
     print("Model 2C baseline BVAR verification: PASS")
     print("Base 2B.2 closure: " + EXPECTED_2B2_CLOSURE[:7])
-    print("Expected delta paths: 8")
+    print("Expected delta paths: 9")
+    print("statsmodels 0.15 AutoReg compatibility: PASS")
     print("Candidate grid: 2 lags x 3 shrinkage values = 6")
     print("Candidate selection/ranking in 2C: prohibited")
     print("Prior: conjugate NIW with Minnesota-style shrinkage")

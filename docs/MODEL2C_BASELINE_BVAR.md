@@ -46,6 +46,10 @@ The posterior-mean companion spectral radius is descriptive in 2C. It does not
 automatically exclude, rank or promote a candidate. Any later stability rule
 must be separately governed.
 
+## CI dependency-compatibility maintenance
+
+The Model 2C CI run exposed a repository-wide compatibility failure under statsmodels 0.15: `AutoReg(..., old_names=False)` is no longer accepted because the deprecated `old_names` keyword was removed. Model 2C maintenance therefore removes only that keyword from the pre-existing AR(1) helper. This is a compatibility-only change: statsmodels 0.14 already defaulted `old_names` to false, so Model 1 forecast semantics are unchanged.
+
 ## Boundaries
 
 Historical Model 1 outputs are not backfilled. Model 1D prospective outcomes

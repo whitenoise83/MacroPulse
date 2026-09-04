@@ -125,7 +125,7 @@ def fit_ar1(
     interval: float = 0.80,
 ) -> ForecastResult:
     clean_target = target.dropna().astype(float)
-    model = AutoReg(clean_target, lags=1, trend="ct", old_names=False)
+    model = AutoReg(clean_target, lags=1, trend="ct")
     result = model.fit()
 
     prediction = result.predict(start=len(clean_target), end=len(clean_target))

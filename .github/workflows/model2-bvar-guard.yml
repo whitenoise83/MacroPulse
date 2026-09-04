@@ -62,11 +62,17 @@ jobs:
       - name: Run focused Model 2B.1 tests
         run: python -m pytest -q --disable-warnings tests/test_model2b_data_vintage.py
 
-      - name: Verify Model 2B.2 origin-grid contract
+      - name: Verify frozen Model 2B.2 origin-grid contract
         run: python scripts/verify_model2b2_origin_grid.py
 
       - name: Run focused Model 2B.2 tests
         run: python -m pytest -q --disable-warnings tests/test_model2b2_origin_grid.py
+
+      - name: Verify Model 2C baseline BVAR contract
+        run: python scripts/verify_model2c_baseline_bvar.py
+
+      - name: Run focused Model 2C tests
+        run: python -m pytest -q --disable-warnings tests/test_model2c_baseline_bvar.py
 
       - name: Run complete repository test suite
         run: python -m pytest -q --disable-warnings
@@ -79,6 +85,7 @@ jobs:
           python scripts/verify_phase3_release.py --require-tag
           python scripts/verify_model2b_data_vintage_scaffold.py
           python scripts/verify_model2b2_origin_grid.py
+          python scripts/verify_model2c_baseline_bvar.py
 
       - name: Require clean tracked source tree after tests
         shell: bash

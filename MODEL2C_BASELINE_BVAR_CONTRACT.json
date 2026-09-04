@@ -1,0 +1,81 @@
+{
+  "base_model2b2_closure_commit": "90f529f635eeaa554259287ffc8a79647c92f7ad",
+  "branch": "model2-bvar-development",
+  "candidate_grid": {
+    "candidate_count": 6,
+    "lags": [
+      2,
+      4
+    ],
+    "overall_shrinkage": [
+      0.1,
+      0.2,
+      0.4
+    ],
+    "ranking_in_2c": false,
+    "selection_in_2c": false
+  },
+  "estimation": {
+    "analytical_conjugate_posterior": true,
+    "effective_sample_minimum": "max(24, 2 * design_columns)",
+    "exact_estimation_panel_hash_required_for_point_forecast": true,
+    "finite_values_required": true,
+    "positive_finite_variable_scale_required": true,
+    "quarterly_contiguous_panel_required": true
+  },
+  "forecast": {
+    "horizons_quarters": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "intervals_deferred_to_2d": true,
+    "method_2c": "recursive_posterior_mean_point_forecast",
+    "posterior_predictive_density_deferred_to_2d": true,
+    "simulation_seed_deferred_to_2d": true
+  },
+  "governance": {
+    "generative_ai_in_governed_core": false,
+    "no_candidate_ranking": true,
+    "no_candidate_selection": true,
+    "no_estimation_start_selection": true,
+    "no_evaluation_start_selection": true,
+    "no_frozen_release_changes": true,
+    "no_model1_historical_backfill": true,
+    "no_model1d_prospective_outcomes": true,
+    "no_production_promotion": true
+  },
+  "name": "Baseline conjugate Bayesian VAR",
+  "prior": {
+    "all_other_lag_prior_means": 0.0,
+    "family": "matrix_normal_inverse_wishart",
+    "intercept_only": true,
+    "intercept_prior_mean": 0.0,
+    "intercept_prior_variance": 1000000.0,
+    "inverse_wishart_df": "m+2",
+    "inverse_wishart_scale": "diag(sample_standard_deviation^2)",
+    "lag_variance_decay": "lambda^2 / (lag^2 * predictor_sample_variance)",
+    "own_first_lag_prior_mean": {
+      "core_pce_inflation": 0.0,
+      "policy_rate": 1.0,
+      "real_gdp_growth": 0.0,
+      "unemployment_rate": 1.0
+    },
+    "scale_source": "estimation_panel_sample_standard_deviation_only",
+    "style": "minnesota_style_conjugate"
+  },
+  "production_authority": "none",
+  "stability": {
+    "automatic_candidate_exclusion_in_2c": false,
+    "posterior_mean_companion_spectral_radius_reported": true
+  },
+  "status": "baseline_engine_bootstrap",
+  "variables": [
+    "real_gdp_growth",
+    "core_pce_inflation",
+    "unemployment_rate",
+    "policy_rate"
+  ],
+  "workstream": "2C"
+}

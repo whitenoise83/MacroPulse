@@ -1,0 +1,67 @@
+{
+  "base_model2c_closure_ci_run_id": 33888716133,
+  "base_model2c_closure_commit": "b321e3f59ac7165cf71b1b3155712312b58af1a7",
+  "branch": "model2-bvar-development",
+  "candidate_policy": {
+    "all_six_model2c_candidates_retained": true,
+    "automatic_candidate_exclusion_in_2d": false,
+    "candidate_ranking_in_2d": false,
+    "candidate_selection_in_2d": false
+  },
+  "forecast": {
+    "calibration_evaluation_deferred_to_2g": true,
+    "central_interval_coverage": [
+      0.5,
+      0.8,
+      0.95
+    ],
+    "density_evaluation_metrics_deferred_to_2g": true,
+    "horizons_quarters": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "scenario_conditioning_deferred_to_2f": true,
+    "summary_statistics": [
+      "mean",
+      "median",
+      "std"
+    ]
+  },
+  "governance": {
+    "generative_ai_in_governed_core": false,
+    "no_candidate_ranking": true,
+    "no_candidate_selection": true,
+    "no_estimation_start_selection": true,
+    "no_evaluation_start_selection": true,
+    "no_frozen_release_changes": true,
+    "no_model1_historical_backfill": true,
+    "no_model1d_prospective_outcomes": true,
+    "no_production_promotion": true
+  },
+  "name": "Posterior predictive forecasts and uncertainty",
+  "posterior_predictive": {
+    "coefficient_draw": "matrix_normal_conditional_on_sigma",
+    "future_innovations_drawn": true,
+    "innovation_uncertainty_included": true,
+    "one_parameter_draw_per_simulated_path": true,
+    "parameter_uncertainty_included": true,
+    "posterior_family": "matrix_normal_inverse_wishart",
+    "recursive_multi_step_simulation": true,
+    "sigma_draw": "inverse_wishart",
+    "stability_truncation_or_rejection": false
+  },
+  "production_authority": "none",
+  "simulation": {
+    "canonical_default_seed": 20260904,
+    "canonical_default_simulations": 5000,
+    "draw_hash_recorded": true,
+    "exact_estimation_panel_hash_required": true,
+    "minimum_simulations": 100,
+    "same_seed_same_environment_reproducible": true,
+    "seed_required_and_recorded": true
+  },
+  "status": "probabilistic_forecast_bootstrap",
+  "workstream": "2D"
+}

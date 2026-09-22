@@ -1,0 +1,131 @@
+{
+  "admissible_origin_rows": 46,
+  "aggregate_metrics_hash": "64df1a544ccceeed0445173488b0f460670e7a77abb1a3f0f631552ba6851d7a",
+  "aggregate_rows": 144,
+  "automatic_switching_after_freeze": false,
+  "base_model2f_closure_commit": "c63ee4df92dd372f883feea4fc86eabae79ab358",
+  "benchmarks_compared": [
+    "benchmark::univariate_ar4",
+    "benchmark::classical_var4",
+    "benchmark::historical_mean_random_walk"
+  ],
+  "canonical_base_seed": 20260904,
+  "canonical_simulations": 5000,
+  "development_origin_inventory_hash": "dd1ac9e9204bf56f5bc6ae7b15175505f7b469ba4ec07c25892f7995fddf8f4e",
+  "development_terminal_origin_quarter": "2026Q1",
+  "evaluation_records_hash": "a5fd8d23544c5a409e2731eb9acb168e1667a5a571d0b8bbcacf3bac4dc8414e",
+  "evaluation_rows": 6084,
+  "evidence_payload_hash": "2f65c3dda0df6d8a501887bbf34671fe80e3292b296bce3e295d9c32fff16bf7",
+  "implementation_hashes": {
+    "MODEL2G_EVALUATION_CONTRACT.json": "93f9be848a3ff010b65457e89ed64cc131360e0dc0ff9e787e70c1806a38b532",
+    "src/macropulse/bvar/benchmarks.py": "72576b2cd214d93f3e7bb10d08231baaef108815152cbd17fb870b9c71915a4f",
+    "src/macropulse/bvar/data.py": "8be8a5caf9c365caa4c2a8bf6e86d00e347387ca4128e8f3216be21ddc786f9c",
+    "src/macropulse/bvar/evaluation.py": "8e08b851867272c07b764c567f99cabd62571e6dffc2ec79fa8bb35d5db4bc0f",
+    "src/macropulse/bvar/model.py": "8ba07342e7a9a483146948cbf0dce5c92731d0d468bc26cca0cee3770f0810a7",
+    "src/macropulse/bvar/origins.py": "4c8b98534b566d8786154871443667811643a0613937ffe1e69e5a63a5d963c3",
+    "src/macropulse/bvar/probabilistic.py": "73be65d360c0b82f471ed0d0c276e3d3386127d8ff409c1e0a61e498709e86ee"
+  },
+  "origin_rows": 47,
+  "outcome_rule": "first_common_exact_vintage_panel_for_target_quarter",
+  "production_authority": "none",
+  "prospective_retuning_after_freeze": false,
+  "schema_version": 1,
+  "selected_candidate": {
+    "candidate_id": "a69878bf644615c5",
+    "lags": 2,
+    "mean_crps": 1.1467771944434653,
+    "mean_log_predictive_density": -33.869601237935434,
+    "mean_rmse": 2.989439450368552,
+    "shrinkage": 0.1
+  },
+  "selection_rule": {
+    "eligible_models": "six_bvar_candidates_only",
+    "minimum_cell_n": 8,
+    "primary_direction": "higher_is_better",
+    "primary_horizons": [
+      1,
+      2,
+      4
+    ],
+    "primary_metric": "mean_log_predictive_density",
+    "tie_break_1": "mean_crps_lower_is_better",
+    "tie_break_2": "mean_rmse_lower_is_better",
+    "tie_break_3": "candidate_id_lexicographic"
+  },
+  "selection_table": [
+    {
+      "candidate_id": "a69878bf644615c5",
+      "cells": 12,
+      "lags": 2,
+      "mean_crps": 1.1467771944434653,
+      "mean_log_predictive_density": -33.869601237935434,
+      "mean_rmse": 2.989439450368552,
+      "minimum_cell_n": 42,
+      "rank": 1,
+      "selected": true,
+      "shrinkage": 0.1
+    },
+    {
+      "candidate_id": "a88d0c8f7f80f6cd",
+      "cells": 12,
+      "lags": 2,
+      "mean_crps": 1.2000761527068204,
+      "mean_log_predictive_density": -34.0722340211365,
+      "mean_rmse": 3.181445403906892,
+      "minimum_cell_n": 42,
+      "rank": 2,
+      "selected": false,
+      "shrinkage": 0.2
+    },
+    {
+      "candidate_id": "e9d1261c022f0037",
+      "cells": 12,
+      "lags": 4,
+      "mean_crps": 1.1458208614789953,
+      "mean_log_predictive_density": -34.204499226531354,
+      "mean_rmse": 2.9886923261486085,
+      "minimum_cell_n": 42,
+      "rank": 3,
+      "selected": false,
+      "shrinkage": 0.1
+    },
+    {
+      "candidate_id": "303caa288811ea34",
+      "cells": 12,
+      "lags": 4,
+      "mean_crps": 1.2912657198682749,
+      "mean_log_predictive_density": -35.20873349222402,
+      "mean_rmse": 3.4779233187287883,
+      "minimum_cell_n": 42,
+      "rank": 4,
+      "selected": false,
+      "shrinkage": 0.4
+    },
+    {
+      "candidate_id": "9b6b542e4c9fcf08",
+      "cells": 12,
+      "lags": 4,
+      "mean_crps": 1.204646281899,
+      "mean_log_predictive_density": -35.798894508892666,
+      "mean_rmse": 3.1949010983836295,
+      "minimum_cell_n": 42,
+      "rank": 5,
+      "selected": false,
+      "shrinkage": 0.2
+    },
+    {
+      "candidate_id": "5497bd201b42d4cc",
+      "cells": 12,
+      "lags": 2,
+      "mean_crps": 1.275372248662389,
+      "mean_log_predictive_density": -37.57626033749778,
+      "mean_rmse": 3.4475099054854934,
+      "minimum_cell_n": 42,
+      "rank": 6,
+      "selected": false,
+      "shrinkage": 0.4
+    }
+  ],
+  "selection_table_hash": "a29f1c25390b17669a67c367c85d9bdef1e7f113d600e93397eda94f7aedfb61",
+  "workstream": "2G"
+}

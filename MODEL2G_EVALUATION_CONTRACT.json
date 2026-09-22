@@ -1,0 +1,129 @@
+{
+  "base_model2f_closure_ci_run_id": 35750342329,
+  "base_model2f_closure_commit": "c63ee4df92dd372f883feea4fc86eabae79ab358",
+  "branch": "model2-bvar-development",
+  "development_inventory": {
+    "first_origin_hand_selected": false,
+    "future_information_fallback": false,
+    "origin_rule": "all_admissible_model2b2_origins",
+    "outcome_rule": "first_common_exact_vintage_panel_for_target_quarter",
+    "revised_outcomes_used": false,
+    "terminal_origin_locked_before_metric_observation": true,
+    "terminal_origin_quarter": "2026Q1",
+    "unresolved_targets_excluded": true
+  },
+  "evidence": {
+    "canonical_evidence_file": "MODEL2G_SELECTION_EVIDENCE.json",
+    "evidence_is_generated_only_after_canonical_run": true,
+    "evidence_records_evaluation_hashes": true,
+    "evidence_records_implementation_hashes": true,
+    "evidence_records_inventory_hash": true
+  },
+  "forecast_evaluation": {
+    "central_intervals": [
+      0.5,
+      0.8,
+      0.95
+    ],
+    "common_case_comparison_required": true,
+    "crps_estimator": "empirical_sample_crps",
+    "density_metrics": [
+      "log_predictive_density",
+      "crps",
+      "coverage_50",
+      "coverage_80",
+      "coverage_95",
+      "interval_score_50",
+      "interval_score_80",
+      "interval_score_95"
+    ],
+    "horizon_8_role": "diagnostic_only_for_candidate_selection",
+    "horizons_quarters": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "log_density_estimator": "gaussian_kernel_silverman_bandwidth_from_predictive_draws",
+    "point_error_sign": "forecast_minus_outcome",
+    "point_metrics": [
+      "rmse",
+      "mae",
+      "bias"
+    ],
+    "primary_selection_horizons_quarters": [
+      1,
+      2,
+      4
+    ]
+  },
+  "governance": {
+    "generative_ai_in_governed_core": false,
+    "no_frozen_release_changes": true,
+    "no_future_information": true,
+    "no_model1_historical_backfill": true,
+    "no_model1d_prospective_outcomes": true,
+    "no_production_promotion": true,
+    "no_prospective_adaptation": true,
+    "no_revised_data_as_realtime": true
+  },
+  "models": {
+    "benchmarks": {
+      "classical_var4": {
+        "eligible_for_selection": false,
+        "innovation_uncertainty": true,
+        "parameter_uncertainty": false
+      },
+      "historical_mean_random_walk": {
+        "eligible_for_selection": false,
+        "growth_inflation": "historical_mean",
+        "innovation_uncertainty": true,
+        "parameter_uncertainty": false,
+        "unemployment_policy_rate": "random_walk"
+      },
+      "univariate_ar4": {
+        "eligible_for_selection": false,
+        "innovation_uncertainty": true,
+        "parameter_uncertainty": false
+      }
+    },
+    "bvar_candidates": {
+      "eligible_for_selection": true,
+      "lags": [
+        2,
+        4
+      ],
+      "shrinkage": [
+        0.1,
+        0.2,
+        0.4
+      ]
+    }
+  },
+  "name": "Pseudo-real-time validation and model comparison",
+  "production_authority": "none",
+  "selection": {
+    "automatic_switching_after_freeze": false,
+    "eligible_models": "six_bvar_candidates_only",
+    "equal_weight_across_variable_horizon_cells": true,
+    "minimum_resolved_cases_per_variable_horizon": 8,
+    "primary_direction": "higher_is_better",
+    "primary_metric": "mean_log_predictive_density",
+    "prospective_retuning_after_freeze": false,
+    "selection_authorized_in_2g": true,
+    "tie_break_1": "mean_crps_lower_is_better",
+    "tie_break_2": "mean_rmse_lower_is_better",
+    "tie_break_3": "candidate_id_lexicographic"
+  },
+  "simulation": {
+    "benchmark_innovation_uncertainty": true,
+    "benchmark_parameter_uncertainty": false,
+    "bvar_innovation_uncertainty": true,
+    "bvar_parameter_uncertainty": true,
+    "canonical_base_seed": 20260904,
+    "canonical_simulations": 5000,
+    "model_origin_seed_derived_by_sha256": true
+  },
+  "status": "evaluation_bootstrap",
+  "workstream": "2G"
+}

@@ -1,0 +1,64 @@
+{
+  "base_model2d_closure_ci_run_id": 33891568448,
+  "base_model2d_closure_commit": "a40c5f3f5426982f5d23781ad26467c97be501c8",
+  "branch": "model2-bvar-development",
+  "candidate_policy": {
+    "all_six_model2c_candidates_retained": true,
+    "automatic_candidate_exclusion_in_2e": false,
+    "candidate_ranking_in_2e": false,
+    "candidate_selection_in_2e": false
+  },
+  "fevd": {
+    "method": "orthogonalized_forecast_error_variance_decomposition",
+    "reported_horizons_quarters": [
+      1,
+      4,
+      8,
+      12
+    ],
+    "shares_bounded_zero_one": true,
+    "shares_sum_to_one_by_response_and_horizon": true
+  },
+  "governance": {
+    "generative_ai_in_governed_core": false,
+    "no_candidate_ranking": true,
+    "no_candidate_selection": true,
+    "no_estimation_start_selection": true,
+    "no_evaluation_start_selection": true,
+    "no_frozen_release_changes": true,
+    "no_model1_historical_backfill": true,
+    "no_model1d_prospective_outcomes": true,
+    "no_production_promotion": true,
+    "no_unidentified_causal_claims": true
+  },
+  "identification": {
+    "causal_interpretation_is_conditional_on_identification": true,
+    "coefficient_representation": "posterior_mean",
+    "contemporaneous_zero_restrictions_implied_by_ordering": true,
+    "covariance_representation": "posterior_expected_residual_covariance",
+    "impact_matrix": "lower_cholesky_of_posterior_expected_residual_covariance",
+    "method": "recursive_cholesky",
+    "ordering": [
+      "real_gdp_growth",
+      "core_pce_inflation",
+      "unemployment_rate",
+      "policy_rate"
+    ],
+    "shock_normalization": "one_standard_deviation_orthogonalized_structural_shock"
+  },
+  "irf": {
+    "impact_horizon_zero_computed_internally": true,
+    "posterior_credible_bands_in_2e": false,
+    "reported_horizons_quarters": [
+      1,
+      4,
+      8,
+      12
+    ],
+    "reported_object": "orthogonalized_level_response"
+  },
+  "name": "Recursive structural IRF and FEVD",
+  "production_authority": "none",
+  "status": "structural_analysis_bootstrap",
+  "workstream": "2E"
+}

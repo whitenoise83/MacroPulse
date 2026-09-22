@@ -21,14 +21,47 @@
     "model1d_prospective_outcomes_excluded": true,
     "prospective_retuning_prohibited": true
   },
-  "manifest_file": "MANIFEST_MODEL2_v1.0.0.txt",
+  "manifest_file": "MANIFEST_MODEL2_v1.0.1.txt",
   "manifest_file_count": 62,
-  "manifest_sha256": "3cc4f53db0d6ec74c332ab06108ef2cd9f1a0657ac444ae0ca1be0f3d2a28746",
+  "manifest_sha256": "0da73738a02d3619f78c1a0a3e876f5e05179b01ce7a7741ca1d2dde7ce663d0",
   "model": "2",
   "model_name": "Bayesian VAR",
+  "patch_scope": {
+    "forecast_semantics": "unchanged",
+    "model2h_frozen_verifier_contract": "permits_exact_model2g_detached_head_compatibility_only",
+    "model_logic": "unchanged",
+    "pseudo_real_time_evidence": "unchanged",
+    "scenario_semantics": "unchanged",
+    "selected_specification": "unchanged",
+    "source_manifest": "unchanged",
+    "structural_identification": "unchanged",
+    "tag_checkout_contract": "detached_head_compatible"
+  },
+  "previous_release": {
+    "commit": "22664c1d3a102ce88b62966dfb6c1f8a3405023f",
+    "immutable": true,
+    "move_or_recreate": false,
+    "tag": "model2-bvar-v1.0.0",
+    "tag_ci_conclusion": "failure",
+    "tag_ci_run_id": 35775232829,
+    "tag_ci_run_number": 15
+  },
+  "prior_tag_ci_failure": {
+    "cause": "GitHub Actions tag checkout uses detached HEAD; the frozen Model 2G verifier required the named model2-bvar-development branch.",
+    "conclusion": "failure",
+    "failed_step": "Verify Model 2 release record when present",
+    "failure_scope": "release_verifier_contract_only",
+    "head_sha": "22664c1d3a102ce88b62966dfb6c1f8a3405023f",
+    "job_id": 106906660113,
+    "model_or_forecast_semantics_affected": false,
+    "release_tag": "model2-bvar-v1.0.0",
+    "run_id": 35775232829,
+    "run_number": 15,
+    "status": "completed"
+  },
   "release_branch": "model2-bvar-development",
-  "release_record_type": "immutable_tag_release",
-  "release_tag": "model2-bvar-v1.0.0",
+  "release_tag": "model2-bvar-v1.0.1",
+  "release_type": "release_engineering_patch",
   "roadmap_phase": "II",
   "selected_specification": {
     "candidate_id": "a69878bf644615c5",
@@ -37,6 +70,7 @@
     "selection_evidence_payload_hash": "2f65c3dda0df6d8a501887bbf34671fe80e3292b296bce3e295d9c32fff16bf7",
     "shrinkage": 0.1
   },
+  "semantic_change": false,
   "source_closure": {
     "ci": {
       "conclusion": "success",
@@ -67,8 +101,8 @@
   "tag_policy": {
     "branch_ci_required_before_tag": true,
     "immutable_after_creation": true,
-    "must_point_to_release_metadata_commit": true,
+    "previous_tag_must_remain_immutable": true,
     "tag_ci_required_for_release_closure": true
   },
-  "version": "1.0.0"
+  "version": "1.0.1"
 }

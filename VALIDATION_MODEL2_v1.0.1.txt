@@ -1,0 +1,26 @@
+Model 2 Bayesian VAR v1.0.1 compatibility validation
+
+Previous immutable tag:
+  model2-bvar-v1.0.0 -> 22664c1d3a102ce88b62966dfb6c1f8a3405023f
+
+Failed tag CI:
+  Guard #15
+  run 35775232829
+  job 106906660113
+  failure class: detached-HEAD release verifier contract only
+  model/forecast semantic change: none
+
+Frozen Model 2 source:
+  df1da2bcd54cf71277eb8bfe21f6c52caad1c302
+
+Selected specification:
+  candidate_id: a69878bf644615c5
+  lags: 2
+  shrinkage: 0.1
+
+Planned immutable release tag:
+  model2-bvar-v1.0.1
+
+Frozen 2H verifier compatibility:
+  exact Model 2G detached-HEAD branch-guard transformation only
+  all other frozen Model 2G verifier content protected

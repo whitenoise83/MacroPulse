@@ -72,7 +72,8 @@ def canonical_payload_hash(payload: dict) -> str:
 def main() -> int:
     errors: list[str] = []
     try:
-        if git("branch", "--show-current") != EXPECTED_BRANCH:
+        branch = git("branch", "--show-current")
+        if branch and branch != EXPECTED_BRANCH:
             errors.append("Wrong branch.")
 
         for ancestor in (EXPECTED_2F_CLOSURE, EXPECTED_2G_CLOSURE):

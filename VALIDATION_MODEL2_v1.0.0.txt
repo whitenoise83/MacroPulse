@@ -1,0 +1,22 @@
+Model 2 Bayesian VAR v1.0.0 release validation
+
+Source closure: df1da2bcd54cf71277eb8bfe21f6c52caad1c302
+Source CI: Model 2 Bayesian VAR Guard #13
+Run: 35769859027
+Job: 106888547394
+Conclusion: success
+
+Frozen candidate:
+  id: a69878bf644615c5
+  lags: 2
+  shrinkage: 0.1
+
+Selection evidence payload:
+  2f65c3dda0df6d8a501887bbf34671fe80e3292b296bce3e295d9c32fff16bf7
+
+Release tag:
+  model2-bvar-v1.0.0
+
+Process:
+  metadata patch -> exact green branch CI -> immutable annotated tag -> exact green tag CI.
+Never move/delete/recreate the release tag.

@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - model2-bvar-development
+    tags:
+      - "model2-bvar-v*"
   pull_request:
     branches:
       - model2-bvar-development
@@ -44,75 +46,16 @@ jobs:
           python -m pip install -e .
           python -m pip install "pytest>=8,<9"
 
-      - name: Verify immutable Phase II release
-        run: python scripts/verify_phase2_release.py --require-tag
-
-      - name: Verify frozen Model 1D release
-        run: python scripts/verify_model1d_v038_release.py --require-tags
-
-      - name: Verify immutable Phase III lineage
-        run: python scripts/verify_phase3_evaluation.py
-
-      - name: Verify immutable Phase III release
-        run: python scripts/verify_phase3_release.py --require-tag
-
-      - name: Verify frozen Model 2B.1 data and vintage contract
-        run: python scripts/verify_model2b_data_vintage_scaffold.py
-
-      - name: Run focused Model 2B.1 tests
-        run: python -m pytest -q --disable-warnings tests/test_model2b_data_vintage.py
-
-      - name: Verify frozen Model 2B.2 origin-grid contract
-        run: python scripts/verify_model2b2_origin_grid.py
-
-      - name: Run focused Model 2B.2 tests
-        run: python -m pytest -q --disable-warnings tests/test_model2b2_origin_grid.py
-
-      - name: Verify frozen Model 2C baseline BVAR contract
-        run: python scripts/verify_model2c_baseline_bvar.py
-
-      - name: Run focused Model 2C tests
-        run: python -m pytest -q --disable-warnings tests/test_model2c_baseline_bvar.py
-
-      - name: Verify frozen Model 2D probabilistic forecast contract
-        run: python scripts/verify_model2d_probabilistic.py
-
-      - name: Run focused Model 2D tests
-        run: python -m pytest -q --disable-warnings tests/test_model2d_probabilistic.py
-
-      - name: Verify frozen Model 2E IRF/FEVD contract
-        run: python scripts/verify_model2e_irf_fevd.py
-
-      - name: Run focused Model 2E tests
-        run: python -m pytest -q --disable-warnings tests/test_model2e_irf_fevd.py
-
-      - name: Verify frozen Model 2F scenario contract
-        run: python scripts/verify_model2f_scenarios.py
-
-      - name: Run focused Model 2F tests
-        run: python -m pytest -q --disable-warnings tests/test_model2f_scenarios.py
-
-      - name: Verify frozen Model 2G pseudo-real-time evaluation
-        run: python scripts/verify_model2g_evaluation.py
-
-      - name: Run focused Model 2G tests
-        run: python -m pytest -q --disable-warnings tests/test_model2g_evaluation.py
-
-      - name: Verify Model 2H production hardening
-        run: python scripts/verify_model2h_production.py
-
-      - name: Run focused Model 2H tests
-        run: python -m pytest -q --disable-warnings tests/test_model2h_production.py
-
-      - name: Run complete repository test suite
-        run: python -m pytest -q --disable-warnings
-
-      - name: Re-verify frozen and Model 2 boundaries
+      - name: Verify immutable prerequisite releases
         run: |
           python scripts/verify_phase2_release.py --require-tag
           python scripts/verify_model1d_v038_release.py --require-tags
           python scripts/verify_phase3_evaluation.py
           python scripts/verify_phase3_release.py --require-tag
+
+      - name: Verify Model 2 workstream lineage on branch
+        if: github.ref_type != 'tag'
+        run: |
           python scripts/verify_model2b_data_vintage_scaffold.py
           python scripts/verify_model2b2_origin_grid.py
           python scripts/verify_model2c_baseline_bvar.py
@@ -121,6 +64,64 @@ jobs:
           python scripts/verify_model2f_scenarios.py
           python scripts/verify_model2g_evaluation.py
           python scripts/verify_model2h_production.py
+
+      - name: Run focused Model 2 workstream tests on branch
+        if: github.ref_type != 'tag'
+        run: |
+          python -m pytest -q --disable-warnings tests/test_model2b_data_vintage.py
+          python -m pytest -q --disable-warnings tests/test_model2b2_origin_grid.py
+          python -m pytest -q --disable-warnings tests/test_model2c_baseline_bvar.py
+          python -m pytest -q --disable-warnings tests/test_model2d_probabilistic.py
+          python -m pytest -q --disable-warnings tests/test_model2e_irf_fevd.py
+          python -m pytest -q --disable-warnings tests/test_model2f_scenarios.py
+          python -m pytest -q --disable-warnings tests/test_model2g_evaluation.py
+          python -m pytest -q --disable-warnings tests/test_model2h_production.py
+
+      - name: Verify Model 2 release record when present
+        shell: bash
+        run: |
+          if [ -f MODEL2_RELEASE.json ]; then
+            python scripts/verify_model2_release.py
+          else
+            echo "Model 2 release record not present on source-hardening commit."
+          fi
+
+      - name: Run focused Model 2 release tests when present
+        shell: bash
+        run: |
+          if [ -f tests/test_model2_release_metadata.py ]; then
+            python -m pytest -q --disable-warnings tests/test_model2_release_metadata.py
+          else
+            echo "Model 2 release metadata tests not present."
+          fi
+
+      - name: Run complete repository test suite
+        run: python -m pytest -q --disable-warnings
+
+      - name: Re-verify Model 2 boundaries
+        shell: bash
+        run: |
+          python scripts/verify_phase2_release.py --require-tag
+          python scripts/verify_model1d_v038_release.py --require-tags
+          python scripts/verify_phase3_evaluation.py
+          python scripts/verify_phase3_release.py --require-tag
+          if [ "${GITHUB_REF_TYPE}" != "tag" ]; then
+            python scripts/verify_model2b_data_vintage_scaffold.py
+            python scripts/verify_model2b2_origin_grid.py
+            python scripts/verify_model2c_baseline_bvar.py
+            python scripts/verify_model2d_probabilistic.py
+            python scripts/verify_model2e_irf_fevd.py
+            python scripts/verify_model2f_scenarios.py
+            python scripts/verify_model2g_evaluation.py
+            python scripts/verify_model2h_production.py
+          fi
+          if [ -f MODEL2_RELEASE.json ]; then
+            python scripts/verify_model2_release.py
+          fi
+
+      - name: Verify immutable Model 2 release tag
+        if: github.ref_type == 'tag'
+        run: python scripts/verify_model2_release.py --require-tag
 
       - name: Require clean tracked source tree after tests
         shell: bash

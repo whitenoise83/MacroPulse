@@ -1,0 +1,74 @@
+{
+  "execution_authority": {
+    "automatic_candidate_reselection": "none",
+    "automatic_model_switching": "none",
+    "core_forecast_interface": "authorized_when_tag_verified",
+    "database_write_authority": "none",
+    "scenario_probability_authority": "none",
+    "unidentified_causal_claim_authority": "none"
+  },
+  "forecast_horizons_quarters": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "governance": {
+    "automatic_switching_prohibited": true,
+    "candidate_specification_immutable": true,
+    "generative_ai_in_governed_core_prohibited": true,
+    "historical_model1_backfill_prohibited": true,
+    "model1d_prospective_outcomes_excluded": true,
+    "prospective_retuning_prohibited": true
+  },
+  "manifest_file": "MANIFEST_MODEL2_v1.0.0.txt",
+  "manifest_file_count": 62,
+  "manifest_sha256": "3cc4f53db0d6ec74c332ab06108ef2cd9f1a0657ac444ae0ca1be0f3d2a28746",
+  "model": "2",
+  "model_name": "Bayesian VAR",
+  "release_branch": "model2-bvar-development",
+  "release_record_type": "immutable_tag_release",
+  "release_tag": "model2-bvar-v1.0.0",
+  "roadmap_phase": "II",
+  "selected_specification": {
+    "candidate_id": "a69878bf644615c5",
+    "lags": 2,
+    "selection_evidence_file": "MODEL2G_SELECTION_EVIDENCE.json",
+    "selection_evidence_payload_hash": "2f65c3dda0df6d8a501887bbf34671fe80e3292b296bce3e295d9c32fff16bf7",
+    "shrinkage": 0.1
+  },
+  "source_closure": {
+    "ci": {
+      "conclusion": "success",
+      "head_sha": "df1da2bcd54cf71277eb8bfe21f6c52caad1c302",
+      "job_id": 106888547394,
+      "run_id": 35769859027,
+      "run_number": 13,
+      "status": "completed",
+      "workflow": "Model 2 Bayesian VAR Guard"
+    },
+    "commit": "df1da2bcd54cf71277eb8bfe21f6c52caad1c302"
+  },
+  "structural_identification": {
+    "irf_fevd_horizons_quarters": [
+      1,
+      4,
+      8,
+      12
+    ],
+    "method": "recursive_cholesky",
+    "ordering": [
+      "real_gdp_growth",
+      "core_pce_inflation",
+      "unemployment_rate",
+      "policy_rate"
+    ]
+  },
+  "tag_policy": {
+    "branch_ci_required_before_tag": true,
+    "immutable_after_creation": true,
+    "must_point_to_release_metadata_commit": true,
+    "tag_ci_required_for_release_closure": true
+  },
+  "version": "1.0.0"
+}

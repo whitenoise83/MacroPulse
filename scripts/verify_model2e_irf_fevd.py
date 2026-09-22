@@ -5,10 +5,10 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CONTRACT = ROOT / "MODEL2E_IRF_FEVD_CONTRACT.json"
-
 EXPECTED_BRANCH = "model2-bvar-development"
 EXPECTED_2D_CLOSURE = "a40c5f3f5426982f5d23781ad26467c97be501c8"
+EXPECTED_2E_CLOSURE = "559c581f6155f16c275e4523d67a8479310bf337"
+EXPECTED_2E_CI_RUN = 35747825040
 
 EXPECTED_DELTA = {
     "MODEL2E_IRF_FEVD_CONTRACT.json",
@@ -21,11 +21,10 @@ EXPECTED_DELTA = {
     ".github/workflows/model2-bvar-guard.yml",
 }
 
-IGNORED_PREFIXES = (
-    "src/macropulse.egg-info/",
-    "reports/inflation_operational_validation/",
-    "reports/labour_operational_validation/",
-)
+FROZEN_CONTENT = EXPECTED_DELTA - {
+    "scripts/verify_model2e_irf_fevd.py",
+    ".github/workflows/model2-bvar-guard.yml",
+}
 
 
 def git(*args: str) -> str:
@@ -47,11 +46,6 @@ def names(output: str) -> set[str]:
     }
 
 
-def ignorable(path: str) -> bool:
-    normalized = path.replace("\\", "/")
-    return any(normalized.startswith(prefix) for prefix in IGNORED_PREFIXES)
-
-
 def main() -> int:
     errors: list[str] = []
 
@@ -59,115 +53,79 @@ def main() -> int:
         if git("branch", "--show-current") != EXPECTED_BRANCH:
             errors.append("Wrong branch.")
 
-        ancestor = subprocess.run(
-            [
-                "git",
-                "merge-base",
-                "--is-ancestor",
-                EXPECTED_2D_CLOSURE,
-                "HEAD",
-            ],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-        )
-        if ancestor.returncode != 0:
-            errors.append("HEAD does not descend from closed Model 2D.")
-
-        committed = names(
-            git("diff", "--name-only", EXPECTED_2D_CLOSURE + "..HEAD")
-        )
-        working = {
-            path
-            for path in names(git("diff", "--name-only"))
-            if not ignorable(path)
-        }
-        staged = names(git("diff", "--cached", "--name-only"))
-        untracked = {
-            path
-            for path in names(
-                git("ls-files", "--others", "--exclude-standard")
+        for ancestor in (EXPECTED_2D_CLOSURE, EXPECTED_2E_CLOSURE):
+            result = subprocess.run(
+                ["git", "merge-base", "--is-ancestor", ancestor, "HEAD"],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
             )
-            if not ignorable(path)
-        }
-        observed = committed | working | staged | untracked
+            if result.returncode != 0:
+                errors.append("HEAD does not descend from " + ancestor)
 
-        bad = sorted(observed - EXPECTED_DELTA)
-        missing = sorted(EXPECTED_DELTA - observed)
+        closure_delta = names(
+            git(
+                "diff",
+                "--name-only",
+                EXPECTED_2D_CLOSURE + ".." + EXPECTED_2E_CLOSURE,
+            )
+        )
+        bad = sorted(closure_delta - EXPECTED_DELTA)
+        missing = sorted(EXPECTED_DELTA - closure_delta)
         if bad:
-            errors.append("Unexpected 2E paths: " + ", ".join(bad))
+            errors.append("Unexpected frozen 2E paths: " + ", ".join(bad))
         if missing:
-            errors.append("Missing 2E paths: " + ", ".join(missing))
+            errors.append("Missing frozen 2E paths: " + ", ".join(missing))
 
-        payload = json.loads(CONTRACT.read_text(encoding="utf-8"))
+        for path in sorted(FROZEN_CONTENT):
+            result = subprocess.run(
+                ["git", "diff", "--quiet", EXPECTED_2E_CLOSURE, "--", path],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode != 0:
+                errors.append("Frozen 2E content changed: " + path)
+
+        payload = json.loads(
+            git(
+                "show",
+                EXPECTED_2E_CLOSURE + ":MODEL2E_IRF_FEVD_CONTRACT.json",
+            )
+        )
         if payload.get("workstream") != "2E":
-            errors.append("Wrong workstream identity.")
-        if payload.get("base_model2d_closure_commit") != EXPECTED_2D_CLOSURE:
-            errors.append("Wrong 2D closure base.")
+            errors.append("Wrong frozen 2E workstream.")
         if payload.get("production_authority") != "none":
-            errors.append("Production authority must remain none.")
+            errors.append("2E production authority changed.")
 
         policy = payload.get("candidate_policy", {})
         if policy.get("all_six_model2c_candidates_retained") is not True:
-            errors.append("2E candidate retention changed.")
+            errors.append("Frozen 2E candidate retention changed.")
         for key in (
             "candidate_selection_in_2e",
             "candidate_ranking_in_2e",
             "automatic_candidate_exclusion_in_2e",
         ):
             if policy.get(key) is not False:
-                errors.append("2E candidate action changed: " + key)
+                errors.append("Frozen 2E candidate action changed: " + key)
 
         identification = payload.get("identification", {})
         if identification.get("method") != "recursive_cholesky":
-            errors.append("2E identification method changed.")
+            errors.append("Frozen 2E identification method changed.")
         if identification.get("ordering") != [
             "real_gdp_growth",
             "core_pce_inflation",
             "unemployment_rate",
             "policy_rate",
         ]:
-            errors.append("2E recursive ordering changed.")
-        if identification.get("coefficient_representation") != "posterior_mean":
-            errors.append("2E coefficient representation changed.")
-        if (
-            identification.get("covariance_representation")
-            != "posterior_expected_residual_covariance"
-        ):
-            errors.append("2E covariance representation changed.")
-        if (
-            identification.get(
-                "causal_interpretation_is_conditional_on_identification"
-            )
-            is not True
-        ):
-            errors.append("2E causal-interpretation boundary changed.")
+            errors.append("Frozen 2E recursive ordering changed.")
 
         irf = payload.get("irf", {})
         fevd = payload.get("fevd", {})
         if irf.get("reported_horizons_quarters") != [1, 4, 8, 12]:
-            errors.append("2E IRF horizons changed.")
+            errors.append("Frozen 2E IRF horizons changed.")
         if fevd.get("reported_horizons_quarters") != [1, 4, 8, 12]:
-            errors.append("2E FEVD horizons changed.")
-        if fevd.get("shares_sum_to_one_by_response_and_horizon") is not True:
-            errors.append("2E FEVD add-up rule changed.")
-        if fevd.get("shares_bounded_zero_one") is not True:
-            errors.append("2E FEVD bounds rule changed.")
-
-        governance = payload.get("governance", {})
-        for key in (
-            "no_candidate_selection",
-            "no_candidate_ranking",
-            "no_estimation_start_selection",
-            "no_evaluation_start_selection",
-            "no_model1_historical_backfill",
-            "no_model1d_prospective_outcomes",
-            "no_frozen_release_changes",
-            "no_production_promotion",
-            "no_unidentified_causal_claims",
-        ):
-            if governance.get(key) is not True:
-                errors.append("2E governance changed: " + key)
+            errors.append("Frozen 2E FEVD horizons changed.")
 
         workflow = (
             ROOT / ".github" / "workflows" / "model2-bvar-guard.yml"
@@ -177,32 +135,28 @@ def main() -> int:
             "tests/test_model2e_irf_fevd.py",
         ):
             if token not in workflow:
-                errors.append("Model 2 CI missing 2E gate: " + token)
+                errors.append("Current CI lost frozen 2E gate: " + token)
 
     except Exception as exc:
         errors.append(str(exc))
 
     if errors:
-        print("Model 2E IRF/FEVD verification: FAIL")
+        print("Model 2E frozen IRF/FEVD verification: FAIL")
         for error in errors:
             print("- " + error)
         return 1
 
-    print("Model 2E IRF/FEVD verification: PASS")
-    print("Base 2D closure: " + EXPECTED_2D_CLOSURE[:7])
-    print("Expected delta paths: 8")
-    print("Identification: recursive Cholesky")
-    print(
-        "Ordering: GDP growth -> core PCE inflation -> "
-        "unemployment -> policy rate"
-    )
-    print("IRF horizons: 1, 4, 8, 12")
-    print("FEVD horizons: 1, 4, 8, 12")
-    print("FEVD add-up/bounds rules: frozen")
-    print("Six Model 2C candidates retained: PASS")
-    print("Candidate selection/ranking in 2E: prohibited")
-    print("Causal interpretation: conditional on identification")
+    print("Model 2E frozen IRF/FEVD verification: PASS")
+    print("2D closure: " + EXPECTED_2D_CLOSURE[:7])
+    print("2E closure: " + EXPECTED_2E_CLOSURE[:7])
+    print("2E closure CI run: " + str(EXPECTED_2E_CI_RUN))
+    print("Frozen delta paths: 8")
+    print("Descendant-safe verification: PASS")
+    print("Recursive identification frozen: PASS")
+    print("IRF/FEVD horizons frozen: PASS")
+    print("Candidate selection/ranking: prohibited")
     print("Production authority: none")
+    print("Next: Model 2F permitted on descendants")
     return 0
 
 

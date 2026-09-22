@@ -1,0 +1,82 @@
+{
+  "base_model2e_closure_ci_run_id": 35747825040,
+  "base_model2e_closure_commit": "559c581f6155f16c275e4523d67a8479310bf337",
+  "baseline": {
+    "exact_estimation_panel_hash_required": true,
+    "object": "unconditional_recursive_posterior_mean_path",
+    "path_horizons_quarters": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "standard_report_horizons_quarters": [
+      1,
+      2,
+      4,
+      8
+    ]
+  },
+  "branch": "model2-bvar-development",
+  "candidate_policy": {
+    "all_six_model2c_candidates_retained": true,
+    "automatic_candidate_exclusion_in_2f": false,
+    "candidate_ranking_in_2f": false,
+    "candidate_selection_in_2f": false
+  },
+  "governance": {
+    "generative_ai_in_governed_core": false,
+    "no_candidate_ranking": true,
+    "no_candidate_selection": true,
+    "no_estimation_start_selection": true,
+    "no_evaluation_start_selection": true,
+    "no_frozen_release_changes": true,
+    "no_model1_historical_backfill": true,
+    "no_model1d_prospective_outcomes": true,
+    "no_production_promotion": true,
+    "no_scenario_probability_claims": true,
+    "no_unidentified_causal_claims": true
+  },
+  "interpretation": {
+    "baseline_label": "unconditional_baseline",
+    "deviation_is_scenario_minus_baseline": true,
+    "label_required": "scenario",
+    "no_causal_language": true,
+    "no_probability_language": true,
+    "structural_shock_identification_not_invoked": true
+  },
+  "name": "Conditional path scenario analysis",
+  "production_authority": "none",
+  "scenario": {
+    "allowed_constraint_horizons_quarters": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "allowed_variables": [
+      "real_gdp_growth",
+      "core_pce_inflation",
+      "unemployment_rate",
+      "policy_rate"
+    ],
+    "bayesian_conditional_density_computed": false,
+    "causal_claim": false,
+    "constraint_application": "override_after_model_prediction_then_feed_into_future_state",
+    "duplicate_variable_horizon_constraints_rejected": true,
+    "nonfinite_constraints_rejected": true,
+    "scenario_id_deterministic": true,
+    "scenario_probability_computed": false,
+    "type": "deterministic_hard_path_constraints"
+  },
+  "status": "scenario_analysis_bootstrap",
+  "workstream": "2F"
+}

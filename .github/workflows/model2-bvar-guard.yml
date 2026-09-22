@@ -80,11 +80,17 @@ jobs:
       - name: Run focused Model 2D tests
         run: python -m pytest -q --disable-warnings tests/test_model2d_probabilistic.py
 
-      - name: Verify Model 2E IRF/FEVD contract
+      - name: Verify frozen Model 2E IRF/FEVD contract
         run: python scripts/verify_model2e_irf_fevd.py
 
       - name: Run focused Model 2E tests
         run: python -m pytest -q --disable-warnings tests/test_model2e_irf_fevd.py
+
+      - name: Verify Model 2F scenario contract
+        run: python scripts/verify_model2f_scenarios.py
+
+      - name: Run focused Model 2F tests
+        run: python -m pytest -q --disable-warnings tests/test_model2f_scenarios.py
 
       - name: Run complete repository test suite
         run: python -m pytest -q --disable-warnings
@@ -100,6 +106,7 @@ jobs:
           python scripts/verify_model2c_baseline_bvar.py
           python scripts/verify_model2d_probabilistic.py
           python scripts/verify_model2e_irf_fevd.py
+          python scripts/verify_model2f_scenarios.py
 
       - name: Require clean tracked source tree after tests
         shell: bash

@@ -92,11 +92,17 @@ jobs:
       - name: Run focused Model 2F tests
         run: python -m pytest -q --disable-warnings tests/test_model2f_scenarios.py
 
-      - name: Verify Model 2G pseudo-real-time evaluation contract
+      - name: Verify frozen Model 2G pseudo-real-time evaluation
         run: python scripts/verify_model2g_evaluation.py
 
       - name: Run focused Model 2G tests
         run: python -m pytest -q --disable-warnings tests/test_model2g_evaluation.py
+
+      - name: Verify Model 2H production hardening
+        run: python scripts/verify_model2h_production.py
+
+      - name: Run focused Model 2H tests
+        run: python -m pytest -q --disable-warnings tests/test_model2h_production.py
 
       - name: Run complete repository test suite
         run: python -m pytest -q --disable-warnings
@@ -114,6 +120,7 @@ jobs:
           python scripts/verify_model2e_irf_fevd.py
           python scripts/verify_model2f_scenarios.py
           python scripts/verify_model2g_evaluation.py
+          python scripts/verify_model2h_production.py
 
       - name: Require clean tracked source tree after tests
         shell: bash

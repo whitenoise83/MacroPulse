@@ -1,0 +1,87 @@
+{
+  "base_model2g_closure_ci_job_id": 106835847139,
+  "base_model2g_closure_ci_run_id": 35754237381,
+  "base_model2g_closure_commit": "ad196fb5d9a2d0d2c9113ea94d1363573c0c3b56",
+  "branch": "model2-bvar-development",
+  "forecast_interface": {
+    "default_seed": 20260904,
+    "default_simulations": 5000,
+    "deterministic_output_fingerprint": true,
+    "exact_panel_hash_enforced": true,
+    "future_observation_rows_rejected": true,
+    "horizons_quarters": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "input": "exact_vintage_snapshot_plus_as_of_date",
+    "interval_coverages": [
+      0.5,
+      0.8,
+      0.95
+    ],
+    "point_forecast": "posterior_mean_recursive",
+    "predictive_distribution": "full_bvar_posterior_predictive",
+    "required_series": [
+      "GDPC1",
+      "PCEPILFE",
+      "UNRATE",
+      "FEDFUNDS"
+    ],
+    "scenario_analysis_automatic": false,
+    "structural_analysis_included": true
+  },
+  "governance": {
+    "generative_ai_in_governed_core": false,
+    "no_automatic_candidate_switching": true,
+    "no_candidate_ranking_in_2h": true,
+    "no_candidate_reselection_in_2h": true,
+    "no_database_writes_in_core_forecast_interface": true,
+    "no_frozen_release_changes": true,
+    "no_model1_historical_backfill": true,
+    "no_model1d_prospective_outcomes": true,
+    "no_prospective_retuning": true,
+    "no_scenario_probability_claims": true,
+    "no_unidentified_causal_claims": true,
+    "selected_candidate_frozen": true
+  },
+  "name": "Production hardening and release candidate",
+  "production_authority": "none_until_release_tag",
+  "release": {
+    "planned_tag": "model2-bvar-v1.0.0",
+    "production_authority_before_release_tag": "none",
+    "release_requires_green_source_ci": true,
+    "release_requires_separate_release_metadata_patch": true,
+    "tag_immutable_after_creation": true,
+    "tag_not_created_by_bootstrap": true,
+    "version": "1.0.0"
+  },
+  "selected_specification": {
+    "automatic_switching_allowed": false,
+    "candidate_id": "a69878bf644615c5",
+    "lags": 2,
+    "prospective_retuning_allowed": false,
+    "selection_evidence_file": "MODEL2G_SELECTION_EVIDENCE.json",
+    "selection_evidence_payload_hash": "2f65c3dda0df6d8a501887bbf34671fe80e3292b296bce3e295d9c32fff16bf7",
+    "shrinkage": 0.1
+  },
+  "status": "release_candidate_hardening",
+  "structural_interface": {
+    "causal_interpretation_conditional_on_identification": true,
+    "identification": "recursive_cholesky",
+    "irf_fevd_horizons_quarters": [
+      1,
+      4,
+      8,
+      12
+    ],
+    "ordering": [
+      "real_gdp_growth",
+      "core_pce_inflation",
+      "unemployment_rate",
+      "policy_rate"
+    ]
+  },
+  "workstream": "2H"
+}

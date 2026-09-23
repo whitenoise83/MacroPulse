@@ -43,3 +43,20 @@ Planned immutable release tag:
 Existing immutable tags:
   model2-bvar-v1.0.0: do not move or recreate
   model2-bvar-v1.0.1: do not move or recreate
+
+Prior failed v1.0.2 branch CI:
+  Guard #19
+  run 35828571469
+  job 107075679760
+  head 320bc8b5db7c6b4f86b1de5318f6616277689af9
+  failed step: Verify Model 2 release record when present
+  failure class: manifest line-ending hash only
+  immutable prerequisites: PASS
+  Model 2 workstream lineage verifiers: PASS
+  focused Model 2 workstream tests: PASS
+  model/forecast semantic change: none
+
+Manifest hash contract:
+  UTF-8 text
+  CRLF/CR normalized to LF before SHA-256
+  platform-neutral across Windows and Linux

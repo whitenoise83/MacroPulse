@@ -33,6 +33,12 @@ def manifest_entries() -> dict[str, str]:
     return result
 
 
+def canonical_text_sha256(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
 def test_release_identity_is_v102_compatibility_patch() -> None:
     value = load_release()
     assert value["roadmap_phase"] == "II"
@@ -85,7 +91,7 @@ def test_manifest_hash_matches_release_record() -> None:
     value = load_release()
     assert (
         value["manifest_sha256"]
-        == hashlib.sha256(MANIFEST.read_bytes()).hexdigest()
+        == canonical_text_sha256(MANIFEST)
     )
     assert value["manifest_file_count"] == len(manifest_entries())
 
@@ -131,3 +137,15 @@ def test_phase3_historical_test_is_descendant_safe() -> None:
     assert '"merge-base",' in text
     assert '"--is-ancestor",' in text
     assert "EXPECTED_FINAL_RELEASE_COMMIT" in text
+
+
+def test_v102_branch_ci_line_ending_failure_is_recorded_non_semantic() -> None:
+    value = load_release()
+    failure = value["prior_v1_0_2_branch_ci_failure"]
+    assert failure["run_id"] == 35828571469
+    assert failure["job_id"] == 107075679760
+    assert failure["head_sha"] == "320bc8b5db7c6b4f86b1de5318f6616277689af9"
+    assert failure["failure_scope"] == "manifest_line_ending_hash_only"
+    assert failure["model_or_forecast_semantics_affected"] is False
+    assert value["patch_scope"]["manifest_hash_contract"] == "utf8_lf_normalized_sha256"
+    assert value["release_engineering_lineage"]["v1_0_2_patch_commits_required"] == 2

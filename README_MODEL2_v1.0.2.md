@@ -30,3 +30,9 @@ The two historical tests are made descendant-safe:
   later governed release tags checked out in detached HEAD.
 
 No existing immutable release tag may be moved or recreated.
+
+## Guard #19 branch-CI correction
+
+The initial v1.0.2 patch commit `320bc8b5db7c6b4f86b1de5318f6616277689af9` reached Guard #19 (run `35828571469`, job `107075679760`). All immutable prerequisites, Model 2 workstream verifiers, and focused Model 2 workstream tests passed. The release-record step then failed only because the manifest SHA had been computed from Windows CRLF working-tree bytes while Git stored the committed text with LF line endings.
+
+The manifest integrity contract is therefore platform-neutral: SHA-256 is computed from UTF-8 text after canonical LF newline normalization. This correction is release-engineering only and changes no model or forecast semantics.

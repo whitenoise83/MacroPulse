@@ -86,6 +86,12 @@ def blob(path: str, ref: str) -> bytes:
     return bytes(git("show", ref + ":" + path, binary=True))
 
 
+def canonical_text_sha256(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
 def load_manifest() -> dict[str, str]:
     out: dict[str, str] = {}
     for raw in MANIFEST_FILE.read_text(encoding="utf-8").splitlines():
@@ -233,13 +239,34 @@ def verify_release_record(
     ):
         errors.append("Historical bootstrap-test patch scope changed.")
 
+    if scope.get("manifest_hash_contract") != "utf8_lf_normalized_sha256":
+        errors.append("Manifest hash normalization contract changed.")
+
+    branch_failure = release.get("prior_v1_0_2_branch_ci_failure", {})
+    if branch_failure.get("run_id") != 35828571469:
+        errors.append("Prior v1.0.2 branch-CI run identity changed.")
+    if branch_failure.get("job_id") != 107075679760:
+        errors.append("Prior v1.0.2 branch-CI job identity changed.")
+    if branch_failure.get("head_sha") != "320bc8b5db7c6b4f86b1de5318f6616277689af9":
+        errors.append("Prior v1.0.2 branch-CI commit identity changed.")
+    if branch_failure.get("failure_scope") != "manifest_line_ending_hash_only":
+        errors.append("Prior v1.0.2 branch-CI failure classification changed.")
+    if branch_failure.get("model_or_forecast_semantics_affected") is not False:
+        errors.append("Prior v1.0.2 branch-CI failure must remain non-semantic.")
+
+    lineage = release.get("release_engineering_lineage", {})
+    if lineage.get("v1_0_2_initial_patch_commit") != "320bc8b5db7c6b4f86b1de5318f6616277689af9":
+        errors.append("v1.0.2 initial patch commit lineage changed.")
+    if lineage.get("v1_0_2_patch_commits_required") != 2:
+        errors.append("v1.0.2 correction-count contract changed.")
+
     if release.get("manifest_file") != MANIFEST_FILE.name:
         errors.append("Manifest filename changed.")
     if release.get("manifest_file_count") != len(manifest):
         errors.append("Manifest file count changed.")
     if (
         release.get("manifest_sha256")
-        != hashlib.sha256(MANIFEST_FILE.read_bytes()).hexdigest()
+        != canonical_text_sha256(MANIFEST_FILE)
     ):
         errors.append("Manifest SHA-256 changed.")
 
@@ -313,15 +340,17 @@ def verify_lineage_and_patch() -> list[str]:
     )
 
     if working_delta:
-        if commit_count != 0:
+        if commit_count != 1:
             errors.append(
-                "Pre-commit v1.0.2 verification expects zero committed "
-                "patch commits after v1.0.1."
+                "Pre-correction v1.0.2 verification expects exactly one "
+                "committed patch commit after v1.0.1; found "
+                + str(commit_count)
+                + "."
             )
-    elif commit_count != 1:
+    elif commit_count != 2:
         errors.append(
-            "Frozen v1.0.2 release must be exactly one patch commit after "
-            "v1.0.1; found " + str(commit_count) + "."
+            "Frozen v1.0.2 release must contain exactly two release-engineering "
+            "commits after v1.0.1; found " + str(commit_count) + "."
         )
 
     patch = observed_patch()

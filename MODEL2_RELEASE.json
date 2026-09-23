@@ -23,7 +23,7 @@
   },
   "manifest_file": "MANIFEST_MODEL2_v1.0.2.txt",
   "manifest_file_count": 62,
-  "manifest_sha256": "d93db98e849f286a7888a6b7bdd5dc32a5f973c46cf18d17d5d4c257a4b5132b",
+  "manifest_sha256": "472020b3de18da6502007297317cf848b6ec6f2f8a88ac27b8d019c4632ab94e",
   "model": "2",
   "model_name": "Bayesian VAR",
   "patch_scope": {
@@ -36,7 +36,8 @@
     "source_manifest": "unchanged",
     "structural_identification": "unchanged",
     "tag_checkout_contract": "detached_head_compatible",
-    "historical_bootstrap_tests": "descendant_and_detached_head_safe"
+    "historical_bootstrap_tests": "descendant_and_detached_head_safe",
+    "manifest_hash_contract": "utf8_lf_normalized_sha256"
   },
   "previous_release": {
     "tag": "model2-bvar-v1.0.1",
@@ -86,8 +87,9 @@
     "v1_0_0_metadata_commit": "22664c1d3a102ce88b62966dfb6c1f8a3405023f",
     "v1_0_1_release_commit": "7a54c19fe9216b2073b6bfc107ea5e4fc25bebd9",
     "v1_0_1_tag_ci_run": 35822437102,
-    "v1_0_2_patch_commits_required": 1,
-    "model_or_forecast_semantics_changed": false
+    "v1_0_2_patch_commits_required": 2,
+    "model_or_forecast_semantics_changed": false,
+    "v1_0_2_initial_patch_commit": "320bc8b5db7c6b4f86b1de5318f6616277689af9"
   },
   "release_tag": "model2-bvar-v1.0.2",
   "release_type": "release_engineering_patch",
@@ -159,5 +161,20 @@
     "run_number": 16,
     "status": "completed",
     "workflow": "Model 2 Bayesian VAR Guard"
+  },
+  "prior_v1_0_2_branch_ci_failure": {
+    "workflow": "Model 2 Bayesian VAR Guard",
+    "run_number": 19,
+    "run_id": 35828571469,
+    "job_id": 107075679760,
+    "head_sha": "320bc8b5db7c6b4f86b1de5318f6616277689af9",
+    "status": "completed",
+    "conclusion": "failure",
+    "failed_step": "Verify Model 2 release record when present",
+    "failure_scope": "manifest_line_ending_hash_only",
+    "cause": "The v1.0.2 manifest SHA-256 was calculated from Windows CRLF working-tree bytes before commit, while Git normalized the committed text blob to LF. GitHub Actions therefore observed semantically identical manifest content with different platform-specific raw bytes.",
+    "model_or_forecast_semantics_affected": false,
+    "all_model2_workstream_verifiers_passed_before_failure": true,
+    "all_focused_model2_workstream_tests_passed_before_failure": true
   }
 }

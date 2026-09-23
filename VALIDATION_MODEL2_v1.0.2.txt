@@ -1,0 +1,45 @@
+Model 2 Bayesian VAR v1.0.2 compatibility validation
+
+Previous immutable tag:
+  model2-bvar-v1.0.1 -> 7a54c19fe9216b2073b6bfc107ea5e4fc25bebd9
+
+Failed tag CI:
+  Guard #18
+  run 35822437102
+  job 107056962997
+  failed step: Run complete repository test suite
+  failure class: historical bootstrap test checkout contract only
+
+Tests that failed:
+  tests/test_model2a_bootstrap_contract.py::test_branch_base
+  tests/test_phase3_bootstrap_contract.py::test_current_checkout_preserves_phase3_release_lineage
+
+Evidence before failure:
+  Model 2 v1.0.1 release verifier: PASS
+  Model 2 release metadata tests: PASS
+  immutable prerequisite releases: PASS
+
+Patch semantics:
+  model logic: unchanged
+  selected specification: unchanged
+  forecast semantics: unchanged
+  probabilistic forecasts: unchanged
+  structural identification: unchanged
+  scenarios: unchanged
+  pseudo-real-time evidence: unchanged
+  frozen semantic source manifest: unchanged
+
+Frozen Model 2 source:
+  df1da2bcd54cf71277eb8bfe21f6c52caad1c302
+
+Selected specification:
+  candidate_id: a69878bf644615c5
+  lags: 2
+  shrinkage: 0.1
+
+Planned immutable release tag:
+  model2-bvar-v1.0.2
+
+Existing immutable tags:
+  model2-bvar-v1.0.0: do not move or recreate
+  model2-bvar-v1.0.1: do not move or recreate

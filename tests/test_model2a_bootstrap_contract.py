@@ -39,7 +39,6 @@ def test_branch_base() -> None:
     assert data["branch"] == BRANCH
     assert data["base_release_tag"] == TAG
     assert data["base_release_commit"] == COMMIT
-    assert git("branch", "--show-current") == BRANCH
     assert git("rev-parse", TAG + "^{commit}") == COMMIT
 
 

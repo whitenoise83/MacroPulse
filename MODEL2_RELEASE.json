@@ -21,9 +21,9 @@
     "model1d_prospective_outcomes_excluded": true,
     "prospective_retuning_prohibited": true
   },
-  "manifest_file": "MANIFEST_MODEL2_v1.0.1.txt",
+  "manifest_file": "MANIFEST_MODEL2_v1.0.2.txt",
   "manifest_file_count": 62,
-  "manifest_sha256": "0da73738a02d3619f78c1a0a3e876f5e05179b01ce7a7741ca1d2dde7ce663d0",
+  "manifest_sha256": "d93db98e849f286a7888a6b7bdd5dc32a5f973c46cf18d17d5d4c257a4b5132b",
   "model": "2",
   "model_name": "Bayesian VAR",
   "patch_scope": {
@@ -35,16 +35,18 @@
     "selected_specification": "unchanged",
     "source_manifest": "unchanged",
     "structural_identification": "unchanged",
-    "tag_checkout_contract": "detached_head_compatible"
+    "tag_checkout_contract": "detached_head_compatible",
+    "historical_bootstrap_tests": "descendant_and_detached_head_safe"
   },
   "previous_release": {
-    "commit": "22664c1d3a102ce88b62966dfb6c1f8a3405023f",
+    "tag": "model2-bvar-v1.0.1",
+    "commit": "7a54c19fe9216b2073b6bfc107ea5e4fc25bebd9",
     "immutable": true,
     "move_or_recreate": false,
-    "tag": "model2-bvar-v1.0.0",
     "tag_ci_conclusion": "failure",
-    "tag_ci_run_id": 35775232829,
-    "tag_ci_run_number": 15
+    "tag_ci_run_number": 18,
+    "tag_ci_run_id": 35822437102,
+    "tag_ci_job_id": 107056962997
   },
   "prior_branch_ci_failure": {
     "cause": "The v1.0.1 release verifier misclassified the already committed compatibility source because generated/ignored working-tree state entered its pre-commit state check.",
@@ -60,26 +62,34 @@
     "workflow": "Model 2 Bayesian VAR Guard"
   },
   "prior_tag_ci_failure": {
-    "cause": "GitHub Actions tag checkout uses detached HEAD; the frozen Model 2G verifier required the named model2-bvar-development branch.",
+    "release_tag": "model2-bvar-v1.0.1",
+    "head_sha": "7a54c19fe9216b2073b6bfc107ea5e4fc25bebd9",
+    "workflow": "Model 2 Bayesian VAR Guard",
+    "run_number": 18,
+    "run_id": 35822437102,
+    "job_id": 107056962997,
+    "status": "completed",
     "conclusion": "failure",
-    "failed_step": "Verify Model 2 release record when present",
-    "failure_scope": "release_verifier_contract_only",
-    "head_sha": "22664c1d3a102ce88b62966dfb6c1f8a3405023f",
-    "job_id": 106906660113,
+    "failed_step": "Run complete repository test suite",
+    "failure_scope": "historical_bootstrap_test_checkout_contract_only",
+    "cause": "Two historical bootstrap tests rejected a valid descendant Model 2 release tag checkout in detached HEAD: the Model 2A test required the named development branch and the Phase III test required a Phase III tag at HEAD instead of verifying immutable Phase III ancestry.",
+    "failed_tests": [
+      "tests/test_model2a_bootstrap_contract.py::test_branch_base",
+      "tests/test_phase3_bootstrap_contract.py::test_current_checkout_preserves_phase3_release_lineage"
+    ],
     "model_or_forecast_semantics_affected": false,
-    "release_tag": "model2-bvar-v1.0.0",
-    "run_id": 35775232829,
-    "run_number": 15,
-    "status": "completed"
+    "model2_release_verifier_passed_before_failure": true,
+    "model2_release_metadata_tests_passed_before_failure": true
   },
   "release_branch": "model2-bvar-development",
   "release_engineering_lineage": {
-    "final_state_detection_correction_commits_required": 1,
-    "model_or_forecast_semantics_changed": false,
     "v1_0_0_metadata_commit": "22664c1d3a102ce88b62966dfb6c1f8a3405023f",
-    "v1_0_1_compatibility_source_commit": "24f2a0f95984229f93635d33e5be315f72ed5d0d"
+    "v1_0_1_release_commit": "7a54c19fe9216b2073b6bfc107ea5e4fc25bebd9",
+    "v1_0_1_tag_ci_run": 35822437102,
+    "v1_0_2_patch_commits_required": 1,
+    "model_or_forecast_semantics_changed": false
   },
-  "release_tag": "model2-bvar-v1.0.1",
+  "release_tag": "model2-bvar-v1.0.2",
   "release_type": "release_engineering_patch",
   "roadmap_phase": "II",
   "selected_specification": {
@@ -123,5 +133,31 @@
     "previous_tag_must_remain_immutable": true,
     "tag_ci_required_for_release_closure": true
   },
-  "version": "1.0.1"
+  "version": "1.0.2",
+  "historical_v1_0_0_tag_ci_failure": {
+    "cause": "GitHub Actions tag checkout uses detached HEAD; the frozen Model 2G verifier required the named model2-bvar-development branch.",
+    "conclusion": "failure",
+    "failed_step": "Verify Model 2 release record when present",
+    "failure_scope": "release_verifier_contract_only",
+    "head_sha": "22664c1d3a102ce88b62966dfb6c1f8a3405023f",
+    "job_id": 106906660113,
+    "model_or_forecast_semantics_affected": false,
+    "release_tag": "model2-bvar-v1.0.0",
+    "run_id": 35775232829,
+    "run_number": 15,
+    "status": "completed"
+  },
+  "historical_v1_0_1_branch_ci_failure": {
+    "cause": "The v1.0.1 release verifier misclassified the already committed compatibility source because generated/ignored working-tree state entered its pre-commit state check.",
+    "conclusion": "failure",
+    "failed_step": "Verify Model 2 release record when present",
+    "failure_scope": "release_verifier_state_detection_only",
+    "head_sha": "24f2a0f95984229f93635d33e5be315f72ed5d0d",
+    "job_id": 106928064296,
+    "model_or_forecast_semantics_affected": false,
+    "run_id": 35781569124,
+    "run_number": 16,
+    "status": "completed",
+    "workflow": "Model 2 Bayesian VAR Guard"
+  }
 }

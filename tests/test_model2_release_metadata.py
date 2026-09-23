@@ -118,3 +118,19 @@ def test_model2h_verifier_enforces_exact_2g_compatibility() -> None:
     ).read_text(encoding="utf-8")
     assert "expected_detached_head_2g_verifier" in text
     assert "Exact Model 2G detached-HEAD compatibility: PASS" in text
+
+def test_prior_branch_ci_failure_is_recorded_non_semantic() -> None:
+    failure = load_release()["prior_branch_ci_failure"]
+    assert failure["run_id"] == 35781569124
+    assert failure["job_id"] == 106928064296
+    assert failure["head_sha"] == (
+        "24f2a0f95984229f93635d33e5be315f72ed5d0d"
+    )
+    assert (
+        failure["failure_scope"]
+        == "release_verifier_state_detection_only"
+    )
+    assert (
+        failure["model_or_forecast_semantics_affected"]
+        is False
+    )

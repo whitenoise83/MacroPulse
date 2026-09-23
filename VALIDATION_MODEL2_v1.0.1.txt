@@ -24,3 +24,13 @@ Planned immutable release tag:
 Frozen 2H verifier compatibility:
   exact Model 2G detached-HEAD branch-guard transformation only
   all other frozen Model 2G verifier content protected
+
+Prior failed branch CI:
+  Guard #16
+  run 35781569124
+  job 106928064296
+  head 24f2a0f95984229f93635d33e5be315f72ed5d0d
+  failed step: Verify Model 2 release record when present
+  failure class: release-verifier state detection only
+  Model 2 workstream lineage/tests before failure: PASS
+  model/forecast semantic change: none

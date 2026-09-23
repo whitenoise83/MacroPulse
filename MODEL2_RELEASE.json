@@ -46,6 +46,19 @@
     "tag_ci_run_id": 35775232829,
     "tag_ci_run_number": 15
   },
+  "prior_branch_ci_failure": {
+    "cause": "The v1.0.1 release verifier misclassified the already committed compatibility source because generated/ignored working-tree state entered its pre-commit state check.",
+    "conclusion": "failure",
+    "failed_step": "Verify Model 2 release record when present",
+    "failure_scope": "release_verifier_state_detection_only",
+    "head_sha": "24f2a0f95984229f93635d33e5be315f72ed5d0d",
+    "job_id": 106928064296,
+    "model_or_forecast_semantics_affected": false,
+    "run_id": 35781569124,
+    "run_number": 16,
+    "status": "completed",
+    "workflow": "Model 2 Bayesian VAR Guard"
+  },
   "prior_tag_ci_failure": {
     "cause": "GitHub Actions tag checkout uses detached HEAD; the frozen Model 2G verifier required the named model2-bvar-development branch.",
     "conclusion": "failure",
@@ -60,6 +73,12 @@
     "status": "completed"
   },
   "release_branch": "model2-bvar-development",
+  "release_engineering_lineage": {
+    "final_state_detection_correction_commits_required": 1,
+    "model_or_forecast_semantics_changed": false,
+    "v1_0_0_metadata_commit": "22664c1d3a102ce88b62966dfb6c1f8a3405023f",
+    "v1_0_1_compatibility_source_commit": "24f2a0f95984229f93635d33e5be315f72ed5d0d"
+  },
   "release_tag": "model2-bvar-v1.0.1",
   "release_type": "release_engineering_patch",
   "roadmap_phase": "II",

@@ -19,3 +19,5 @@ The new immutable release tag will be `model2-bvar-v1.0.1` after this single pat
 passes exact branch CI.
 
 The frozen Model 2H verifier is descendant-safe for this single exact Model 2G detached-HEAD branch-guard transformation and rejects any other change to the frozen 2G verifier.
+
+Guard #16 (run 35781569124) failed only in release-verifier state detection after all Model 2 lineage verifiers and focused workstream tests passed. The final correction anchors release state to commit lineage and consistently excludes ignored/generated runtime paths. Model and forecast semantics remain unchanged.

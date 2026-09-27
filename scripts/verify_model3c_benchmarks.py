@@ -78,6 +78,8 @@ def main() -> int:
         errors.append("Unexpected benchmark-family set.")
     if families.get("hp_filter", {}).get("role") != "diagnostic_benchmark":
         errors.append("Conventional HP must remain diagnostic.")
+    if families.get("hp_filter", {}).get("pseudo_real_time_reestimated_at_each_origin") is not False:
+        errors.append("Conventional two-sided HP must not be eligible for pseudo-real-time recursive-origin scoring.")
     if families.get("one_sided_hp_filter", {}).get("uses_only_information_through_origin") is not True:
         errors.append("One-sided HP must be origin-safe.")
     h = families.get("hamilton_regression", {})

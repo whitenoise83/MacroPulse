@@ -25,7 +25,7 @@
       "role": "diagnostic_benchmark",
       "lambda_quarterly": 1600.0,
       "two_sided_full_sample": true,
-      "pseudo_real_time_reestimated_at_each_origin": true
+      "pseudo_real_time_reestimated_at_each_origin": false
     },
     "one_sided_hp_filter": {
       "role": "real_time_benchmark",

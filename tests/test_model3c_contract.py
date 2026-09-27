@@ -27,6 +27,7 @@ def test_hp_roles_are_explicit():
     f = contract()["benchmark_families"]
     assert f["hp_filter"]["role"] == "diagnostic_benchmark"
     assert f["hp_filter"]["two_sided_full_sample"] is True
+    assert f["hp_filter"]["pseudo_real_time_reestimated_at_each_origin"] is False
     assert f["one_sided_hp_filter"]["uses_only_information_through_origin"] is True
 
 

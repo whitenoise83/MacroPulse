@@ -22,6 +22,8 @@ OLS of log real GDP on an intercept and deterministic time trend. A full-sample 
 
 Quarterly HP filter with lambda 1600. The conventional full-sample HP trend is explicitly two-sided and must not masquerade as a real-time estimate.
 
+The conventional full-sample HP diagnostic is not eligible for recursive-origin pseudo-real-time scoring. The one-sided HP benchmark owns the origin-safe HP role.
+
 ### One-sided HP benchmark
 
 At origin `t`, the HP filter is fit only to observations available through `t`; only the terminal trend estimate is retained for that origin. Future observations may not revise that stored origin estimate.

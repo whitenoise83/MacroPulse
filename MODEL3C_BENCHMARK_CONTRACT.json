@@ -1,0 +1,65 @@
+{
+  "model": "3",
+  "workstream": "3C",
+  "name": "Univariate Trend / Filter Benchmarks",
+  "status": "benchmark_estimation",
+  "branch": "model3-output-gap-development",
+  "model2_base_tag": "model2-bvar-v1.0.2",
+  "model2_base_commit": "cda24988e772cd2b96be612b7d455c54a06f44fa",
+  "model3a_commit": "6f45208103a5ac1a900317a33c0038d56920ffbb",
+  "model3b_base_commit": "5849b89367defdef68c0676fdcd1d2f7182bd873",
+  "frequency": "quarterly",
+  "input_contract": {
+    "required_column": "real_gdp_log",
+    "minimum_observations": 20,
+    "finite_values_required": true,
+    "strictly_increasing_quarter_index_required": true
+  },
+  "benchmark_families": {
+    "deterministic_linear_trend": {
+      "role": "benchmark",
+      "two_sided_full_sample": true,
+      "pseudo_real_time_reestimated_at_each_origin": true
+    },
+    "hp_filter": {
+      "role": "diagnostic_benchmark",
+      "lambda_quarterly": 1600.0,
+      "two_sided_full_sample": true,
+      "pseudo_real_time_reestimated_at_each_origin": true
+    },
+    "one_sided_hp_filter": {
+      "role": "real_time_benchmark",
+      "lambda_quarterly": 1600.0,
+      "uses_only_information_through_origin": true
+    },
+    "hamilton_regression": {
+      "role": "benchmark",
+      "horizon_quarters": 8,
+      "lags": 4,
+      "uses_only_information_through_origin": true
+    }
+  },
+  "output_contract": {
+    "potential_log_output": true,
+    "potential_output_level": true,
+    "output_gap_pct": true,
+    "estimate_origin": true,
+    "benchmark_id": true,
+    "production_status": false
+  },
+  "governance": {
+    "production_winner_frozen": false,
+    "automatic_selection_allowed": false,
+    "automatic_promotion_allowed": false,
+    "model1_integration_allowed": false,
+    "model2_forecast_integration_allowed": false,
+    "multivariate_slack_estimation_allowed": false,
+    "state_space_core_estimation_allowed": false,
+    "predecessor_modification_allowed": false,
+    "database_writes_allowed": false
+  },
+  "bootstrap": {
+    "new_paths_only": true,
+    "passing_3c_authorizes_only": "3D_state_space_potential_output"
+  }
+}

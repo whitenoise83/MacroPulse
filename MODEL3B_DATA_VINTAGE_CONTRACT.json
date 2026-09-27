@@ -1,0 +1,49 @@
+{
+  "model": "3",
+  "workstream": "3B",
+  "name": "Real-Time Data & Vintage Architecture",
+  "status": "data_vintage_architecture",
+  "branch": "model3-output-gap-development",
+  "model2_base_tag": "model2-bvar-v1.0.2",
+  "model2_base_commit": "cda24988e772cd2b96be612b7d455c54a06f44fa",
+  "model3a_base_commit": "6f45208103a5ac1a900317a33c0038d56920ffbb",
+  "frequency": "quarterly",
+  "required_series": [
+    "GDPC1",
+    "UNRATE",
+    "PCEPILFE"
+  ],
+  "panel_columns": [
+    "real_gdp_level",
+    "real_gdp_log",
+    "unemployment_rate",
+    "core_pce_level",
+    "core_pce_inflation"
+  ],
+  "vintage_contract": {
+    "exact_vintage_or_governed_availability_evidence_required": true,
+    "information_set_cutoff_required": true,
+    "source_snapshot_hash_required": true,
+    "deterministic_information_set_id_required": true,
+    "no_look_ahead_required": true,
+    "current_revised_history_may_not_masquerade_as_real_time": false,
+    "publication_lags_must_be_respected": true,
+    "left_censored_first_state_not_admissible": true
+  },
+  "integration": {
+    "model1_integration_deferred_to": "3F",
+    "model2_forward_gap_integration_deferred_to": "3G",
+    "model2_forecasts_allowed_in_3b": false
+  },
+  "governance": {
+    "estimation_allowed": false,
+    "production_writes_allowed": false,
+    "predecessor_modification_allowed": false,
+    "generative_ai_in_governed_core_allowed": false,
+    "automatic_promotion_allowed": false
+  },
+  "bootstrap": {
+    "new_paths_only": true,
+    "passing_3b_authorizes_only": "3C_univariate_trend_filter_benchmarks"
+  }
+}

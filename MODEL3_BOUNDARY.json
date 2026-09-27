@@ -1,0 +1,86 @@
+{
+  "base_release_commit": "cda24988e772cd2b96be612b7d455c54a06f44fa",
+  "base_release_tag": "model2-bvar-v1.0.2",
+  "branch": "model3-output-gap-development",
+  "model": "3",
+  "model_name": "Potential Output & Macroeconomic Slack",
+  "promotion_authority": "none",
+  "roadmap_phase": "II",
+  "status": "specification_bootstrap",
+  "frequency": "quarterly",
+  "workstreams": [
+    "3A_specification_governance",
+    "3B_real_time_data_vintages",
+    "3C_univariate_trend_filter_benchmarks",
+    "3D_state_space_potential_output",
+    "3E_multivariate_macroeconomic_slack",
+    "3F_model1_current_state_integration",
+    "3G_model2_forward_gap_integration",
+    "3H_pseudo_real_time_evaluation_selection",
+    "3I_production_hardening_release"
+  ],
+  "core_output_contract": {
+    "objects": [
+      "potential_output_level",
+      "potential_output_growth",
+      "output_gap_pct",
+      "output_gap_uncertainty"
+    ],
+    "forward_horizons_quarters": [
+      0,
+      1,
+      2,
+      4,
+      8
+    ],
+    "real_time_estimate_required": true,
+    "revised_or_smoothed_estimates_must_be_separately_labelled": true,
+    "uncertainty_required": true
+  },
+  "candidate_architecture": {
+    "production_winner_frozen_in_3a": false,
+    "candidate_selection": "predeclared_pseudo_real_time_development_evidence_then_freeze",
+    "benchmark_families": [
+      "linear_or_deterministic_trend",
+      "hp_filter_diagnostic",
+      "one_sided_filter",
+      "hamilton_regression_filter"
+    ],
+    "core_family": "state_space_unobserved_components",
+    "multivariate_extension": "economically_interpretable_labour_and_inflation_slack_relations",
+    "prospective_adaptation": false
+  },
+  "real_time_contract": {
+    "pseudo_real_time_required": true,
+    "information_set_cutoff_required": true,
+    "vintage_identity_required": true,
+    "no_look_ahead_required": true,
+    "latest_revised_data_may_not_masquerade_as_real_time": true,
+    "revised_or_smoothed_estimates_separately_labelled": true,
+    "monitoring_is_not_adaptation": true
+  },
+  "integration_contract": {
+    "model1_interface_frozen_in": "3F",
+    "model2_interface_frozen_in": "3G",
+    "model2_forecasts_may_determine_current_or_historical_potential": false,
+    "model2_forecasts_may_retune_model3_current_or_historical_estimator": false,
+    "forward_gap_distribution_requires_separately_governed_potential_process": true
+  },
+  "governance": {
+    "model3_core_may_use_generative_ai": false,
+    "model3_may_auto_promote_or_switch_specifications": false,
+    "model3_may_modify_frozen_model1_releases": false,
+    "model3_may_modify_frozen_model2_release": false,
+    "model3_may_move_or_recreate_frozen_release_tags": false,
+    "model3_may_backfill_governed_predecessor_outputs": false,
+    "model3_may_tune_predecessor_models": false,
+    "model3_may_use_future_information_in_pseudo_real_time": false,
+    "model3_may_use_latest_revised_data_as_if_real_time": false,
+    "model3_may_tune_from_future_model4_performance": false
+  },
+  "bootstrap_contract": {
+    "new_paths_only": true,
+    "predecessor_file_modification_allowed": false,
+    "passing_3a_authorizes_only": "3B_real_time_data_vintages"
+  }
+}

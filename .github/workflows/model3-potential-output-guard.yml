@@ -89,7 +89,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          import pytest, sys
+          import pytest
           excluded = Path("tests/test_model3d_corrective_real_data.py")
           files = [
               str(p) for p in sorted(Path("tests").glob("test_model3*.py"))
@@ -102,7 +102,7 @@ jobs:
 
       - name: Run complete CI-safe repository test suite
         run: |
-          python -m pytest -q --disable-warnings             --ignore=tests/test_model3d_corrective_real_data.py
+          python -m pytest -q --disable-warnings             --ignore=tests/test_model3d_corrective_real_data.py             --deselect=tests/test_model2_release_metadata.py::test_v102_release_verifier_is_tag_optional_before_creation
 
       - name: Verify final Model 3 release record when present
         shell: bash

@@ -1,0 +1,39 @@
+{
+  "governance": {
+    "econometric_retuning_allowed": false,
+    "model1_mutation_allowed": false,
+    "model2_mutation_allowed": false,
+    "model3_predecessor_mutation_allowed": false,
+    "model4_performance_selection_allowed": false,
+    "post_hoc_revision_cutoff_allowed": false,
+    "production_promotion_before_release_tag": false
+  },
+  "name": "Production Hardening & Release",
+  "planned_release_tag": "model3-potential-output-v1.0.0",
+  "predecessor": {
+    "commit": "a8ebf2d05a3b49d0c21f5ab1b03ca6eefca0b094",
+    "immutable": true,
+    "tag": "model3-pseudo-real-time-v1.0.0"
+  },
+  "production": {
+    "automatic_candidate_switching": "none",
+    "current_estimate_class": "production_current_endpoint",
+    "database_write_authority": "none",
+    "module": "macropulse.slack.production",
+    "revised_history_class": "smoothed_revised"
+  },
+  "release_audits": {
+    "fixed_quarter_revision": "reports/model3i_release_audits/MODEL3I_FIXED_QUARTER_REVISION_AUDIT.json",
+    "model3h_evidence_manifest": "reports/model3i_release_audits/MODEL3H_EVIDENCE_MANIFEST.json",
+    "no_lookahead": "reports/model3i_release_audits/MODEL3I_NO_LOOKAHEAD_AUDIT.json",
+    "production_smoke": "reports/model3i_release_audits/MODEL3I_PRODUCTION_SMOKE_TEST.json"
+  },
+  "release_branch": "model3-output-gap-development",
+  "release_status": "pre_commit_release_candidate",
+  "selected_candidate": {
+    "candidate_id": "3D",
+    "name": "State-Space Potential Output",
+    "selection_source": "reports/model3h_selection/MODEL3H_SELECTION_DECISION.json"
+  },
+  "workstream": "3I"
+}

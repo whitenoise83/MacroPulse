@@ -1,0 +1,68 @@
+{
+  "workstream": "3I",
+  "name": "Model 3 Production Hardening & Release",
+  "predecessor_commit": "a8ebf2d05a3b49d0c21f5ab1b03ca6eefca0b094",
+  "predecessor_tag": "model3-pseudo-real-time-v1.0.0",
+  "selected_candidate": "3D",
+  "selected_candidate_source": "reports/model3h_selection/MODEL3H_SELECTION_DECISION.json",
+  "production_promotion_in_bootstrap": false,
+  "database_writes_in_bootstrap": false,
+  "econometric_retuning_allowed": false,
+  "model1_mutation_allowed": false,
+  "model2_mutation_allowed": false,
+  "model3_predecessor_mutation_allowed": false,
+  "production_fit_api": "macropulse.slack.state_space.fit_state_space",
+  "production_estimate_semantics": {
+    "current_endpoint": "terminal filtered_full_sample_parameters relabelled production_current_endpoint",
+    "revised_history": "smoothed_revised",
+    "filtered_history_not_claimed_real_time": "full-sample filtered history is not historical real-time evidence"
+  },
+  "required_provenance": [
+    "model3_release_identity",
+    "selected_candidate",
+    "as_of_date",
+    "information_set_id",
+    "source_snapshot_hash",
+    "sample_first_quarter",
+    "sample_last_quarter",
+    "n_observations",
+    "estimate_class",
+    "estimator_diagnostics"
+  ],
+  "fail_closed_gates": [
+    "selected_candidate_is_3D",
+    "exact_vintage_information_set",
+    "state_space_converged",
+    "ar2_stationarity_and_root_margin",
+    "trend_gap_sigma_ratio",
+    "finite_outputs",
+    "deterministic_export",
+    "dependency_metadata_consistency",
+    "model3g_growth_transform_audit",
+    "model3g_variable_index_by_name_audit",
+    "model3g_dense_vs_report_provenance_audit",
+    "full_model3_regression",
+    "frozen_predecessor_integrity"
+  ],
+  "dependency_policy": {
+    "requirements_statsmodels": "statsmodels>=0.14.6,<0.16",
+    "pyproject_normalization_required": true,
+    "normalization_must_not_relax_requirements_bound": true
+  },
+  "model3g_release_audits": {
+    "real_gdp_growth_transform_must_equal": "400*diff(log(GDPC1))",
+    "gdp_variable_selection": "by variable name, not caller hard-coded cube index",
+    "dense_draw_provenance": "must distinguish dense-path draw identity/horizons from governed report horizons"
+  },
+  "release_artifacts_planned": [
+    "production wrapper/API",
+    "deterministic export schema",
+    "release manifest",
+    "release metadata",
+    "CI/release guard",
+    "runbook",
+    "changelog"
+  ],
+  "release_tag_planned": "model3-potential-output-v1.0.0",
+  "bootstrap_authorizes": "3I implementation only; no production promotion or release tag"
+}

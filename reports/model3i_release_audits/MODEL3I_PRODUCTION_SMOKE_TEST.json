@@ -1,0 +1,39 @@
+{
+  "as_of_date": "2026-06-30",
+  "audit": "Model 3I real-data production smoke test",
+  "current_estimate": {
+    "observed_log_output": 10.093298452389204,
+    "output_gap_pct": 0.35682483378316476,
+    "potential_log_output": 10.089730204051373,
+    "potential_output_growth_annualized_pct": 2.4239599709004134,
+    "potential_output_level": 24094.291014500363,
+    "provenance": {
+      "as_of_date": "2026-06-30",
+      "estimate_class": "production_current_endpoint",
+      "estimator_diagnostics": {
+        "converged": true,
+        "log_likelihood": 513.2755133620677,
+        "phi1": 0.7995832425031477,
+        "phi2": 0.1120025590720761,
+        "sigma_gap": 0.010033871306596907,
+        "sigma_potential": 0.0,
+        "sigma_trend_growth": 0.0003313408620397813
+      },
+      "information_set_id": "8714f8b5b31257add706ed6862fcfdac9d3d12eb4b10e38a135946b2f28aa263",
+      "model3_release_identity": "model3-potential-output-v1.0.0",
+      "n_observations": 164,
+      "sample_first_quarter": "1985Q2",
+      "sample_last_quarter": "2026Q1",
+      "selected_candidate": "3D",
+      "source_snapshot_hash": "0efef015a0234aa8e7ba1446e9c1ac5a16715fd3ffe104a77e595f23a5d3ed7a"
+    },
+    "quarter": "2026Q1"
+  },
+  "deterministic_repeated_fit": true,
+  "export_sha256": "1b83ddddb7894009f8f884bb18eb60ef81f063965c7d8d374dc7bf37d982bd56",
+  "future_dated_rows": 0,
+  "planned_release_tag": "model3-potential-output-v1.0.0",
+  "release_status": "pre_tag_validation",
+  "snapshot_rows": 1158,
+  "status": "PASS"
+}

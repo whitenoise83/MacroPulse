@@ -1,0 +1,30 @@
+{
+  "audit": "Model 3I No-Lookahead Archive Audit",
+  "complete_three_series_vintages": 213,
+  "complete_vintages_with_future_rows": 0,
+  "conclusion": "No observation_date > as_of_date rows were found for GDPC1, PCEPILFE, or UNRATE. No archive lookahead defect was identified.",
+  "database": "data/macropulse.duckdb",
+  "first_complete_vintage": "2015-01-15",
+  "last_complete_vintage": "2026-06-30",
+  "prior_audit_correction": "The previously printed values 38667, 325962, and 493921 were total archive row counts, not future-row counts.",
+  "required_series": {
+    "GDPC1": {
+      "future_rows": 0,
+      "n_vintages": 272,
+      "total_rows": 38667
+    },
+    "PCEPILFE": {
+      "future_rows": 0,
+      "n_vintages": 760,
+      "total_rows": 325962
+    },
+    "UNRATE": {
+      "future_rows": 0,
+      "n_vintages": 1145,
+      "total_rows": 493921
+    }
+  },
+  "safe_loader_failures": 0,
+  "safe_loader_vintages_checked": 213,
+  "status": "PASS"
+}

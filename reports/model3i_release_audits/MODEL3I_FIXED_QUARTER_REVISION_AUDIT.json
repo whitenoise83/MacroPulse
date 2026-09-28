@@ -1,0 +1,70 @@
+{
+  "advancing_information_sets": 47,
+  "audit": "Model 3I Selected-3D Fixed-Quarter Revision Audit",
+  "candidate_id": "3D",
+  "governance_interpretation": "Robustness/release diagnostic only. No post-hoc revision cutoff is introduced and the governed Model 3H selection is not reopened. Large revisions are concentrated in the COVID shock window.",
+  "largest_latest_revisions": [
+    {
+      "latest_gap_pct": -3.998244,
+      "latest_revision_pp": -3.797605,
+      "max_abs_revision_pp": 4.702237,
+      "quarter": "2020Q2",
+      "terminal_gap_pct": -0.200639
+    },
+    {
+      "latest_gap_pct": -0.007835,
+      "latest_revision_pp": -1.580872,
+      "max_abs_revision_pp": 2.271838,
+      "quarter": "2020Q3",
+      "terminal_gap_pct": 1.573037
+    },
+    {
+      "latest_gap_pct": -0.117777,
+      "latest_revision_pp": 0.635719,
+      "max_abs_revision_pp": 0.660458,
+      "quarter": "2020Q4",
+      "terminal_gap_pct": -0.753496
+    },
+    {
+      "latest_gap_pct": 0.721476,
+      "latest_revision_pp": 0.622923,
+      "max_abs_revision_pp": 0.622923,
+      "quarter": "2019Q4",
+      "terminal_gap_pct": 0.098553
+    },
+    {
+      "latest_gap_pct": 0.739385,
+      "latest_revision_pp": 0.617751,
+      "max_abs_revision_pp": 0.617795,
+      "quarter": "2019Q3",
+      "terminal_gap_pct": 0.121634
+    }
+  ],
+  "quarters_evaluated": 45,
+  "recursive_fit_failures": 0,
+  "recursive_fits": 46,
+  "release_blocker": false,
+  "selection_reopened": false,
+  "status": "PASS",
+  "subperiods": {
+    "COVID_2020Q1_2021Q4": {
+      "mae": 1.011497,
+      "maxabs": 3.797605,
+      "n": 8,
+      "rmse": 1.508256
+    },
+    "NON_COVID": {
+      "mae": 0.231979,
+      "maxabs": 0.622923,
+      "n": 37,
+      "rmse": 0.281469
+    }
+  },
+  "summary_pp": {
+    "latest_revision_mae": 0.3705601806972404,
+    "latest_revision_maxabs": 3.7976052138173344,
+    "latest_revision_rmse": 0.6852413174754595,
+    "per_quarter_max_revision_max": 4.702237452099567,
+    "per_quarter_max_revision_mean": 0.4630314438639655
+  }
+}

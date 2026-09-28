@@ -1,0 +1,86 @@
+{
+  "directories": [
+    {
+      "directory": "reports/model3h_final_evaluation",
+      "directory_digest_sha256": "8ed8d44b8e0618b20a0f3a357a9bdaa5ddb0413f8b4c1fe9840b99499a18d42b",
+      "file_count": 8,
+      "total_bytes": 72780
+    },
+    {
+      "directory": "reports/model3h_pseudo_real_time",
+      "directory_digest_sha256": "d557d0407e4517c56294d746b7cc46fb6364756d152da1515b6f9378b162e2f9",
+      "file_count": 5,
+      "total_bytes": 59505
+    }
+  ],
+  "files": [
+    {
+      "bytes": 7783,
+      "path": "reports/model3h_final_evaluation/benchmark_endpoints.csv",
+      "sha256": "49108942731158333f82b0820c996e7473f0eca4efe69319890a2410df7a902f"
+    },
+    {
+      "bytes": 462,
+      "path": "reports/model3h_final_evaluation/benchmark_summary.csv",
+      "sha256": "0c88d3ac4d52d6517ac16facb4b367353fe5b56b160fd048c1ebb026f5563aba"
+    },
+    {
+      "bytes": 752,
+      "path": "reports/model3h_final_evaluation/evaluation_manifest.json",
+      "sha256": "b578adb1ce8d6d3fc2e54fdeab296e05adaf55c89915d97f7e55f4e6a79347a6"
+    },
+    {
+      "bytes": 8198,
+      "path": "reports/model3h_final_evaluation/information_set_inventory.csv",
+      "sha256": "a11af4d64b760c0459e20b3cc834ed0a97249d326254971778531306d75617b7"
+    },
+    {
+      "bytes": 4017,
+      "path": "reports/model3h_final_evaluation/observed_gdp_vintage_revisions.csv",
+      "sha256": "39115f5361d7487943a911f8428ea7b1c08d089ea2ad7bca7b6b0ac353612fe6"
+    },
+    {
+      "bytes": 50074,
+      "path": "reports/model3h_final_evaluation/structural_recursive_endpoints.csv",
+      "sha256": "18eb726f8c75e9ae7a1e502fe067045278b1d0cf3ee7fe0f453da686655ef0e4"
+    },
+    {
+      "bytes": 813,
+      "path": "reports/model3h_final_evaluation/structural_subperiod_summary.csv",
+      "sha256": "ff2444c9c31cf9fc6b7639f15bd019d5177b9e1b42992e0126009a8ad6992159"
+    },
+    {
+      "bytes": 681,
+      "path": "reports/model3h_final_evaluation/structural_summary.csv",
+      "sha256": "03dc8989cd5449bb7c114da7fb3f30eec4a5a320acf7003f558c1edeb35c30f1"
+    },
+    {
+      "bytes": 724,
+      "path": "reports/model3h_pseudo_real_time/model3h_candidate_summary.csv",
+      "sha256": "9c5ec6379b8416c96e75b35d4023e29aa69d28e05062309ae14b66759a48aa4c"
+    },
+    {
+      "bytes": 480,
+      "path": "reports/model3h_pseudo_real_time/model3h_diagnostic_manifest.json",
+      "sha256": "1121de1b0ec7856edf188971c941efeef1c17be5b99faef60804b84fe12d09ba"
+    },
+    {
+      "bytes": 29,
+      "path": "reports/model3h_pseudo_real_time/model3h_failure_summary.csv",
+      "sha256": "269b41ecd6ae1686155556f781997d7261297d5c2165c41e9e2b239becc5014a"
+    },
+    {
+      "bytes": 8198,
+      "path": "reports/model3h_pseudo_real_time/model3h_information_set_inventory.csv",
+      "sha256": "a11af4d64b760c0459e20b3cc834ed0a97249d326254971778531306d75617b7"
+    },
+    {
+      "bytes": 50074,
+      "path": "reports/model3h_pseudo_real_time/model3h_recursive_endpoints.csv",
+      "sha256": "18eb726f8c75e9ae7a1e502fe067045278b1d0cf3ee7fe0f453da686655ef0e4"
+    }
+  ],
+  "hash_algorithm": "sha256",
+  "manifest": "Model 3H empirical evidence inputs retained for Model 3I release reproducibility",
+  "status": "PASS"
+}

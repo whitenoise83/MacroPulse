@@ -1,0 +1,90 @@
+name: Model 3 Potential Output Guard
+
+on:
+  push:
+    branches:
+      - model3-output-gap-development
+    tags:
+      - "model3-potential-output-v*"
+  pull_request:
+    branches:
+      - model3-output-gap-development
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: model3-potential-output-guard-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate Model 3 production and release contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out complete history and tags
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            pyproject.toml
+
+      - name: Install project and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install -e .
+          python -m pip install "pytest>=8,<9"
+
+      - name: Verify immutable Model 2 release
+        run: python scripts/verify_model2_release.py --require-tag
+
+      - name: Verify Model 3 release candidate
+        if: github.ref_type != 'tag'
+        run: python scripts/verify_model3i_release_candidate.py
+
+      - name: Run focused Model 3 tests
+        run: python -m pytest -q --disable-warnings tests/test_model3*.py
+
+      - name: Run complete repository test suite
+        run: python -m pytest -q --disable-warnings
+
+      - name: Verify final Model 3 release record when present
+        shell: bash
+        run: |
+          if [ -f MODEL3_RELEASE.json ]; then
+            python scripts/verify_model3_release.py
+          else
+            echo "Final Model 3 release record not present on source-hardening commit."
+          fi
+
+      - name: Verify immutable Model 3 release tag
+        if: github.ref_type == 'tag'
+        run: python scripts/verify_model3_release.py --require-tag
+
+      - name: Require clean tracked source tree after tests
+        shell: bash
+        run: |
+          if ! git diff --quiet -- .             ':(exclude)reports/**'             ':(exclude)data/**'             ':(exclude)src/macropulse.egg-info/**'; then
+            echo "Tracked governed/source files changed during tests."
+            git --no-pager diff --stat -- .               ':(exclude)reports/**'               ':(exclude)data/**'               ':(exclude)src/macropulse.egg-info/**'
+            exit 1
+          fi
+
+      - name: Reject tracked runtime data artifacts
+        shell: bash
+        run: |
+          if git ls-files | grep -E             '(^data/backups/|\.duckdb$|\.wal$|^reports/decision_intelligence_snapshots/)'; then
+            echo "Tracked runtime artifact detected."
+            exit 1
+          fi

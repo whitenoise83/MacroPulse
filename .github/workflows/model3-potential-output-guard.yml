@@ -87,7 +87,18 @@ jobs:
 
       - name: Run CI-safe focused Model 3 tests
         run: |
-          python -m pytest -q --disable-warnings             --ignore=tests/test_model3d_corrective_real_data.py             tests/test_model3*.py
+          python - <<'PY'
+          from pathlib import Path
+          import pytest, sys
+          excluded = Path("tests/test_model3d_corrective_real_data.py")
+          files = [
+              str(p) for p in sorted(Path("tests").glob("test_model3*.py"))
+              if p != excluded
+          ]
+          print("CI-safe Model 3 test files:", len(files))
+          print("Excluded local-data diagnostic:", excluded)
+          raise SystemExit(pytest.main(["-q", "--disable-warnings", *files]))
+          PY
 
       - name: Run complete CI-safe repository test suite
         run: |

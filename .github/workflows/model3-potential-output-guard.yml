@@ -46,8 +46,24 @@ jobs:
           python -m pip install -e .
           python -m pip install "pytest>=8,<9"
 
-      - name: Verify immutable Model 2 release
-        run: python scripts/verify_model2_release.py --require-tag
+      - name: Verify immutable Model 2 release at its frozen tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          MODEL2_TAG="model2-bvar-v1.0.2"
+          MODEL2_COMMIT="cda24988e772cd2b96be612b7d455c54a06f44fa"
+          ACTUAL="$(git rev-list -n 1 "${MODEL2_TAG}")"
+          if [ "${ACTUAL}" != "${MODEL2_COMMIT}" ]; then
+            echo "Immutable Model 2 tag moved: ${ACTUAL}"
+            exit 1
+          fi
+          git merge-base --is-ancestor "${MODEL2_COMMIT}" HEAD
+          MODEL2_WORKTREE="${RUNNER_TEMP}/model2-bvar-v1.0.2"
+          rm -rf "${MODEL2_WORKTREE}"
+          git worktree add --detach "${MODEL2_WORKTREE}" "${MODEL2_TAG}"
+          python "${MODEL2_WORKTREE}/scripts/verify_model2_release.py" --require-tag
+          git worktree remove "${MODEL2_WORKTREE}" --force
+          echo "Immutable Model 2 release verified at ${MODEL2_TAG} (${MODEL2_COMMIT})."
 
       - name: Verify Model 3 release candidate
         if: github.ref_type != 'tag'

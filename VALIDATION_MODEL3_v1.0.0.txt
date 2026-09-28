@@ -1,0 +1,68 @@
+Model 3 Potential Output & Macroeconomic Slack v1.0.0 validation
+
+Immutable predecessor:
+  model3-pseudo-real-time-v1.0.0
+  a8ebf2d05a3b49d0c21f5ab1b03ca6eefca0b094
+
+Selected candidate:
+  3D - State-Space Potential Output
+
+Source-hardening closure:
+  568b1302d4406736e5568371d7354c6ce10bcbb6
+
+Pre-release closure:
+  c018b4771108bbc646614d61f1970f4e55e4544a
+  Model 3 Potential Output Guard #6
+  run 36425589715
+  conclusion SUCCESS
+
+Pseudo-real-time selection evidence:
+  3D admissible origins: 46/46
+  endpoint-change MAE: 0.2330005211797904 pp
+  endpoint-change RMSE: 0.4834307129343426 pp
+
+No-lookahead audit:
+  status PASS
+  complete required-series vintages: 213
+  vintages with future rows: 0
+  safe-loader failures: 0
+
+Production smoke:
+  as-of 2026-06-30
+  sample 1985Q2 to 2026Q1, n=164
+  current quarter 2026Q1
+  output gap +0.35682483378316476%
+  potential growth 2.4239599709004134% annualized
+  deterministic export SHA-256:
+  1b83ddddb7894009f8f884bb18eb60ef81f063965c7d8d374dc7bf37d982bd56
+
+Fixed-quarter revision disclosure:
+  latest-revision MAE 0.3705601806972404 pp
+  latest-revision RMSE 0.6852413174754595 pp
+  latest-revision max abs 3.7976052138173344 pp
+  maximum within-quarter revision path 4.702237452099567 pp
+  largest revision quarter 2020Q2
+  selection reopened: NO
+  post-hoc cutoff: NO
+
+Production semantics:
+  current endpoint: production_current_endpoint
+  revised history: smoothed_revised
+  full-sample filtered history claimed real-time: NO
+  forward potential continuation: deterministic
+  forward potential uncertainty claim: NO
+  database writes: none
+
+Governance:
+  no econometric retuning
+  no automatic switching
+  no Model 1 mutation
+  no Model 2 mutation
+  no Model 4 performance selection
+  Model 1D prospective validation not a Model 3 selection gate
+
+Planned immutable release tag:
+  model3-potential-output-v1.0.0
+
+Tag creation gate:
+  final metadata branch CI must pass first

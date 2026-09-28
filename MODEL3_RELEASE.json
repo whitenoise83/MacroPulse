@@ -1,0 +1,128 @@
+{
+  "forward_gap_semantics": {
+    "dense_model2_horizons": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "governed_report_horizons": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "integration_workstream": "3G",
+    "model2_growth_draw_selection": "by variable name",
+    "potential_continuation": "deterministic",
+    "potential_uncertainty_claimed": false
+  },
+  "governance": {
+    "automatic_switching_prohibited": true,
+    "candidate_specification_immutable": true,
+    "econometric_retuning_prohibited": true,
+    "generative_ai_in_governed_core_prohibited": true,
+    "model1_mutation_prohibited": true,
+    "model1d_validation_selection_gate_prohibited": true,
+    "model2_mutation_prohibited": true,
+    "model4_performance_selection_prohibited": true
+  },
+  "manifest_file": "MANIFEST_MODEL3_v1.0.0.txt",
+  "manifest_file_count": 80,
+  "manifest_sha256": "2795a89dc97a5fa260c7f35e4d5774c419a0c9c14f62181f892c1697ad879644",
+  "model": "3",
+  "model_name": "Potential Output & Macroeconomic Slack",
+  "no_lookahead": {
+    "complete_three_series_vintages": 213,
+    "complete_vintages_with_future_rows": 0,
+    "safe_loader_failures": 0,
+    "status": "PASS"
+  },
+  "pre_release_closure": {
+    "ci": {
+      "conclusion": "success",
+      "head_sha": "c018b4771108bbc646614d61f1970f4e55e4544a",
+      "run_id": 36425589715,
+      "run_number": 6,
+      "status": "completed",
+      "workflow": "Model 3 Potential Output Guard"
+    },
+    "commit": "c018b4771108bbc646614d61f1970f4e55e4544a",
+    "includes_streamlit_integration": true
+  },
+  "predecessor": {
+    "commit": "a8ebf2d05a3b49d0c21f5ab1b03ca6eefca0b094",
+    "immutable": true,
+    "move_or_recreate": false,
+    "tag": "model3-pseudo-real-time-v1.0.0"
+  },
+  "production_authority": {
+    "after_verified_release_tag": "governed read-only production interface",
+    "before_release_tag": "none"
+  },
+  "production_semantics": {
+    "current_endpoint_definition": "terminal filtered estimate from an origin-specific fit using only the information set available through that origin",
+    "current_estimate_class": "production_current_endpoint",
+    "database_write_authority": "none",
+    "full_sample_filtered_history_claimed_real_time": false,
+    "module": "macropulse.slack.production",
+    "revised_history_class": "smoothed_revised"
+  },
+  "production_smoke": {
+    "as_of_date": "2026-06-30",
+    "current_output_gap_pct": 0.35682483378316476,
+    "deterministic_export_sha256": "1b83ddddb7894009f8f884bb18eb60ef81f063965c7d8d374dc7bf37d982bd56",
+    "n_observations": 164,
+    "potential_growth_annualized_pct": 2.4239599709004134,
+    "sample_first_quarter": "1985Q2",
+    "sample_last_quarter": "2026Q1"
+  },
+  "release_audits": {
+    "fixed_quarter_revision": "reports/model3i_release_audits/MODEL3I_FIXED_QUARTER_REVISION_AUDIT.json",
+    "model3h_evidence_manifest": "reports/model3i_release_audits/MODEL3H_EVIDENCE_MANIFEST.json",
+    "no_lookahead": "reports/model3i_release_audits/MODEL3I_NO_LOOKAHEAD_AUDIT.json",
+    "production_smoke": "reports/model3i_release_audits/MODEL3I_PRODUCTION_SMOKE_TEST.json"
+  },
+  "release_commit_policy": "single metadata-only direct child of pre-release closure",
+  "release_tag": "model3-potential-output-v1.0.0",
+  "release_type": "initial_governed_production_release",
+  "revision_disclosure": {
+    "audit_status": "PASS",
+    "interpretation": "Large revisions are concentrated in the COVID shock window and are disclosed as a robustness caveat rather than used for retuning.",
+    "largest_revision_quarter": "2020Q2",
+    "latest_revision_mae_pp": 0.3705601806972404,
+    "latest_revision_maxabs_pp": 3.7976052138173344,
+    "latest_revision_rmse_pp": 0.6852413174754595,
+    "per_quarter_max_revision_max_pp": 4.702237452099567,
+    "post_hoc_cutoff_introduced": false,
+    "selection_reopened": false
+  },
+  "roadmap_phase": "II",
+  "selected_candidate": {
+    "candidate_id": "3D",
+    "name": "State-Space Potential Output",
+    "selection_source": "reports/model3h_selection/MODEL3H_SELECTION_DECISION.json",
+    "selection_workstream": "3H"
+  },
+  "source_hardening_closure": {
+    "commit": "568b1302d4406736e5568371d7354c6ce10bcbb6",
+    "semantic_model_change_after_closure": false
+  },
+  "streamlit": {
+    "model2_and_model3_ui_commit": "c018b4771108bbc646614d61f1970f4e55e4544a",
+    "navigation": "app.py",
+    "page": "ui/model3_slack.py",
+    "read_only": true
+  },
+  "tag_policy": {
+    "branch_ci_required_before_tag": true,
+    "immutable_after_creation": true,
+    "predecessor_tag_must_remain_immutable": true,
+    "tag_ci_required_for_release_closure": true
+  },
+  "version": "1.0.0"
+}

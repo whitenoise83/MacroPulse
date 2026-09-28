@@ -1,0 +1,55 @@
+{
+  "workstream": "3H",
+  "decision": "select_research_candidate_for_3I",
+  "selected_candidate": "3D",
+  "production_promotion": false,
+  "selection_hierarchy": [
+    "real_time_estimability_and_origin_coverage",
+    "numerical_and_econometric_admissibility",
+    "revision_and_endpoint_stability",
+    "economic_diagnostic_evidence"
+  ],
+  "evidence": {
+    "3D": {
+      "origins": 46,
+      "converged": 46,
+      "admissible": 46,
+      "admissibility_rate": 1.0,
+      "endpoint_change_abs_mean": 0.2330005211797904,
+      "endpoint_change_rmse": 0.4834307129343426
+    },
+    "3E_A": {
+      "origins": 46,
+      "converged": 46,
+      "admissible": 8,
+      "admissibility_rate": 0.1739130434782608,
+      "phillips_sign_coherent": 0,
+      "phillips_sign_evaluated": 46
+    },
+    "3E_B": {
+      "origins": 46,
+      "converged": 46,
+      "admissible": 43,
+      "admissibility_rate": 0.9347826086956522,
+      "endpoint_change_abs_mean": 1.0541679717346957,
+      "endpoint_change_rmse": 3.3432516769152403,
+      "phillips_sign_coherent": 27,
+      "phillips_sign_evaluated": 46,
+      "okun_sign_coherent": 46,
+      "okun_sign_evaluated": 46
+    }
+  },
+  "reference_benchmarks_role": "diagnostic_only_not_selectable_structural_candidates",
+  "excluded_evidence": {
+    "observed_gdp_log_level_vintage_revision_statistic": "Excluded from candidate selection because cross-vintage log-level comparisons can be contaminated by benchmark/reference-basis changes.",
+    "model4_performance": "Prohibited by governance.",
+    "model1d_prospective_validation_status": "Not a Model 3H selection gate.",
+    "raw_likelihood_aic_cross_candidate_comparison": "Not used across candidates with differing observable systems."
+  },
+  "interpretation": [
+    "3D satisfies convergence and common admissibility at all 46 governed pseudo-real-time origins.",
+    "3E-A fails common admissibility at 38 of 46 origins and its Phillips-sign diagnostic is incoherent at all 46 origins.",
+    "3E-B is admissible at 43 of 46 origins but has materially larger endpoint-change instability than 3D, especially during the COVID-disruption subperiod.",
+    "Selection authorizes 3D for Model 3I production hardening; it does not itself promote 3D to production."
+  ]
+}

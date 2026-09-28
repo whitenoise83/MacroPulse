@@ -1,0 +1,65 @@
+{
+  "workstream": "3H",
+  "name": "Pseudo-Real-Time Evaluation & Selection",
+  "predecessor": "86e58f9c7a1bcec8818c6233bc658675293ffed3",
+  "candidate_set": [
+    "3D",
+    "3E_A",
+    "3E_B"
+  ],
+  "estimate_label": "filtered_real_time_endpoint",
+  "information_rule": "each origin may use only the exact-vintage information set available at that origin",
+  "refit_rule": "candidate parameters are re-estimated independently at every pseudo-real-time origin",
+  "benchmarks": {
+    "model3c": "reference_only_not_structural_selection_candidate"
+  },
+  "selection_policy": {
+    "selection_permitted_in_bootstrap": false,
+    "hierarchy": [
+      "real_time_estimability",
+      "numerical_and_econometric_admissibility",
+      "revision_and_endpoint_stability",
+      "economic_diagnostic_evidence"
+    ],
+    "weighted_composite_score": false,
+    "model4_downstream_performance_allowed": false,
+    "model1d_validation_is_selection_gate": false
+  },
+  "diagnostics": [
+    "origin_coverage",
+    "convergence",
+    "admissibility",
+    "endpoint_gap",
+    "endpoint_change",
+    "revision_against_revised_reference",
+    "parameter_stability",
+    "ar_root_margin",
+    "variance_boundary_proximity",
+    "phillips_expected_sign",
+    "okun_expected_sign"
+  ],
+  "governance": {
+    "no_lookahead": true,
+    "no_model1_mutation": true,
+    "no_model2_mutation": true,
+    "no_model3_predecessor_mutation": true,
+    "no_database_writes": true,
+    "no_production_promotion": true,
+    "no_candidate_winner_in_bootstrap": true
+  },
+  "next_authorized_workstream_after_passing_3h": "3I",
+  "recursive_engine": {
+    "panel_builder": "Model 3B build_quarterly_panel",
+    "snapshot_identity": "Model 3B canonical_snapshot_hash and information_set_id",
+    "origin_source": "admissible Model 3B information-set inventory rows only",
+    "candidate_refit_each_origin": true,
+    "3D_fit_api": "fit_state_space",
+    "3E_fit_api": "fit_multivariate_slack",
+    "endpoint_source": "terminal filtered_full_sample_parameters path from origin-truncated fit",
+    "endpoint_relabel": "filtered_real_time_endpoint",
+    "smoothed_path_used_for_realtime_endpoint": false,
+    "candidate_failure_policy": "record failure and continue other candidates/origins",
+    "minimum_ar_root_diagnostic": 1.02,
+    "minimum_trend_gap_sigma_ratio_diagnostic": 0.001
+  }
+}

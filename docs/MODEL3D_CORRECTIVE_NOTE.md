@@ -1,0 +1,2 @@
+# Model 3D corrective descendant
+3E real-data diagnostics exposed an arbitrary potential/gap level split under fully diffuse initialization. This correction preserves the 3D equations and sigma_potential=0, anchors initial potential/growth to the observed scale, initializes the stationary AR(2) cycle with its unconditional covariance, and adds near-unit-root / variance-pile-up admissibility guards. No production promotion is authorized.

@@ -1,0 +1,9 @@
+{
+ "model":"3","workstream":"3D-CORRECTIVE",
+ "predecessor_commit":"edfaddbaa76612343001d08afc0448b588c94488",
+ "economic_equations_changed":false,"sigma_potential_fixed":0.0,
+ "initialization":"anchored level/growth plus stationary AR2 cycle covariance",
+ "minimum_ar_root_modulus":1.02,
+ "minimum_sigma_growth_to_sigma_gap_ratio":0.001,
+ "production_authority":false
+}

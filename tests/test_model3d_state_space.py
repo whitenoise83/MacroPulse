@@ -114,3 +114,18 @@ def test_filtered_and_smoothed_labels_are_not_interchangeable():
         filtered["potential_log_output"].iloc[:-1],
         smoothed["potential_log_output"].iloc[:-1],
     )
+
+def test_real_scale_anchor_prevents_arbitrary_level_split():
+    y = synthetic_log_gdp(120)
+    model = PotentialOutputUCModel(y)
+    assert np.isclose(model._initial_state_anchor[0], y.iloc[0])
+    assert np.isfinite(model._initial_state_anchor).all()
+
+def test_fitted_synthetic_states_are_finite_and_economically_scaled():
+    fit = fit_state_space(synthetic_log_gdp(120), maxiter=1000)
+    f = fit.estimates
+    assert np.isfinite(f["potential_output_level"]).all()
+    assert f["output_gap_pct"].abs().max() < 50.0
+    roots = np.roots([-fit.diagnostics.phi2, -fit.diagnostics.phi1, 1.0])
+    assert np.min(np.abs(roots)) >= 1.02
+    assert fit.diagnostics.sigma_trend_growth / fit.diagnostics.sigma_gap >= 1e-3

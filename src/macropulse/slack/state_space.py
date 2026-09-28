@@ -81,12 +81,19 @@ class PotentialOutputUCModel(MLEModel):
     def __init__(self, real_gdp_log: pd.Series):
         y = _validate_log_gdp(real_gdp_log)
         self._period_index = y.index.copy()
+        observed = y.to_numpy(dtype=float)
+        initial_growth = float(np.mean(np.diff(observed[: min(12, len(observed))])))
+        initial_state = np.array([observed[0], initial_growth, 0.0, 0.0], dtype=float)
+        initial_cov = np.diag([1e-6, 1e-4, 1e-4, 1e-4])
         super().__init__(
-            endog=y.to_numpy(),
+            endog=observed,
             k_states=4,
             k_posdef=2,
-            initialization="diffuse",
+            initialization="known",
+            initial_state=initial_state,
+            initial_state_cov=initial_cov,
         )
+        self._initial_state_anchor = initial_state
         self["design"] = np.array([[1.0, 0.0, 1.0, 0.0]])
         self["obs_cov"] = np.zeros((1, 1))
         self["selection"] = np.array(
@@ -152,6 +159,20 @@ class PotentialOutputUCModel(MLEModel):
         self["transition", 2, 2] = phi1
         self["transition", 2, 3] = phi2
         self["state_cov"] = np.diag([sigma_growth**2, sigma_gap**2])
+        cov_dtype = np.result_type(phi1, phi2, sigma_gap)
+        A = np.array([[phi1, phi2], [1.0, 0.0]], dtype=cov_dtype)
+        Q = np.array([[sigma_gap**2, 0.0], [0.0, 0.0]], dtype=cov_dtype)
+        try:
+            vec_p = np.linalg.solve(np.eye(4) - np.kron(A, A), Q.reshape(4, order="F"))
+            P = np.real_if_close(vec_p.reshape((2, 2), order="F"), tol=1000)
+            P = np.asarray(P.real, dtype=float)
+            P = 0.5 * (P + P.T)
+            if np.isfinite(P).all():
+                cov = np.diag([1e-6, 1e-4, 1.0, 1.0])
+                cov[2:4, 2:4] = P
+                self.ssm.initialize_known(self._initial_state_anchor, cov)
+        except np.linalg.LinAlgError:
+            pass
 
 
 def _estimate_frame(index, observed, states, estimate_class):
@@ -188,6 +209,11 @@ def fit_state_space(real_gdp_log: pd.Series, *, maxiter: int = 500,
         raise RuntimeError("State-space estimation produced non-positive standard deviations.")
     if not ar2_is_stationary(params[2], params[3]):
         raise RuntimeError("State-space estimation produced a nonstationary output-gap AR(2).")
+    roots = np.roots([-float(params[3]), -float(params[2]), 1.0])
+    if float(np.min(np.abs(roots))) < 1.02:
+        raise RuntimeError("State-space output-gap AR(2) is too close to the unit-root boundary.")
+    if params[0] / params[1] < 1e-3:
+        raise RuntimeError("State-space trend-growth innovation has piled up near zero relative to the gap innovation.")
     if require_convergence and not converged:
         raise RuntimeError("State-space maximum-likelihood optimization did not converge.")
 

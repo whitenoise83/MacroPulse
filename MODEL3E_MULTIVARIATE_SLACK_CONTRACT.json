@@ -1,0 +1,95 @@
+{
+  "model": "3",
+  "workstream": "3E",
+  "name": "Multivariate Macroeconomic Slack",
+  "branch": "model3-output-gap-development",
+  "model2_base_commit": "cda24988e772cd2b96be612b7d455c54a06f44fa",
+  "model3d_base_commit": "4a33072b8c2d767fb4eecdf6efc1aba879373ff2",
+  "frequency": "quarterly",
+  "input_contract": {
+    "required_columns": [
+      "real_gdp_log",
+      "unemployment_rate",
+      "core_pce_inflation"
+    ],
+    "joint_complete_model3b_panel_required": true,
+    "minimum_observations": 40,
+    "core_pce_inflation_definition": "400*(log(PCEPILFE_t)-log(PCEPILFE_t-1))",
+    "unemployment_definition": "quarter-end monthly UNRATE observation"
+  },
+  "inherited_gdp_state_system": {
+    "state_vector": [
+      "potential_log_output",
+      "trend_growth",
+      "output_gap",
+      "output_gap_lag1"
+    ],
+    "sigma_potential_fixed": 0.0,
+    "gdp_measurement_error_variance": 0.0,
+    "stationary_gap_ar2_required": true
+  },
+  "candidates": {
+    "3E_A": {
+      "name": "inflation_augmented_slack",
+      "inflation_gap_timing": "lagged",
+      "kappa_sign_expected": "nonnegative",
+      "kappa_sign_hard_constrained": false
+    },
+    "3E_B": {
+      "name": "inflation_unemployment_augmented_slack",
+      "unemployment_trend": "deterministic_linear_time_trend",
+      "stochastic_nairu_allowed": false,
+      "lambda_sign_expected": "positive",
+      "lambda_sign_hard_constrained": false
+    }
+  },
+  "estimation": {
+    "engine": "statsmodels_state_space_mlemodel",
+    "optimizer": "powell",
+    "convergence_required_for_admissible_fit": true,
+    "economic_signs_are_diagnostics_not_hard_constraints": true
+  },
+  "output_contract": {
+    "filtered_full_sample_parameters_estimates_required": true,
+    "filtered_full_sample_parameters_strict_real_time": false,
+    "strict_real_time_endpoint_estimation_deferred_to": "3H",
+    "smoothed_revised_estimates_required": true,
+    "production_status": false
+  },
+  "selection": {
+    "production_selection_allowed": false,
+    "candidate_ranking_allowed": false,
+    "raw_likelihood_cross_candidate_production_selection_allowed": false,
+    "aic_cross_candidate_production_selection_allowed": false,
+    "pseudo_real_time_selection_deferred_to": "3H"
+  },
+  "integration": {
+    "model1_integration_allowed": false,
+    "model2_forecast_integration_allowed": false,
+    "model1_current_state_integration_deferred_to": "3F",
+    "model2_forward_gap_integration_deferred_to": "3G"
+  },
+  "governance": {
+    "predecessor_modification_allowed": false,
+    "database_writes_allowed": false,
+    "automatic_specification_switching_allowed": false,
+    "automatic_promotion_allowed": false,
+    "generative_ai_in_governed_core_allowed": false,
+    "full_sample_filtered_may_masquerade_as_real_time": false,
+    "smoothed_estimate_may_masquerade_as_real_time": false,
+    "downstream_model4_performance_may_retune_model3e": false
+  },
+  "bootstrap": {
+    "new_paths_only": true,
+    "passing_3e_authorizes_only": "3F_model1_current_state_integration"
+  },
+  "corrected_model3d_predecessor_commit": "4a33072b8c2d767fb4eecdf6efc1aba879373ff2",
+  "output_gap_persistence_diagnostic": {
+    "minimum_ar_root_modulus": 1.02,
+    "role": "candidate diagnostic only; no production selection"
+  },
+  "economic_sign_diagnostics": {
+    "hard_constrained": false,
+    "role": "record Phillips/Okun expected-sign evidence only"
+  }
+}

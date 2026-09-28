@@ -1,0 +1,32 @@
+{
+  "workstream": "3F",
+  "name": "Model 1 Current-State Integration",
+  "model3e_predecessor_commit": "5378dd8aeef716f17e46f73716803ac20d101516",
+  "branch": "model3-output-gap-development",
+  "purpose": "Read-only alignment of governed Model 1 current-state outputs with Model 3 slack research candidates while preserving provenance and information-set identity.",
+  "inputs": {
+    "model1_read_only": true,
+    "model1_refit_allowed": false,
+    "model1_mutation_allowed": false,
+    "model2_forecasts_allowed": false,
+    "model3e_candidates": ["3E_A", "3E_B"],
+    "model3e_candidate_selection_allowed": false
+  },
+  "provenance": {
+    "preserve_source_identity": true,
+    "required_when_available": ["model_id", "model_name", "model_version", "forecast_stage", "forecast_date", "target_period", "information_set_hash", "created_at", "run_id"],
+    "silent_information_set_mismatch_allowed": false
+  },
+  "estimate_classes": {
+    "full_sample_classes_may_be_labelled_real_time": false,
+    "strict_real_time_endpoint_deferred_to": "3H"
+  },
+  "governance": {
+    "database_writes_allowed": false,
+    "automatic_selection_allowed": false,
+    "automatic_promotion_allowed": false,
+    "predecessor_modification_allowed": false,
+    "generative_ai_in_governed_core_allowed": false
+  },
+  "passing_authorizes_only": "3G_model2_forward_gap_integration"
+}

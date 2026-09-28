@@ -1,0 +1,105 @@
+{
+  "model": "3",
+  "workstream": "3D",
+  "name": "State-Space Potential Output",
+  "status": "state_space_estimation",
+  "branch": "model3-output-gap-development",
+  "model2_base_tag": "model2-bvar-v1.0.2",
+  "model2_base_commit": "cda24988e772cd2b96be612b7d455c54a06f44fa",
+  "model3a_commit": "6f45208103a5ac1a900317a33c0038d56920ffbb",
+  "model3b_commit": "5849b89367defdef68c0676fdcd1d2f7182bd873",
+  "model3c_base_commit": "dfcee48d0a0391f3187cf103c7c906d4ecf78892",
+  "frequency": "quarterly",
+  "input_contract": {
+    "required_series": "GDPC1",
+    "required_transform": "natural_log_real_gdp",
+    "minimum_observations": 40,
+    "quarterly_period_index_required": true,
+    "consecutive_quarters_required": true,
+    "finite_values_required": true,
+    "strictly_positive_levels_required_before_log": true,
+    "joint_complete_model3b_panel_required": false
+  },
+  "state_space_specification": {
+    "observation_equation": "y_t = ystar_t + gap_t",
+    "potential_transition": "ystar_t = ystar_{t-1} + gstar_{t-1}",
+    "trend_growth_transition": "gstar_t = gstar_{t-1} + eta_g_t",
+    "gap_transition": "gap_t = phi1*gap_{t-1} + phi2*gap_{t-2} + eps_gap_t",
+    "state_vector": [
+      "potential_log_output",
+      "trend_growth",
+      "output_gap",
+      "output_gap_lag1"
+    ],
+    "gaussian_innovations": true,
+    "independent_state_innovations": true,
+    "measurement_error_variance": 0.0,
+    "estimated_parameters": [
+      "sigma_trend_growth",
+      "sigma_gap",
+      "phi1",
+      "phi2"
+    ],
+    "positive_standard_deviations_required": true,
+    "stationary_gap_ar2_required": true,
+    "fixed_parameters": {
+      "sigma_potential": 0.0
+    },
+    "identification_rationale": "Direct potential-level innovation variance is fixed at zero in 3D because the five-parameter local-linear-trend plus AR(2) cycle likelihood exhibits variance pile-up at the boundary; stochastic trend growth remains estimated."
+  },
+  "estimation": {
+    "engine": "statsmodels_state_space_mlemodel",
+    "method": "gaussian_maximum_likelihood",
+    "diffuse_initialization": true,
+    "optimizer": "powell",
+    "convergence_required_for_admissible_fit": true,
+    "numerical_dependencies": {
+      "numpy": "required",
+      "pandas": "required",
+      "scipy": "required",
+      "statsmodels": ">=0.14"
+    },
+    "dependency_manifest_normalization_deferred_to": "3I",
+    "boundary_pile_up_guard_required": true,
+    "optimizer_rationale": "Derivative-based L-BFGS/BFGS produced unstable numerical gradients in pre-freeze validation; derivative-free Powell converged on the identified smooth-trend UC model."
+  },
+  "output_contract": {
+    "filtered_full_sample_parameters_estimates_required": true,
+    "filtered_full_sample_parameters_strict_real_time": false,
+    "strict_real_time_endpoint_estimation_deferred_to": "3H",
+    "smoothed_revised_estimates_required": true,
+    "filtered_and_smoothed_must_be_separately_labelled": true,
+    "potential_log_output": true,
+    "potential_output_level": true,
+    "potential_output_growth_annualized_pct": true,
+    "output_gap_pct": true,
+    "estimate_origin": true,
+    "log_likelihood": true,
+    "converged": true,
+    "parameter_diagnostics": true,
+    "production_status": false
+  },
+  "integration": {
+    "inflation_allowed": false,
+    "unemployment_allowed": false,
+    "model1_integration_allowed": false,
+    "model2_forecast_integration_allowed": false,
+    "multivariate_slack_deferred_to": "3E",
+    "model1_current_state_integration_deferred_to": "3F",
+    "model2_forward_gap_integration_deferred_to": "3G"
+  },
+  "governance": {
+    "production_winner_frozen": false,
+    "automatic_selection_allowed": false,
+    "automatic_promotion_allowed": false,
+    "predecessor_modification_allowed": false,
+    "database_writes_allowed": false,
+    "generative_ai_in_governed_core_allowed": false,
+    "smoothed_estimate_may_masquerade_as_real_time": false,
+    "filtered_full_sample_parameters_may_masquerade_as_real_time": false
+  },
+  "bootstrap": {
+    "new_paths_only": true,
+    "passing_3d_authorizes_only": "3E_multivariate_macroeconomic_slack"
+  }
+}

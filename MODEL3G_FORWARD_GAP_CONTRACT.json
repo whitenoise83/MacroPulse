@@ -1,0 +1,72 @@
+{
+  "workstream": "3G",
+  "name": "Model 2 forward-gap integration",
+  "predecessor_commit": "effb612f0d637a217fd00b563a8efafb69156983",
+  "model2_release_tag": "model2-bvar-v1.0.2",
+  "model2_access": "read_only",
+  "model2_refit_allowed": false,
+  "model3_candidate_selection_allowed": false,
+  "production_promotion_allowed": false,
+  "database_writes_allowed": false,
+  "forecast_horizons_quarters": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "forward_gap_definition": "100*(log(real_gdp_level_path)-log(potential_output_level_path))",
+  "gdp_draw_semantics": "Model 2 real-GDP-growth predictive draws are compounded from an explicitly supplied origin real-GDP level",
+  "potential_process": {
+    "owner": "Model 3",
+    "model2_may_redefine_historical_or_current_potential": false,
+    "default_propagation": "deterministic continuation from supplied origin potential log level and quarterly trend growth",
+    "potential_uncertainty_claimed": false
+  },
+  "distribution": {
+    "preserve_draws": true,
+    "joint_draw_alignment_required": true,
+    "summaries": [
+      "mean",
+      "median",
+      "lower_80",
+      "upper_80"
+    ]
+  },
+  "scenarios": {
+    "supported_as_probabilistic_density": false,
+    "reason": "Model 2F scenarios are deterministic hard-path constraints and do not compute scenario probability or Bayesian conditional density"
+  },
+  "provenance_required": [
+    "model2_origin_quarter",
+    "model2_candidate_id",
+    "model2_draw_hash",
+    "model2_estimation_panel_hash",
+    "model2_seed",
+    "model2_horizons"
+  ],
+  "estimate_class": "forward_distribution_from_model2_gdp_uncertainty_with_deterministic_model3_potential_continuation",
+  "strict_pseudo_realtime_evaluation": "deferred_to_3H",
+  "next_authorized_workstream": "3H",
+  "model2_dense_path_interface": {
+    "method": "call frozen simulate_posterior_predictive read-only with horizons 1..8",
+    "dense_horizons_quarters": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "model2_source_modified": false,
+    "model2_refit_required": false,
+    "dense_draw_hash_is_distinct_from_production_draw_hash": true,
+    "report_horizons_quarters": [
+      1,
+      2,
+      4,
+      8
+    ]
+  }
+}
